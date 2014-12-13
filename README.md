@@ -1,6 +1,6 @@
 LifestyleCoach
 ==============
-
+====eidted by david=====
 SDE project 2014/2015
 
 1. Application is done with Spring Framework, Hibernate, JPA, H2 in-memory database and Jackson
