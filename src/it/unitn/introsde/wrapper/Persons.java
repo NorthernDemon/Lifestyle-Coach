@@ -6,27 +6,27 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.google.common.base.MoreObjects;
-import it.unitn.introsde.persistence.entity.HealthHistory;
+import it.unitn.introsde.persistence.entity.Person;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@JsonRootName("measureHistory")
-public final class MeasurementHistory {
+@JsonRootName("people")
+public final class Persons {
 
-    @JsonProperty(value = "measureHistory")
-    @JacksonXmlProperty(localName = "measure")
+    @JsonProperty("people")
+    @JacksonXmlProperty(localName = "person")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<HealthHistory> measurementHistories;
+    private List<Person> persons;
 
     @JsonCreator
-    public MeasurementHistory(@JsonProperty(value = "measureHistory") List<HealthHistory> measurementHistories) {
-        this.measurementHistories = measurementHistories;
+    public Persons(@JsonProperty("people") List<Person> persons) {
+        this.persons = persons;
     }
 
-    public List<HealthHistory> getMeasurementHistories() {
-        return Collections.unmodifiableList(measurementHistories);
+    public List<Person> getPersons() {
+        return Collections.unmodifiableList(persons);
     }
 
     @Override
@@ -34,10 +34,10 @@ public final class MeasurementHistory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        if (o instanceof MeasurementHistory) {
-            MeasurementHistory healthHistory = (MeasurementHistory) o;
+        if (o instanceof Persons) {
+            Persons persons = (Persons) o;
 
-            return Objects.equals(measurementHistories, healthHistory.measurementHistories);
+            return Objects.equals(this.persons, persons.persons);
         }
 
         return false;
@@ -45,13 +45,13 @@ public final class MeasurementHistory {
 
     @Override
     public int hashCode() {
-        return Objects.hash(measurementHistories);
+        return Objects.hash(persons);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("measurementHistories", measurementHistories.size())
+                .add("persons", persons.size())
                 .toString();
     }
 }

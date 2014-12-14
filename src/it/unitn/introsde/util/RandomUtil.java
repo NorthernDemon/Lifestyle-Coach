@@ -1,7 +1,6 @@
 package it.unitn.introsde.util;
 
-import it.unitn.introsde.persistence.entity.HealthHistory;
-import it.unitn.introsde.persistence.entity.HealthProfile;
+import it.unitn.introsde.persistence.entity.Measure;
 import it.unitn.introsde.persistence.entity.Person;
 
 import java.util.Calendar;
@@ -25,46 +24,53 @@ public abstract class RandomUtil {
             "Skyler,Jordyn").split(",");
 
     /**
-     * Generate random health history
+     * Generate random measure
      *
-     * @param person owner of the health history
-     * @return random health history
+     * @param person owner of the measure
+     * @return random measure
      */
-    public static HealthHistory getHealthHistory(Person person) {
-        int value = new Random().nextInt(3);
+    public static Measure getMeasure(Person person) {
+        int value = new Random().nextInt(2);
         if (value == 0) {
-            return new HealthHistory(person, "height", getDouble(100), getDate(2010));
-        } else if (value == 1) {
-            return new HealthHistory(person, "weight", getDouble(1000), getDate(2010));
+            return new Measure(person, getDate(1950), "height", String.valueOf(getDouble(100)), "Double");
         } else {
-            return new HealthHistory(person, "steps", getDouble(10000), getDate(2010));
+            return new Measure(person, getDate(1950), "weight", String.valueOf(getInteger(100)), "Integer");
         }
     }
 
     /**
-     * Generates person with random first and last names, health profile, id and birthDate starting from 1950 year
+     * Wrapper for returning random Integer
+     *
+     * @param n the bound on the random number to be returned.  Must be
+     *          positive
+     * @return the next pseudorandom, uniformly distributed {@code int}
+     * value between {@code 0} (inclusive) and {@code n} (exclusive)
+     * from this random number generator's sequence
+     */
+    private static int getInteger(int n) {
+        return new Random().nextInt(n);
+    }
+
+    /**
+     * Wrapper for returning random Double with 1 decimal after dot
+     *
+     * @param n the bound on the random number to be returned.  Must be
+     *          positive
+     * @return the next pseudorandom, uniformly distributed {@code double}
+     * value between {@code 0.0} (inclusive) and {@code n} (exclusive)
+     * from this random number generator's sequence
+     */
+    private static double getDouble(int n) {
+        return Math.round(new Random().nextDouble() * n) / 10.0;
+    }
+
+    /**
+     * Generates person with random first and last names, measure, id and birthDate starting from 1950 year
      *
      * @return random person
      */
     public static Person getPerson() {
-        return new Person(
-                getName(),
-                getName(),
-                getDate(1950),
-                getHealthProfile());
-    }
-
-    /**
-     * Generates health profile with random values
-     *
-     * @return random health profile
-     */
-    private static HealthProfile getHealthProfile() {
-        return new HealthProfile(getDouble(100), getDouble(1000), getDouble(10000));
-    }
-
-    private static double getDouble(int value) {
-        return Math.round(new Random().nextDouble() * value) / 10.0;
+        return new Person(getName(), getName(), getDate(1950));
     }
 
     /**

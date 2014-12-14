@@ -1,6 +1,6 @@
 package it.unitn.introsde.spring;
 
-import it.unitn.introsde.persistence.dao.HealthHistoryDao;
+import it.unitn.introsde.persistence.dao.MeasureDao;
 import it.unitn.introsde.persistence.dao.PersonDao;
 import it.unitn.introsde.persistence.entity.Person;
 import it.unitn.introsde.util.RandomUtil;
@@ -43,11 +43,11 @@ public class SpringWebApplicationInitializer implements WebApplicationInitialize
      */
     private void initData(AnnotationConfigWebApplicationContext context, int magicNumber) {
         PersonDao personDao = context.getBean(PersonDao.class);
-        HealthHistoryDao healthHistoryDao = context.getBean(HealthHistoryDao.class);
+        MeasureDao measureDao = context.getBean(MeasureDao.class);
         for (int i = 0; i < magicNumber; i++) {
             Person person = personDao.save(RandomUtil.getPerson());
             for (int j = 0; j < magicNumber / 4; j++) {
-                healthHistoryDao.save(RandomUtil.getHealthHistory(person));
+                measureDao.save(RandomUtil.getMeasure(person));
             }
         }
     }

@@ -3,60 +3,21 @@ package it.unitn.introsde;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import it.unitn.introsde.persistence.entity.HealthHistory;
-import it.unitn.introsde.persistence.entity.HealthProfile;
+import it.unitn.introsde.persistence.entity.Measure;
 import it.unitn.introsde.persistence.entity.Person;
-import it.unitn.introsde.wrapper.MeasurementHistory;
-import it.unitn.introsde.wrapper.MeasurementType;
-import it.unitn.introsde.wrapper.People;
+import it.unitn.introsde.wrapper.MeasureTypes;
+import it.unitn.introsde.wrapper.Measures;
+import it.unitn.introsde.wrapper.Persons;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public final class StandaloneClientLauncher {
-
-    /**
-     * TRUE for having parent element for JSON lists (lab7)
-     * FALSE for unwrapping JSON list into array without parent element
-     */
-    public static final boolean JSON_UNWRAP_LIST = true;
-
-    /**
-     * SERVER IP ADDRESS
-     */
-    public static String IP;
-
-    static {
-        try {
-            IP = InetAddress.getLocalHost().getHostAddress();
-//            IP = "10.25.157.80";
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * SERVER PORT NUMBER
-     */
-    public static final int PORT = 443;
-
-    /**
-     * SERVER STUDENT NAME
-     */
-    public static final String SERVER_STUDENT_NAME = "/victorekimov";
-//    public static final String SERVER_STUDENT_NAME = "/sdelab";
-
-    private static final String BASE_URL = "http://" + IP + ":" + PORT + SERVER_STUDENT_NAME;
 
     private static final RestTemplate restTemplate = new RestTemplate();
 
@@ -69,7 +30,7 @@ public final class StandaloneClientLauncher {
     private static String url;
 
     public static void main(String args[]) throws Exception {
-        file = new File(SERVER_STUDENT_NAME.replace("/", "") + '_' + BASE_URL.replace(SERVER_STUDENT_NAME, "").replace(":", "-").replace("/", "_") + "_results.txt");
+        file = new File(ServiceConfiguration.getUrl().replace("/", "_").replace(":", "-").replace(".", "_") + ".txt");
         if (file.exists()) {
             file.delete();
         }
@@ -122,15 +83,9 @@ public final class StandaloneClientLauncher {
          * Save into a variable id of the first person (first_person_id) and of the last person (last_person_id)
          */
         httpMethod = HttpMethod.GET;
-        url = BASE_URL + "/person";
-        List<Person> persons = null;
-        if (JSON_UNWRAP_LIST && MediaType.APPLICATION_JSON_VALUE.equals(applicationType.toString())) {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Person[].class);
-            persons = Arrays.asList((Person[]) exchange.getBody());
-        } else {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), People.class);
-            persons = ((People) exchange.getBody()).getPersons();
-        }
+        url = ServiceConfiguration.getUrl() + "/person";
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Persons.class);
+        List<Person> persons = ((Persons) exchange.getBody()).getPersons();
         int personCount = persons.size();
         Person firstPerson = persons.get(0);
         Person lastPerson = persons.get(persons.size() - 1);
@@ -140,7 +95,7 @@ public final class StandaloneClientLauncher {
          * Step 3.2. Send R#2 for first_person_id. If the responses for this is 200 or 202, the result is OK.
          */
         httpMethod = HttpMethod.GET;
-        url = BASE_URL + "/person/" + firstPerson.getId();
+        url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId();
         exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Person.class);
         logRequest(2, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
@@ -148,7 +103,7 @@ public final class StandaloneClientLauncher {
          * Step 3.3. Send R#3 for first_person_id changing the firstname. If the responses has the name changed, the result is OK.
          */
         httpMethod = HttpMethod.PUT;
-        url = BASE_URL + "/person/" + firstPerson.getId();
+        url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId();
         String updatedFirstName = "Victor";
         Person updatedPerson = (Person) exchange.getBody();
         updatedPerson.setFirstName(updatedFirstName);
@@ -160,16 +115,20 @@ public final class StandaloneClientLauncher {
          * If the answer is 201 (200 or 202 are also applicable) with a person in the body who has an ID, the result is OK.
          */
         httpMethod = HttpMethod.POST;
-        url = BASE_URL + "/person";
-        exchange = restTemplate.exchange(url, httpMethod, createHeader(new Person("Chuck", "Norris", getDate(1945, 0, 1), new HealthProfile(78.9, 172.0, 666.0))), Person.class);
-        Person chuckNorris = (Person) exchange.getBody();
+        url = ServiceConfiguration.getUrl() + "/person";
+        Person chuckNorris = new Person("Chuck", "Norris", getDate(1945, 0, 1));
+        List<Measure> chuckMeasure = new ArrayList<>();
+        chuckMeasure.add(new Measure(chuckNorris, "height", "172.0", "Double"));
+        chuckNorris.setCurrentHealth(chuckMeasure);
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(chuckNorris), Person.class);
+        chuckNorris = (Person) exchange.getBody();
         logRequest(4, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
         /**
          * Step 3.5. Send R#5 for the person you have just created.
          */
         httpMethod = HttpMethod.DELETE;
-        url = BASE_URL + "/person/" + chuckNorris.getId();
+        url = ServiceConfiguration.getUrl() + "/person/" + chuckNorris.getId();
         exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Person.class);
         logRequest(5, exchange.getStatusCode().is2xxSuccessful(), "", exchange.getStatusCode().toString(), applicationType.toString());
 
@@ -177,7 +136,7 @@ public final class StandaloneClientLauncher {
          * Then send R#1 with the id of that person. If the answer is 404, your result must be OK.
          */
         httpMethod = HttpMethod.GET;
-        url = BASE_URL + "/person/" + chuckNorris.getId();
+        url = ServiceConfiguration.getUrl() + "/person/" + chuckNorris.getId();
         try {
             exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Person.class);
             logRequest(1, false, exchange);
@@ -191,18 +150,12 @@ public final class StandaloneClientLauncher {
          * Save all measureTypes into array (measure_types)
          */
         httpMethod = HttpMethod.GET;
-        url = BASE_URL + "/measureTypes";
-        List<String> measurementTypesList = null;
-        if (JSON_UNWRAP_LIST && MediaType.APPLICATION_JSON_VALUE.equals(applicationType.toString())) {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), String[].class);
-            measurementTypesList = Arrays.asList((String[]) exchange.getBody());
-        } else {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), MeasurementType.class);
-            measurementTypesList = ((MeasurementType) exchange.getBody()).getMeasurementTypes();
-        }
+        url = ServiceConfiguration.getUrl() + "/measureTypes";
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(""), MeasureTypes.class);
+        List<String> measurementTypesList = ((MeasureTypes) exchange.getBody()).getMeasureTypes();
         logRequest(9, measurementTypesList.size() > 2, exchange);
         printMeasurements(firstPerson.getId(), measurementTypesList);
-        HealthHistory healthHistory = printMeasurements(lastPerson.getId(), measurementTypesList);
+        Measure measure = printMeasurements(lastPerson.getId(), measurementTypesList);
         String measureType = measurementTypesList.get(measurementTypesList.size() - 1);
 
         /**
@@ -210,8 +163,8 @@ public final class StandaloneClientLauncher {
          * If the response is 200, result is OK, else is ERROR.
          */
         httpMethod = HttpMethod.GET;
-        url = BASE_URL + "/person/" + lastPerson.getId() + '/' + measureType + '/' + healthHistory.getId();
-        exchange = restTemplate.exchange(url, httpMethod, createHeader(""), HealthHistory.class);
+        url = ServiceConfiguration.getUrl() + "/person/" + lastPerson.getId() + '/' + measureType + '/' + measure.getId();
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Measure.class);
         logRequest(7, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
         /**
@@ -219,25 +172,19 @@ public final class StandaloneClientLauncher {
          * and save count value (e.g. 5 measurements).
          */
         httpMethod = HttpMethod.GET;
-        url = BASE_URL + "/person/" + firstPerson.getId() + '/' + measureType;
-        int countFirstPersonMeasurements = 0;
-        if (JSON_UNWRAP_LIST && MediaType.APPLICATION_JSON_VALUE.equals(applicationType.toString())) {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), HealthHistory[].class);
-            countFirstPersonMeasurements = ((HealthHistory[]) exchange.getBody()).length;
-            logRequest(6, exchange.getStatusCode().is2xxSuccessful(), exchange);
-        } else {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), MeasurementHistory.class);
-            countFirstPersonMeasurements = ((MeasurementHistory) exchange.getBody()).getMeasurementHistories().size();
-            logRequest(6, exchange.getStatusCode().is2xxSuccessful(), exchange);
-        }
+        url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId() + '/' + measureType;
+        System.out.print(url);
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Measures.class);
+        int countFirstPersonMeasurements = ((Measures) exchange.getBody()).getMeasures().size();
+        logRequest(6, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
         /**
          * Then send R#8 (POST BASE_URL/person/{first_person_id}/{measureTypes}) with the measurement specified below.
          */
         httpMethod = HttpMethod.POST;
-        url = BASE_URL + "/person/" + firstPerson.getId() + '/' + measureType;
-        exchange = restTemplate.exchange(url, httpMethod, createHeader(new HealthHistory(firstPerson, measureType, 72)), HealthHistory.class);
-        HealthHistory savedHealthHistory = (HealthHistory) exchange.getBody();
+        url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId() + '/' + measureType;
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(new Measure(firstPerson, measureType, "72.0", "Double")), Measure.class);
+        Measure savedHealthHistory = (Measure) exchange.getBody();
         logRequest(8, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
         /**
@@ -245,30 +192,25 @@ public final class StandaloneClientLauncher {
          * If it is 1 measure more - print OK, else print ERROR. Remember, first with JSON and then with XML as content-types
          */
         httpMethod = HttpMethod.GET;
-        url = BASE_URL + "/person/" + firstPerson.getId() + '/' + measureType;
-        if (JSON_UNWRAP_LIST && MediaType.APPLICATION_JSON_VALUE.equals(applicationType.toString())) {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), HealthHistory[].class);
-            logRequest(6, ((HealthHistory[]) exchange.getBody()).length - 1 == countFirstPersonMeasurements, exchange);
-        } else {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), MeasurementHistory.class);
-            logRequest(6, ((MeasurementHistory) exchange.getBody()).getMeasurementHistories().size() - 1 == countFirstPersonMeasurements, exchange);
-        }
+        url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId() + '/' + measureType;
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Measures.class);
+        logRequest(6, ((Measures) exchange.getBody()).getMeasures().size() - 1 == countFirstPersonMeasurements, exchange);
 
         /**
          * Step 3.10. Send R#10 using the {mid} or the measure created in the previous step and updating the value at will.
          */
         httpMethod = HttpMethod.PUT;
-        url = BASE_URL + "/person/" + firstPerson.getId() + '/' + measureType + '/' + savedHealthHistory.getId();
-        savedHealthHistory.setValue(90);
-        exchange = restTemplate.exchange(url, httpMethod, createHeader(savedHealthHistory), HealthHistory.class);
+        url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId() + '/' + measureType + '/' + savedHealthHistory.getId();
+        savedHealthHistory.setValue("90");
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(savedHealthHistory), Measure.class);
         logRequest(10, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
         /**
          * Follow up with at R#7 to check that the value was updated. If it was, result is OK, else is ERROR.
          */
         httpMethod = HttpMethod.GET;
-        url = BASE_URL + "/person/" + firstPerson.getId() + '/' + measureType + '/' + savedHealthHistory.getId();
-        exchange = restTemplate.exchange(url, httpMethod, createHeader(""), HealthHistory.class);
+        url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId() + '/' + measureType + '/' + savedHealthHistory.getId();
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Measure.class);
         logRequest(7, exchange.getBody().equals(savedHealthHistory), exchange);
 
         /**
@@ -277,28 +219,18 @@ public final class StandaloneClientLauncher {
          */
         httpMethod = HttpMethod.GET;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        url = BASE_URL + "/person/" + firstPerson.getId() + '/' + measureType + "?before=" + dateFormat.format(new Date()) + "&after=" + dateFormat.format(getDate(2012, 0, 1));
-        if (JSON_UNWRAP_LIST && MediaType.APPLICATION_JSON_VALUE.equals(applicationType.toString())) {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), HealthHistory[].class);
-            logRequest(11, ((HealthHistory[]) exchange.getBody()).length > 1, exchange);
-        } else {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), MeasurementHistory.class);
-            logRequest(11, ((MeasurementHistory) exchange.getBody()).getMeasurementHistories().size() > 1, exchange);
-        }
+        url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId() + '/' + measureType + "?before=" + dateFormat.format(new Date()) + "&after=" + dateFormat.format(getDate(2012, 0, 1));
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Measures.class);
+        logRequest(11, ((Measures) exchange.getBody()).getMeasures().size() > 1, exchange);
 
         /**
          * Step 3.12. Send R#12 using the same parameters as the preivious steps.
          * If status is 200 and there is at least one person in the body, result is OK, else is ERROR
          */
         httpMethod = HttpMethod.GET;
-        url = BASE_URL + "/person?measureType=" + measureType + "&max=" + 1000.0 + "&min=" + 500.0;
-        if (JSON_UNWRAP_LIST && MediaType.APPLICATION_JSON_VALUE.equals(applicationType.toString())) {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Person[].class);
-            personCount = ((Person[]) exchange.getBody()).length;
-        } else {
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), People.class);
-            personCount = ((People) exchange.getBody()).getPersons().size();
-        }
+        url = ServiceConfiguration.getUrl() + "/person?measureType=" + measureType + "&max=" + 200.0 + "&min=" + 100.0;
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Persons.class);
+        personCount = ((Persons) exchange.getBody()).getPersons().size();
         logRequest(12, personCount > 1, exchange);
     }
 
@@ -307,23 +239,17 @@ public final class StandaloneClientLauncher {
      * for the first person you obtained at the beginning and the last person,and for each measure types from measure_types.
      * If no response has at least one measure - result is ERROR (no data at all) else result is OK. Store one measure_id and one measureType.
      */
-    private static HealthHistory printMeasurements(int personId, List<String> measurementType) throws Exception {
+    private static Measure printMeasurements(int personId, List<String> measurementType) throws Exception {
         httpMethod = HttpMethod.GET;
-        HealthHistory healthHistory = null;
+        Measure measure = null;
         for (String type : measurementType) {
-            url = BASE_URL + "/person/" + personId + '/' + type;
+            url = ServiceConfiguration.getUrl() + "/person/" + personId + '/' + type;
             ResponseEntity<?> exchange;
-            if (JSON_UNWRAP_LIST && MediaType.APPLICATION_JSON_VALUE.equals(applicationType.toString())) {
-                exchange = restTemplate.exchange(url, httpMethod, createHeader(""), HealthHistory[].class);
-                healthHistory = ((HealthHistory[]) exchange.getBody())[0];
-                logRequest(6, exchange.getStatusCode().is2xxSuccessful(), exchange);
-            } else {
-                exchange = restTemplate.exchange(url, httpMethod, createHeader(""), MeasurementHistory.class);
-                healthHistory = ((MeasurementHistory) exchange.getBody()).getMeasurementHistories().get(0);
-                logRequest(6, exchange.getStatusCode().is2xxSuccessful(), exchange);
-            }
+            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Measures.class);
+            measure = ((Measures) exchange.getBody()).getMeasures().get(0);
+            logRequest(6, exchange.getStatusCode().is2xxSuccessful(), exchange);
         }
-        return healthHistory;
+        return measure;
     }
 
     /**

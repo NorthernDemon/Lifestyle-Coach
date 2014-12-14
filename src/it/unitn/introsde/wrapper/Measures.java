@@ -1,32 +1,33 @@
 package it.unitn.introsde.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.google.common.base.MoreObjects;
-import it.unitn.introsde.persistence.entity.Person;
+import it.unitn.introsde.persistence.entity.Measure;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@JsonRootName("people")
-public final class People {
+@JsonRootName("measures")
+public final class Measures {
 
-    @JsonProperty("people")
-    @JacksonXmlProperty(localName = "person")
+    @JsonProperty(value = "measures")
+    @JacksonXmlProperty(localName = "measure")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<Person> persons;
+    private List<Measure> measures;
 
-    @JsonCreator
-    public People(@JsonProperty("people") List<Person> persons) {
-        this.persons = persons;
+    public Measures() {
     }
 
-    public List<Person> getPersons() {
-        return Collections.unmodifiableList(persons);
+    public Measures(List<Measure> measures) {
+        this.measures = measures;
+    }
+
+    public List<Measure> getMeasures() {
+        return Collections.unmodifiableList(measures);
     }
 
     @Override
@@ -34,10 +35,10 @@ public final class People {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        if (o instanceof People) {
-            People people = (People) o;
+        if (o instanceof Measures) {
+            Measures measures = (Measures) o;
 
-            return Objects.equals(this.persons, people.persons);
+            return Objects.equals(this.measures, measures.measures);
         }
 
         return false;
@@ -45,13 +46,13 @@ public final class People {
 
     @Override
     public int hashCode() {
-        return Objects.hash(persons);
+        return Objects.hash(measures);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("persons", persons.size())
+                .add("measures", measures.size())
                 .toString();
     }
 }

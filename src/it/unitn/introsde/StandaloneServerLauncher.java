@@ -12,11 +12,11 @@ public final class StandaloneServerLauncher {
 
     public static void main(String[] args) throws Exception {
         Tomcat tomcat = new Tomcat();
-        tomcat.setHostname(StandaloneClientLauncher.IP);
-        tomcat.setPort(StandaloneClientLauncher.PORT);
+        tomcat.setHostname(ServiceConfiguration.getHost());
+        tomcat.setPort(ServiceConfiguration.getPort());
         tomcat.addWebapp("/", new File("webapp/").getAbsolutePath());
         tomcat.start();
-        System.out.println("Standalone server is up at: " + tomcat.getHost().getName() + ':' + tomcat.getConnector().getPort() + StandaloneClientLauncher.SERVER_STUDENT_NAME);
+        System.out.println("Standalone server is up at: " + tomcat.getHost().getName() + ':' + tomcat.getConnector().getPort() + ServiceConfiguration.getName());
         printPossibleIP();
         tomcat.getServer().await();
     }
@@ -33,7 +33,7 @@ public final class StandaloneServerLauncher {
             Enumeration<InetAddress> inetAddresses = networkInterfaces.nextElement().getInetAddresses();
             for (; inetAddresses.hasMoreElements(); ) {
                 String hostAddress = inetAddresses.nextElement().getHostAddress();
-                if (hostAddress.contains(".") && !"127.0.0.1".equals(hostAddress) && !StandaloneClientLauncher.IP.equals(hostAddress)) {
+                if (hostAddress.contains(".") && !"127.0.0.1".equals(hostAddress) && !ServiceConfiguration.getHost().equals(hostAddress)) {
                     System.out.println('-' + hostAddress);
                 }
             }

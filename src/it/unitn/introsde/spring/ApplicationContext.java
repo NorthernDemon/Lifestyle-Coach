@@ -1,24 +1,17 @@
 package it.unitn.introsde.spring;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.beans.PropertyVetoException;
-import java.util.List;
 
 /**
  * Spring configuration:
@@ -31,21 +24,7 @@ import java.util.List;
 @ComponentScan("it.unitn.introsde")
 @EnableWebMvc
 @EnableTransactionManagement
-public class ApplicationContext extends WebMvcConfigurerAdapter {
-
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        MappingJackson2HttpMessageConverter converterJson = new MappingJackson2HttpMessageConverter();
-        ObjectMapper objectMapper = new ObjectMapper();
-        converterJson.setObjectMapper(objectMapper);
-        converters.add(converterJson);
-
-        MappingJackson2XmlHttpMessageConverter converterXml = new MappingJackson2XmlHttpMessageConverter();
-        XmlMapper xmlMapper = new XmlMapper();
-        converterXml.setObjectMapper(xmlMapper);
-        converters.add(converterXml);
-        super.configureMessageConverters(converters);
-    }
+public class ApplicationContext {
 
     @Bean(name = "dataSource")
     public ComboPooledDataSource getDataSource() throws PropertyVetoException {

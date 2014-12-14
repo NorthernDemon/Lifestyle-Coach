@@ -1,9 +1,11 @@
 package it.unitn.introsde.persistence;
 
-import it.unitn.introsde.StandaloneClientLauncher;
+import it.unitn.introsde.ServiceConfiguration;
+import it.unitn.introsde.persistence.dao.MeasureDao;
 import it.unitn.introsde.persistence.dao.PersonDao;
+import it.unitn.introsde.persistence.entity.Measure;
 import it.unitn.introsde.persistence.entity.Person;
-import it.unitn.introsde.wrapper.People;
+import it.unitn.introsde.wrapper.Persons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,10 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = StandaloneClientLauncher.SERVER_STUDENT_NAME)
+@RequestMapping(value = ServiceConfiguration.NAME)
 public class PeopleService {
 
     private PersonDao personDao;
+
+    private MeasureDao measureDao;
 
     /**
      * Request #1: GET /person should list all the people (see above Person model to know what data to return here) in your database (wrapped under the root element "people")
@@ -26,39 +30,19 @@ public class PeopleService {
     @RequestMapping(value = {"/person", "/person?measureType={measureType}&max={max}&min={min}"}, method = RequestMethod.GET,
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> getPeople(@RequestHeader(value = "Accept") String accept,
-                                       @RequestParam(value = "measureType", required = false) String measurementType,
-                                       @RequestParam(value = "max", required = false) Double max,
-                                       @RequestParam(value = "min", required = false) Double min) {
+    public Persons getPeople(@RequestParam(value = "measureType", required = false) String measurementType,
+                             @RequestParam(value = "max", required = false) String max,
+                             @RequestParam(value = "min", required = false) String min) {
+        List<Person> persons;
         if (measurementType != null && max != null && min != null) {
-            List<Person> persons = personDao.findWithinMeasurementType(measurementType, max, min);
-            switch (accept.toLowerCase()) {
-                case MediaType.APPLICATION_XML_VALUE:
-                    return new ResponseEntity<>(new People(persons), HttpStatus.OK);
-                case MediaType.APPLICATION_JSON_VALUE:
-                    if (StandaloneClientLauncher.JSON_UNWRAP_LIST) {
-                        return new ResponseEntity<>(persons, HttpStatus.OK);
-                    } else {
-                        return new ResponseEntity<>(new People(persons), HttpStatus.OK);
-                    }
-                default:
-                    return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-            }
+            persons = measureDao.findPeopleByMeasureTypeWithinRange(measurementType, max, min);
         } else {
-            List<Person> persons = personDao.list();
-            switch (accept.toLowerCase()) {
-                case MediaType.APPLICATION_XML_VALUE:
-                    return new ResponseEntity<>(new People(persons), HttpStatus.OK);
-                case MediaType.APPLICATION_JSON_VALUE:
-                    if (StandaloneClientLauncher.JSON_UNWRAP_LIST) {
-                        return new ResponseEntity<>(persons, HttpStatus.OK);
-                    } else {
-                        return new ResponseEntity<>(new People(persons), HttpStatus.OK);
-                    }
-                default:
-                    return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-            }
+            persons = personDao.list();
         }
+        for (Person person : persons) {
+            person.setCurrentHealth(measureDao.findCurrentMeasureByPerson(person));
+        }
+        return new Persons(persons);
     }
 
     /**
@@ -70,6 +54,7 @@ public class PeopleService {
     public ResponseEntity<Person> getPerson(@PathVariable("id") int id) {
         Person person = personDao.get(Person.class, id);
         if (person != null) {
+            person.setCurrentHealth(measureDao.findCurrentMeasureByPerson(person));
             return new ResponseEntity<>(person, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -83,12 +68,14 @@ public class PeopleService {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)
-    public Person updatePerson(@PathVariable("id") int id, @RequestBody Person person) {
+    public ResponseEntity<Person> updatePerson(@PathVariable("id") int id, @RequestBody Person person) {
         Person existingPerson = personDao.get(Person.class, id);
-        existingPerson.setFirstName(person.getFirstName());
-        existingPerson.setLastName(person.getLastName());
-        existingPerson.setBirthDate(person.getBirthDate());
-        return personDao.update(existingPerson);
+        if (existingPerson != null) {
+            personDao.update(person);
+            return new ResponseEntity<>(person, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
@@ -98,22 +85,33 @@ public class PeopleService {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.OK)
-    public Person postPerson(@RequestBody Person person) {
-        return personDao.save(person);
+    public Person savePerson(@RequestBody Person person) {
+        Person savedPerson = personDao.save(person);
+        for (Measure measure : savedPerson.getCurrentHealth()) {
+            measure.setPerson(savedPerson);
+            measureDao.save(measure);
+        }
+        return savedPerson;
     }
 
     /**
      * Request #5: DELETE /person/{id} should delete the person identified by {id} from the system
      */
-    @RequestMapping(value = "/person/{id}", method = RequestMethod.DELETE,
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @RequestMapping(value = "/person/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deletePerson(@PathVariable("id") int id) {
-        personDao.delete(personDao.load(Person.class, id));
+        Person person = personDao.load(Person.class, id);
+        measureDao.deleteByPerson(person);
+        personDao.delete(person);
     }
 
     @Autowired
     public void setPersonDao(PersonDao personDao) {
         this.personDao = personDao;
+    }
+
+    @Autowired
+    public void setMeasureDao(MeasureDao measureDao) {
+        this.measureDao = measureDao;
     }
 }

@@ -1,6 +1,5 @@
 package it.unitn.introsde.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -12,20 +11,22 @@ import java.util.List;
 import java.util.Objects;
 
 @JsonRootName("measureTypes")
-public final class MeasurementType {
+public final class MeasureTypes {
 
     @JsonProperty("measureTypes")
-    @JacksonXmlProperty(localName = "measureType")
+    @JacksonXmlProperty(localName = "measure")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<String> measurementTypes;
+    private List<String> measureTypes;
 
-    @JsonCreator
-    public MeasurementType(@JsonProperty(value = "measureTypes") List<String> measurementTypes) {
-        this.measurementTypes = measurementTypes;
+    public MeasureTypes() {
     }
 
-    public List<String> getMeasurementTypes() {
-        return Collections.unmodifiableList(measurementTypes);
+    public MeasureTypes(List<String> measureTypes) {
+        this.measureTypes = measureTypes;
+    }
+
+    public List<String> getMeasureTypes() {
+        return Collections.unmodifiableList(measureTypes);
     }
 
     @Override
@@ -33,10 +34,10 @@ public final class MeasurementType {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        if (o instanceof MeasurementType) {
-            MeasurementType measurementType = (MeasurementType) o;
+        if (o instanceof MeasureTypes) {
+            MeasureTypes measureTypes = (MeasureTypes) o;
 
-            return Objects.equals(measurementTypes, measurementType.measurementTypes);
+            return Objects.equals(this.measureTypes, measureTypes.measureTypes);
         }
 
         return false;
@@ -44,13 +45,13 @@ public final class MeasurementType {
 
     @Override
     public int hashCode() {
-        return Objects.hash(measurementTypes);
+        return Objects.hash(measureTypes);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("measurementTypes", measurementTypes.size())
+                .add("measureTypes", measureTypes.size())
                 .toString();
     }
 }

@@ -1,39 +1,21 @@
 package it.unitn.introsde.persistence.entity;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.google.common.base.MoreObjects;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "person", schema = "people")
 @JsonRootName("person")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"id", "firstName", "lastName", "birthDate", "healthProfile"})
-@NamedQueries({
-        @NamedQuery(
-                name = Person.FIND_WITHIN_MEASUREMENT_TYPE_WEIGHT,
-                query = "SELECT p FROM Person p WHERE p.healthProfile.weight BETWEEN :min AND :max"
-        ),
-        @NamedQuery(
-                name = Person.FIND_WITHIN_MEASUREMENT_TYPE_HEIGHT,
-                query = "SELECT p FROM Person p WHERE p.healthProfile.height BETWEEN :min AND :max"
-        ),
-        @NamedQuery(
-                name = Person.FIND_WITHIN_MEASUREMENT_TYPE_STEPS,
-                query = "SELECT p FROM Person p WHERE p.healthProfile.steps BETWEEN :min AND :max"
-        ),
-})
+@JsonPropertyOrder({"id", "firstName", "lastName", "birthday", "currentHealth", "healthHistory"})
 public class Person implements Serializable {
-
-    public static final String FIND_WITHIN_MEASUREMENT_TYPE_WEIGHT = "Person.findWithinMeasurementTypeWeight";
-    public static final String FIND_WITHIN_MEASUREMENT_TYPE_HEIGHT = "Person.findWithinMeasurementTypeHeight";
-    public static final String FIND_WITHIN_MEASUREMENT_TYPE_STEPS = "Person.findWithinMeasurementTypeSteps";
 
     @Id
     @GeneratedValue
@@ -42,38 +24,39 @@ public class Person implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    @JsonProperty(value = "firstname", required = true)
+    @JsonProperty(required = true)
     private String firstName;
 
     @NotNull
     @Column(nullable = false)
-    @JsonProperty(value = "lastname", required = true)
+    @JsonProperty(required = true)
     private String lastName;
 
     @NotNull
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    @JsonProperty(value = "birthdate", required = true)
+    @JsonProperty(required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date birthDate;
+    private Date birthday;
 
     @NotNull
-    @Embedded
+    @Transient
+    @JacksonXmlElementWrapper(localName = "currentMeasures")
     @JsonProperty(required = true)
-    private HealthProfile healthProfile = new HealthProfile();
+    private List<Measure> currentHealth = new ArrayList<>(); // one for each type of measure
+
+    @Transient
+    @JacksonXmlElementWrapper(localName = "historyMeasures")
+    @JsonProperty
+    private List<Measure> healthHistory = new ArrayList<>(); // all measurements
 
     public Person() {
     }
 
-    public Person(String firstName, String lastName, Date birthDate) {
+    public Person(String firstName, String lastName, Date birthday) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
-    }
-
-    public Person(String firstName, String lastName, Date birthDate, HealthProfile healthProfile) {
-        this(firstName, lastName, birthDate);
-        this.healthProfile = new HealthProfile(healthProfile);
+        this.birthday = birthday;
     }
 
     public int getId() {
@@ -100,20 +83,28 @@ public class Person implements Serializable {
         this.lastName = lastName;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
+    public Date getBirthday() {
+        return birthday;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
-    public HealthProfile getHealthProfile() {
-        return healthProfile;
+    public List<Measure> getCurrentHealth() {
+        return currentHealth;
     }
 
-    public void setHealthProfile(HealthProfile healthProfile) {
-        this.healthProfile = healthProfile;
+    public void setCurrentHealth(List<Measure> currentHealth) {
+        this.currentHealth = currentHealth;
+    }
+
+    public List<Measure> getHealthHistory() {
+        return healthHistory;
+    }
+
+    public void setHealthHistory(List<Measure> healthHistory) {
+        this.healthHistory = healthHistory;
     }
 
     @Override
@@ -127,7 +118,7 @@ public class Person implements Serializable {
             return Objects.equals(id, person.id)
                     && Objects.equals(firstName, person.firstName)
                     && Objects.equals(lastName, person.lastName)
-                    && Objects.equals(birthDate, person.birthDate);
+                    && Objects.equals(birthday, person.birthday);
         }
 
         return false;
@@ -135,7 +126,7 @@ public class Person implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, birthDate);
+        return Objects.hash(id, firstName, lastName, birthday);
     }
 
     @Override
@@ -144,8 +135,9 @@ public class Person implements Serializable {
                 .add("id", id)
                 .add("firstName", firstName)
                 .add("lastName", lastName)
-                .add("birthDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(birthDate))
-                .add("healthProfile", healthProfile)
+                .add("birthday", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(birthday))
+                .add("currentHealth", currentHealth == null ? "null" : Arrays.toString(currentHealth.toArray()))
+                .add("healthHistory", healthHistory == null ? "null" : Arrays.toString(healthHistory.toArray()))
                 .toString();
     }
 }
