@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.google.common.base.MoreObjects;
 import it.unitn.introsde.persistence.entity.Person;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +22,7 @@ public final class Persons {
     private List<Person> persons;
 
     @JsonCreator
-    public Persons(@JsonProperty("people") List<Person> persons) {
+    public Persons(@JsonProperty("person") List<Person> persons) {
         this.persons = persons;
     }
 
@@ -51,7 +52,7 @@ public final class Persons {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("persons", persons.size())
+                .add("persons", Arrays.toString(persons.toArray()))
                 .toString();
     }
 }

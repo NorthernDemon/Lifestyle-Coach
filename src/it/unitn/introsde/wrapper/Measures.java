@@ -1,5 +1,6 @@
 package it.unitn.introsde.wrapper;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -7,6 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.google.common.base.MoreObjects;
 import it.unitn.introsde.persistence.entity.Measure;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -19,10 +21,8 @@ public final class Measures {
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<Measure> measures;
 
-    public Measures() {
-    }
-
-    public Measures(List<Measure> measures) {
+    @JsonCreator
+    public Measures(@JsonProperty("measure") List<Measure> measures) {
         this.measures = measures;
     }
 
@@ -52,7 +52,7 @@ public final class Measures {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("measures", measures.size())
+                .add("measures", Arrays.toString(measures.toArray()))
                 .toString();
     }
 }

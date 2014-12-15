@@ -11,10 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Entity
-@Table(name = "person", schema = "people")
+@Table(name = "person", schema = "lifestylecoach")
 @JsonRootName("person")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"id", "firstName", "lastName", "birthday", "currentHealth", "healthHistory"})
+@JsonPropertyOrder({"id", "firstName", "lastName", "birthday", "currentMeasure", "historyMeasure"})
 public class Person implements Serializable {
 
     @Id
@@ -43,12 +43,12 @@ public class Person implements Serializable {
     @Transient
     @JacksonXmlElementWrapper(localName = "currentMeasures")
     @JsonProperty(required = true)
-    private List<Measure> currentHealth = new ArrayList<>(); // one for each type of measure
+    private List<Measure> currentMeasure = new ArrayList<>();
 
     @Transient
     @JacksonXmlElementWrapper(localName = "historyMeasures")
     @JsonProperty
-    private List<Measure> healthHistory = new ArrayList<>(); // all measurements
+    private List<Measure> historyMeasure = new ArrayList<>();
 
     public Person() {
     }
@@ -91,20 +91,20 @@ public class Person implements Serializable {
         this.birthday = birthday;
     }
 
-    public List<Measure> getCurrentHealth() {
-        return currentHealth;
+    public List<Measure> getCurrentMeasure() {
+        return currentMeasure;
     }
 
-    public void setCurrentHealth(List<Measure> currentHealth) {
-        this.currentHealth = currentHealth;
+    public void setCurrentMeasure(List<Measure> currentMeasure) {
+        this.currentMeasure = currentMeasure;
     }
 
-    public List<Measure> getHealthHistory() {
-        return healthHistory;
+    public List<Measure> getHistoryMeasure() {
+        return historyMeasure;
     }
 
-    public void setHealthHistory(List<Measure> healthHistory) {
-        this.healthHistory = healthHistory;
+    public void setHistoryMeasure(List<Measure> historyMeasure) {
+        this.historyMeasure = historyMeasure;
     }
 
     @Override
@@ -136,8 +136,8 @@ public class Person implements Serializable {
                 .add("firstName", firstName)
                 .add("lastName", lastName)
                 .add("birthday", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(birthday))
-                .add("currentHealth", currentHealth == null ? "null" : Arrays.toString(currentHealth.toArray()))
-                .add("healthHistory", healthHistory == null ? "null" : Arrays.toString(healthHistory.toArray()))
+                .add("currentMeasure", currentMeasure == null ? "null" : Arrays.toString(currentMeasure.toArray()))
+                .add("historyMeasure", historyMeasure == null ? "null" : Arrays.toString(historyMeasure.toArray()))
                 .toString();
     }
 }

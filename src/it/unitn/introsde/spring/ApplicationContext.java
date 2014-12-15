@@ -15,10 +15,9 @@ import java.beans.PropertyVetoException;
 
 /**
  * Spring configuration:
- * - hibernate c3p0
  * - datasource
+ * - hibernate c3p0
  * - transactional manager
- * - XML and JSON object mappers
  */
 @Configuration
 @ComponentScan("it.unitn.introsde")
@@ -30,7 +29,7 @@ public class ApplicationContext {
     public ComboPooledDataSource getDataSource() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         dataSource.setDriverClass("org.h2.Driver");
-        dataSource.setJdbcUrl("jdbc:h2:mem:people:;INIT=CREATE SCHEMA IF NOT EXISTS people");
+        dataSource.setJdbcUrl("jdbc:h2:mem:lifestylecoach:;INIT=CREATE SCHEMA IF NOT EXISTS lifestylecoach");
         dataSource.setUser("sa");
         dataSource.setPassword("sa");
         return dataSource;

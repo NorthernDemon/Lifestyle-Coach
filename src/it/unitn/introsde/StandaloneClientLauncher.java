@@ -68,10 +68,6 @@ public final class StandaloneClientLauncher {
         }
     }
 
-    /**
-     * ACTUAL WORK
-     */
-
     private static void doWork(ObjectWriter objectWriter, MediaType contentType) throws Exception {
         mapper = objectWriter;
         applicationType = contentType;
@@ -118,8 +114,8 @@ public final class StandaloneClientLauncher {
         url = ServiceConfiguration.getUrl() + "/person";
         Person chuckNorris = new Person("Chuck", "Norris", getDate(1945, 0, 1));
         List<Measure> chuckMeasure = new ArrayList<>();
-        chuckMeasure.add(new Measure(chuckNorris, "height", "172.0", "Double"));
-        chuckNorris.setCurrentHealth(chuckMeasure);
+        chuckMeasure.add(new Measure(chuckNorris, "height", "172.0"));
+        chuckNorris.setCurrentMeasure(chuckMeasure);
         exchange = restTemplate.exchange(url, httpMethod, createHeader(chuckNorris), Person.class);
         chuckNorris = (Person) exchange.getBody();
         logRequest(4, exchange.getStatusCode().is2xxSuccessful(), exchange);
@@ -153,7 +149,7 @@ public final class StandaloneClientLauncher {
         url = ServiceConfiguration.getUrl() + "/measureTypes";
         exchange = restTemplate.exchange(url, httpMethod, createHeader(""), MeasureTypes.class);
         List<String> measurementTypesList = ((MeasureTypes) exchange.getBody()).getMeasureTypes();
-        logRequest(9, measurementTypesList.size() > 2, exchange);
+        logRequest(9, measurementTypesList.size() >= 2, exchange);
         printMeasurements(firstPerson.getId(), measurementTypesList);
         Measure measure = printMeasurements(lastPerson.getId(), measurementTypesList);
         String measureType = measurementTypesList.get(measurementTypesList.size() - 1);
@@ -183,7 +179,7 @@ public final class StandaloneClientLauncher {
          */
         httpMethod = HttpMethod.POST;
         url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId() + '/' + measureType;
-        exchange = restTemplate.exchange(url, httpMethod, createHeader(new Measure(firstPerson, measureType, "72.0", "Double")), Measure.class);
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(new Measure(firstPerson, measureType, "72.0")), Measure.class);
         Measure savedHealthHistory = (Measure) exchange.getBody();
         logRequest(8, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
@@ -239,13 +235,12 @@ public final class StandaloneClientLauncher {
      * for the first person you obtained at the beginning and the last person,and for each measure types from measure_types.
      * If no response has at least one measure - result is ERROR (no data at all) else result is OK. Store one measure_id and one measureType.
      */
-    private static Measure printMeasurements(int personId, List<String> measurementType) throws Exception {
+    private static Measure printMeasurements(int personId, List<String> measureType) throws Exception {
         httpMethod = HttpMethod.GET;
         Measure measure = null;
-        for (String type : measurementType) {
+        for (String type : measureType) {
             url = ServiceConfiguration.getUrl() + "/person/" + personId + '/' + type;
-            ResponseEntity<?> exchange;
-            exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Measures.class);
+            ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(""), Measures.class);
             measure = ((Measures) exchange.getBody()).getMeasures().get(0);
             logRequest(6, exchange.getStatusCode().is2xxSuccessful(), exchange);
         }

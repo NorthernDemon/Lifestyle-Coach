@@ -1,11 +1,13 @@
 package it.unitn.introsde.wrapper;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.google.common.base.MoreObjects;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -14,14 +16,12 @@ import java.util.Objects;
 public final class MeasureTypes {
 
     @JsonProperty("measureTypes")
-    @JacksonXmlProperty(localName = "measure")
+    @JacksonXmlProperty(localName = "measureType")
     @JacksonXmlElementWrapper(useWrapping = false)
     private List<String> measureTypes;
 
-    public MeasureTypes() {
-    }
-
-    public MeasureTypes(List<String> measureTypes) {
+    @JsonCreator
+    public MeasureTypes(@JsonProperty("measureType") List<String> measureTypes) {
         this.measureTypes = measureTypes;
     }
 
@@ -51,7 +51,7 @@ public final class MeasureTypes {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("measureTypes", measureTypes.size())
+                .add("measureTypes", Arrays.toString(measureTypes.toArray()))
                 .toString();
     }
 }

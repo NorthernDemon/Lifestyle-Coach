@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "measure", schema = "people")
+@Table(name = "measure", schema = "lifestylecoach")
 @JsonRootName("measure")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"id", "created", "type", "value", "units"})
@@ -89,23 +89,17 @@ public class Measure implements Serializable {
     @JsonProperty(required = true)
     private String value;
 
-    @NotNull
-    @Column(nullable = false)
-    @JsonProperty(required = true)
-    private String units; // string, integer, real
-
     public Measure() {
     }
 
-    public Measure(Person person, String type, String value, String units) {
+    public Measure(Person person, String type, String value) {
         this.person = person;
         this.type = type;
         this.value = value;
-        this.units = units;
     }
 
-    public Measure(Person person, Date created, String type, String value, String units) {
-        this(person, type, value, units);
+    public Measure(Person person, Date created, String type, String value) {
+        this(person, type, value);
         this.created = created;
     }
 
@@ -149,14 +143,6 @@ public class Measure implements Serializable {
         this.value = value;
     }
 
-    public String getUnits() {
-        return units;
-    }
-
-    public void setUnits(String units) {
-        this.units = units;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -187,7 +173,6 @@ public class Measure implements Serializable {
                 .add("created", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(created))
                 .add("type", type)
                 .add("value", value)
-                .add("units", units)
                 .toString();
     }
 }

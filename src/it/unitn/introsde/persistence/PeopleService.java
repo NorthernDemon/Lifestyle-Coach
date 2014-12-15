@@ -40,7 +40,7 @@ public class PeopleService {
             persons = personDao.list();
         }
         for (Person person : persons) {
-            person.setCurrentHealth(measureDao.findCurrentMeasureByPerson(person));
+            person.setCurrentMeasure(measureDao.findCurrentMeasureByPerson(person));
         }
         return new Persons(persons);
     }
@@ -54,7 +54,7 @@ public class PeopleService {
     public ResponseEntity<Person> getPerson(@PathVariable("id") int id) {
         Person person = personDao.get(Person.class, id);
         if (person != null) {
-            person.setCurrentHealth(measureDao.findCurrentMeasureByPerson(person));
+            person.setCurrentMeasure(measureDao.findCurrentMeasureByPerson(person));
             return new ResponseEntity<>(person, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -87,7 +87,7 @@ public class PeopleService {
     @ResponseStatus(HttpStatus.OK)
     public Person savePerson(@RequestBody Person person) {
         Person savedPerson = personDao.save(person);
-        for (Measure measure : savedPerson.getCurrentHealth()) {
+        for (Measure measure : savedPerson.getCurrentMeasure()) {
             measure.setPerson(savedPerson);
             measureDao.save(measure);
         }

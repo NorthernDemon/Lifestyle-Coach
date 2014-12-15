@@ -30,11 +30,10 @@ public abstract class RandomUtil {
      * @return random measure
      */
     public static Measure getMeasure(Person person) {
-        int value = new Random().nextInt(2);
-        if (value == 0) {
-            return new Measure(person, getDate(1950), "height", String.valueOf(getDouble(100)), "Double");
+        if (new Random().nextBoolean()) {
+            return new Measure(person, getDate(1950), "height", String.valueOf(getDouble(100)));
         } else {
-            return new Measure(person, getDate(1950), "weight", String.valueOf(getInteger(100)), "Integer");
+            return new Measure(person, getDate(1950), "weight", String.valueOf(getInteger(100)));
         }
     }
 
