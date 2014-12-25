@@ -1,6 +1,9 @@
 LifestyleCoach
 ==============
-====eidted by david=====
+
+Introduction
+-------
+
 SDE project 2014/2015
 
 1. Application is done with Spring Framework, Hibernate, JPA, H2 in-memory database and Jackson
@@ -25,3 +28,20 @@ SDE project 2014/2015
 4. When starting the server you get exception
     - java.lang.ClassNotFoundException: org.apache.jasper.servlet.JspServlet
     Do not worry, that the situation is under control
+
+Use Case
+-------
+
+Entity Relationship
+-------
+
+Architecture
+-------
+
+Documentation
+-------
+Apiary: http://docs.lifestylecoach1.apiary.io/
+
+Authors
+-------
+David Nyaika and Victor Ekimov
