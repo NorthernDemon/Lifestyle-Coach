@@ -26,7 +26,7 @@
 
         <dependency org="org.apache.tomcat.embed" name="tomcat-embed-core" rev="8.0.15"/>
 
-        <dependency org="com.h2database" name="h2" rev="1.4.183"/>
+        <dependency org="com.h2database" name="h2" rev="1.4.184"/>
         <dependency org="org.hibernate" name="hibernate-c3p0" rev="4.3.7.Final"/>
         <dependency org="org.hibernate" name="hibernate-entitymanager" rev="4.3.7.Final"/>
 
