@@ -1,21 +1,39 @@
 package it.unitn.introsde.persistence.entity;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.google.common.base.MoreObjects;
+import it.unitn.introsde.ServiceConfiguration;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.Objects;
 
 @Entity
-@Table(name = "person", schema = "lifestylecoach")
+@Table(name = "person", schema = ServiceConfiguration.SCHEMA)
 @JsonRootName("person")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"id", "firstName", "lastName", "birthday", "currentMeasure", "historyMeasure"})
+@JsonPropertyOrder({"id", "name", "surname", "birthday", "facebookId", "googleId"})
+@NamedQueries({
+        @NamedQuery(
+                name = Person.FIND_BY_FACEBOOK_ID,
+                query = "SELECT p FROM Person p WHERE p.facebookId = :facebookId"
+        ),
+        @NamedQuery(
+                name = Person.FIND_BY_GOOGLE_ID,
+                query = "SELECT p FROM Person p WHERE p.googleId = :googleId"
+        ),
+})
 public class Person implements Serializable {
+
+    public static final String FIND_BY_FACEBOOK_ID = "Person.findByFacebookId";
+    public static final String FIND_BY_GOOGLE_ID = "Person.findByGoogleId";
 
     @Id
     @GeneratedValue
@@ -23,40 +41,54 @@ public class Person implements Serializable {
     private int id;
 
     @NotNull
-    @Column(nullable = false)
+    @NotEmpty
+    @Size(max = 20)
+    @Column(nullable = false, updatable = false)
     @JsonProperty(required = true)
-    private String firstName;
+    private String name;
 
     @NotNull
-    @Column(nullable = false)
+    @NotEmpty
+    @Size(max = 20)
+    @Column(nullable = false, updatable = false)
     @JsonProperty(required = true)
-    private String lastName;
+    private String surname;
 
     @NotNull
-    @Column(nullable = false)
+    @Past
+    @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.DATE)
     @JsonProperty(required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthday;
 
-    @NotNull
-    @Transient
-    @JacksonXmlElementWrapper(localName = "currentMeasures")
+    @Range
+    @Column(nullable = false, unique = true)
     @JsonProperty(required = true)
-    private List<Measure> currentMeasure = new ArrayList<>();
+    private int facebookId;
 
-    @Transient
-    @JacksonXmlElementWrapper(localName = "historyMeasures")
-    @JsonProperty
-    private List<Measure> historyMeasure = new ArrayList<>();
+    @Range
+    @Column(nullable = false, unique = true)
+    @JsonProperty(required = true)
+    private int googleId;
 
     public Person() {
     }
 
-    public Person(String firstName, String lastName, Date birthday) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Person(String name, String surname, Date birthday) {
+        this.name = name;
+        this.surname = surname;
         this.birthday = birthday;
+    }
+
+    public Person(String name, String surname, Date birthday, int facebookId) {
+        this(name, surname, birthday);
+        this.facebookId = facebookId;
+    }
+
+    public Person(String name, String surname, Date birthday, int facebookId, int googleId) {
+        this(name, surname, birthday, facebookId);
+        this.googleId = googleId;
     }
 
     public int getId() {
@@ -67,20 +99,20 @@ public class Person implements Serializable {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public Date getBirthday() {
@@ -91,20 +123,20 @@ public class Person implements Serializable {
         this.birthday = birthday;
     }
 
-    public List<Measure> getCurrentMeasure() {
-        return currentMeasure;
+    public int getFacebookId() {
+        return facebookId;
     }
 
-    public void setCurrentMeasure(List<Measure> currentMeasure) {
-        this.currentMeasure = currentMeasure;
+    public void setFacebookId(int facebookId) {
+        this.facebookId = facebookId;
     }
 
-    public List<Measure> getHistoryMeasure() {
-        return historyMeasure;
+    public int getGoogleId() {
+        return googleId;
     }
 
-    public void setHistoryMeasure(List<Measure> historyMeasure) {
-        this.historyMeasure = historyMeasure;
+    public void setGoogleId(int googleId) {
+        this.googleId = googleId;
     }
 
     @Override
@@ -113,12 +145,13 @@ public class Person implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         if (o instanceof Person) {
-            Person person = (Person) o;
+            Person object = (Person) o;
 
-            return Objects.equals(id, person.id)
-                    && Objects.equals(firstName, person.firstName)
-                    && Objects.equals(lastName, person.lastName)
-                    && Objects.equals(birthday, person.birthday);
+            return Objects.equals(id, object.id)
+                    && Objects.equals(name, object.name)
+                    && Objects.equals(surname, object.surname)
+                    && Objects.equals(birthday, object.birthday)
+                    && Objects.equals(facebookId, object.facebookId);
         }
 
         return false;
@@ -126,18 +159,18 @@ public class Person implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, birthday);
+        return Objects.hash(id, name, surname, birthday, facebookId);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
-                .add("firstName", firstName)
-                .add("lastName", lastName)
-                .add("birthday", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(birthday))
-                .add("currentMeasure", currentMeasure == null ? "null" : Arrays.toString(currentMeasure.toArray()))
-                .add("historyMeasure", historyMeasure == null ? "null" : Arrays.toString(historyMeasure.toArray()))
+                .add("name", name)
+                .add("surname", surname)
+                .add("birthday", new SimpleDateFormat("yyyy-MM-dd").format(birthday))
+                .add("facebookId", facebookId)
+                .add("googleId", googleId)
                 .toString();
     }
 }

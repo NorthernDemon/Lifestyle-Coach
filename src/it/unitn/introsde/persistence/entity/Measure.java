@@ -2,9 +2,13 @@ package it.unitn.introsde.persistence.entity;
 
 import com.fasterxml.jackson.annotation.*;
 import com.google.common.base.MoreObjects;
+import it.unitn.introsde.ServiceConfiguration;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,94 +16,69 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "measure", schema = "lifestylecoach")
+@Table(name = "measure", schema = ServiceConfiguration.SCHEMA)
 @JsonRootName("measure")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"id", "created", "type", "value", "units"})
+@JsonPropertyOrder({"id", "measureType", "value", "created"})
 @NamedQueries({
         @NamedQuery(
-                name = Measure.FIND_CURRENT_MEASURE_BY_PERSON,
-                query = "SELECT m FROM Measure m WHERE m.person = :person AND m.created =" +
-                        " (SELECT MAX(mm.created) FROM Measure mm WHERE mm.person = :person AND mm.type = m.type)"
+                name = Measure.FIND_BY_PERSON_AND_MEASURE_TYPE_SINCE_DATE,
+                query = "SELECT m FROM Measure m WHERE m.person = :person AND m.measureType = :measureType AND m.created >= :start" +
+                        " ORDER BY m.created DESC"
         ),
         @NamedQuery(
-                name = Measure.FIND_HISTORY_MEASURE_BY_PERSON_AND_MEASURE_TYPE,
-                query = "SELECT m FROM Measure m WHERE m.person = :person AND m.type = :type AND m.created !=" +
-                        " (SELECT MAX(mm.created) FROM Measure mm WHERE mm.person = :person AND mm.type = m.type)" +
-                        " ORDER BY m.created"
-        ),
-        @NamedQuery(
-                name = Measure.FIND_BY_PERSON_AND_MEASURE_TYPE_AND_ID,
-                query = "SELECT m FROM Measure m WHERE m.person = :person AND m.type = :type AND m.id = :id"
-        ),
-        @NamedQuery(
-                name = Measure.FIND_MEASURE_TYPES,
-                query = "SELECT DISTINCT m.type FROM Measure m"
-        ),
-        @NamedQuery(
-                name = Measure.FIND_BY_PERSON_AND_MEASURE_TYPE_WITHIN_DATES,
-                query = "SELECT m FROM Measure m WHERE" +
-                        " m.person = :person AND m.type = :type AND m.created BETWEEN :after AND :before" +
-                        " ORDER BY m.created"
-        ),
-        @NamedQuery(
-                name = Measure.FIND_PEOPLE_BY_MEASURE_TYPE_WITHIN_RANGE,
-                query = "SELECT DISTINCT m.person FROM Measure m WHERE m.type = :type AND m.value BETWEEN :min AND :max"
-        ),
-        @NamedQuery(
-                name = Measure.DELETE_BY_PERSON,
-                query = "DELETE FROM Measure m WHERE m.person = :person"
+                name = Measure.FIND_BY_PERSON_AND_MEASURE_TYPE_AND_LATEST_DATE,
+                query = "SELECT m FROM Measure m WHERE m.created =" +
+                        " (SELECT MAX(mm.created) FROM Measure mm WHERE mm.person = :person AND mm.measureType = :measureType)"
         ),
 })
 public class Measure implements Serializable {
 
-    public static final String FIND_CURRENT_MEASURE_BY_PERSON = "Measure.findCurrentMeasureByPerson";
-    public static final String FIND_HISTORY_MEASURE_BY_PERSON_AND_MEASURE_TYPE = "Measure.findHistoryMeasureByPersonAndMeasureType";
-    public static final String FIND_BY_PERSON_AND_MEASURE_TYPE_AND_ID = "Measure.findByPersonAndMeasureTypeAndId";
-    public static final String FIND_MEASURE_TYPES = "Measure.findMeasureTypes";
-    public static final String FIND_BY_PERSON_AND_MEASURE_TYPE_WITHIN_DATES = "Measure.findByPersonAndMeasureTypeWithinDates";
-    public static final String FIND_PEOPLE_BY_MEASURE_TYPE_WITHIN_RANGE = "Measure.findPeopleByMeasureTypeWithinRange";
-    public static final String DELETE_BY_PERSON = "Measure.deleteByPerson";
+    public static final String FIND_BY_PERSON_AND_MEASURE_TYPE_SINCE_DATE = "Measure.findByPersonAndMeasureTypeSinceDate";
+    public static final String FIND_BY_PERSON_AND_MEASURE_TYPE_AND_LATEST_DATE = "Measure.findByPersonAndMeasureTypeAndLatestDate";
 
     @Id
     @GeneratedValue
     @JsonProperty(required = true)
     private int id;
 
+    @Valid
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "personId", nullable = false)
+    @JoinColumn(name = "personId", nullable = false, updatable = false)
     @JsonIgnore
     private Person person;
 
+    @Valid
     @NotNull
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
+    @ManyToOne
+    @JoinColumn(name = "measureTypeId", nullable = false, updatable = false)
     @JsonProperty(required = true)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private MeasureType measureType;
+
+    @Range
+    @Column(nullable = false, updatable = false)
+    @JsonProperty(required = true)
+    private double value;
+
+    @NotNull
+    @Column(nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonProperty(required = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.S")
     private Date created = Calendar.getInstance().getTime();
-
-    @NotNull
-    @Column(nullable = false)
-    @JsonProperty(required = true)
-    private String type;
-
-    @NotNull
-    @Column(nullable = false)
-    @JsonProperty(required = true)
-    private String value;
 
     public Measure() {
     }
 
-    public Measure(Person person, String type, String value) {
+    public Measure(Person person, MeasureType measureType, double value) {
         this.person = person;
-        this.type = type;
+        this.measureType = measureType;
         this.value = value;
     }
 
-    public Measure(Person person, Date created, String type, String value) {
-        this(person, type, value);
+    public Measure(Person person, MeasureType measureType, double value, @Past Date created) {
+        this(person, measureType, value);
         this.created = created;
     }
 
@@ -119,6 +98,14 @@ public class Measure implements Serializable {
         this.person = person;
     }
 
+    public MeasureType getMeasureType() {
+        return measureType;
+    }
+
+    public void setMeasureType(MeasureType measureType) {
+        this.measureType = measureType;
+    }
+
     public Date getCreated() {
         return created;
     }
@@ -127,19 +114,11 @@ public class Measure implements Serializable {
         this.created = created;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(double value) {
         this.value = value;
     }
 
@@ -149,12 +128,12 @@ public class Measure implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         if (o instanceof Measure) {
-            Measure measure = (Measure) o;
+            Measure object = (Measure) o;
 
-            return Objects.equals(id, measure.id)
-                    && Objects.equals(created, measure.created)
-                    && Objects.equals(type, measure.type)
-                    && Objects.equals(value, measure.value);
+            return Objects.equals(id, object.id)
+                    && Objects.equals(person, object.person)
+                    && Objects.equals(value, object.value)
+                    && Objects.equals(created, object.created);
         }
 
         return false;
@@ -162,17 +141,17 @@ public class Measure implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, created, type, value);
+        return Objects.hash(id, person, value, created);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
-                .add("person", person == null ? "null" : person.getId())
-                .add("created", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(created))
-                .add("type", type)
+                .add("person", person == null ? "null" : person)
+                .add("measureType", measureType == null ? "null" : measureType)
                 .add("value", value)
+                .add("created", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(created))
                 .toString();
     }
 }
