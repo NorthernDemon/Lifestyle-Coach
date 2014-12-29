@@ -197,12 +197,12 @@ public class Goal implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         if (o instanceof Goal) {
-            Goal measure = (Goal) o;
+            Goal object = (Goal) o;
 
-            return Objects.equals(id, measure.id)
-                    && Objects.equals(creator, measure.creator)
-                    && Objects.equals(person, measure.person)
-                    && Objects.equals(start, measure.start);
+            return Objects.equals(id, object.id)
+                    && Objects.equals(creator, object.creator)
+                    && Objects.equals(person, object.person)
+                    && Objects.equals(start, object.start);
         }
 
         return false;

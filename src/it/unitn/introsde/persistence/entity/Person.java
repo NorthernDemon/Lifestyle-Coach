@@ -145,13 +145,13 @@ public class Person implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         if (o instanceof Person) {
-            Person person = (Person) o;
+            Person object = (Person) o;
 
-            return Objects.equals(id, person.id)
-                    && Objects.equals(name, person.name)
-                    && Objects.equals(surname, person.surname)
-                    && Objects.equals(birthday, person.birthday)
-                    && Objects.equals(facebookId, person.facebookId);
+            return Objects.equals(id, object.id)
+                    && Objects.equals(name, object.name)
+                    && Objects.equals(surname, object.surname)
+                    && Objects.equals(birthday, object.birthday)
+                    && Objects.equals(facebookId, object.facebookId);
         }
 
         return false;

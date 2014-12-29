@@ -128,12 +128,12 @@ public class Measure implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         if (o instanceof Measure) {
-            Measure measure = (Measure) o;
+            Measure object = (Measure) o;
 
-            return Objects.equals(id, measure.id)
-                    && Objects.equals(person, measure.person)
-                    && Objects.equals(value, measure.value)
-                    && Objects.equals(created, measure.created);
+            return Objects.equals(id, object.id)
+                    && Objects.equals(person, object.person)
+                    && Objects.equals(value, object.value)
+                    && Objects.equals(created, object.created);
         }
 
         return false;

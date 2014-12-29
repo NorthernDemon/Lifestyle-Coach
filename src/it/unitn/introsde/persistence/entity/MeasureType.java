@@ -88,11 +88,11 @@ public class MeasureType implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         if (o instanceof MeasureType) {
-            MeasureType measure = (MeasureType) o;
+            MeasureType object = (MeasureType) o;
 
-            return Objects.equals(id, measure.id)
-                    && Objects.equals(type, measure.type)
-                    && Objects.equals(unit, measure.unit);
+            return Objects.equals(id, object.id)
+                    && Objects.equals(type, object.type)
+                    && Objects.equals(unit, object.unit);
         }
 
         return false;
