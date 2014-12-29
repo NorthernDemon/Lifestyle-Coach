@@ -3,9 +3,12 @@ package it.unitn.introsde.persistence.entity;
 import com.fasterxml.jackson.annotation.*;
 import com.google.common.base.MoreObjects;
 import it.unitn.introsde.ServiceConfiguration;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,18 +42,21 @@ public class Measure implements Serializable {
     @JsonProperty(required = true)
     private int id;
 
+    @Valid
     @NotNull
     @ManyToOne
     @JoinColumn(name = "personId", nullable = false, updatable = false)
     @JsonIgnore
     private Person person;
 
+    @Valid
     @NotNull
     @ManyToOne
     @JoinColumn(name = "measureTypeId", nullable = false, updatable = false)
     @JsonProperty(required = true)
     private MeasureType measureType;
 
+    @Range
     @Column(nullable = false, updatable = false)
     @JsonProperty(required = true)
     private double value;
@@ -71,7 +77,7 @@ public class Measure implements Serializable {
         this.value = value;
     }
 
-    public Measure(Person person, MeasureType measureType, double value, Date created) {
+    public Measure(Person person, MeasureType measureType, double value, @Past Date created) {
         this(person, measureType, value);
         this.created = created;
     }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.google.common.base.MoreObjects;
 import it.unitn.introsde.ServiceConfiguration;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -36,12 +37,14 @@ public class MeasureType implements Serializable {
     private int id;
 
     @NotNull
+    @NotEmpty
     @Size(max = 30)
     @Column(nullable = false, updatable = false)
     @JsonProperty(required = true)
     private String type;
 
     @NotNull
+    @NotEmpty
     @Size(max = 30)
     @Column(nullable = false, updatable = false)
     @JsonProperty(required = true)

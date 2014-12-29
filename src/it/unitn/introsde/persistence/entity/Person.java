@@ -3,9 +3,12 @@ package it.unitn.introsde.persistence.entity;
 import com.fasterxml.jackson.annotation.*;
 import com.google.common.base.MoreObjects;
 import it.unitn.introsde.ServiceConfiguration;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -38,28 +41,33 @@ public class Person implements Serializable {
     private int id;
 
     @NotNull
+    @NotEmpty
     @Size(max = 20)
     @Column(nullable = false, updatable = false)
     @JsonProperty(required = true)
     private String name;
 
     @NotNull
+    @NotEmpty
     @Size(max = 20)
     @Column(nullable = false, updatable = false)
     @JsonProperty(required = true)
     private String surname;
 
     @NotNull
+    @Past
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.DATE)
     @JsonProperty(required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthday;
 
+    @Range
     @Column(nullable = false, unique = true)
     @JsonProperty(required = true)
     private int facebookId;
 
+    @Range
     @Column(nullable = false, unique = true)
     @JsonProperty(required = true)
     private int googleId;

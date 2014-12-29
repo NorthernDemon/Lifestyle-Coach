@@ -3,14 +3,16 @@ package it.unitn.introsde.persistence.entity;
 import com.fasterxml.jackson.annotation.*;
 import com.google.common.base.MoreObjects;
 import it.unitn.introsde.ServiceConfiguration;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -50,29 +52,34 @@ public class Goal implements Serializable {
     @JsonProperty(required = true)
     private int id;
 
+    @Valid
     @NotNull
     @ManyToOne
     @JoinColumn(name = "creatorId", nullable = false, updatable = false)
     @JsonProperty(required = true)
     private Person creator;
 
+    @Valid
     @NotNull
     @ManyToOne
     @JoinColumn(name = "personId", nullable = false, updatable = false)
     @JsonIgnore
     private Person person;
 
+    @Valid
     @NotNull
     @ManyToOne
     @JoinColumn(name = "measureTypeId", nullable = false, updatable = false)
     @JsonProperty(required = true)
     private MeasureType measureType;
 
+    @Range
     @Column(nullable = false, updatable = false)
     @JsonProperty(required = true)
     private double value;
 
     @NotNull
+    @NotEmpty
     @Size(max = 255)
     @Column(nullable = false, updatable = false)
     @JsonProperty(required = true)
@@ -83,21 +90,21 @@ public class Goal implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonProperty(required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.S")
-    private Date start = Calendar.getInstance().getTime();
+    private Date start;
 
     @NotNull
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @JsonProperty(required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.S")
-    private Date end = Calendar.getInstance().getTime();
+    private Date end;
 
     @Nullable
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     @JsonProperty(required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.S")
-    private Date finished = Calendar.getInstance().getTime();
+    private Date finished;
 
     public Goal() {
     }
