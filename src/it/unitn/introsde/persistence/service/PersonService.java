@@ -25,11 +25,12 @@ public class PersonService {
     @RequestMapping(value = "/person", method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Person> createProfile(@Valid @RequestBody Person person, BindingResult result) {
+    public ResponseEntity<Person> createPerson(@Valid @RequestBody Person person, BindingResult result) {
         if (result.hasErrors()) {
             throw new BeanValidationException(result.getAllErrors());
         }
         personDao.save(person);
+        System.out.println("PersonService with person=" + person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 

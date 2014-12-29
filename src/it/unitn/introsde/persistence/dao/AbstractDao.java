@@ -8,20 +8,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Convenient class to abstract hibernate session factory, CRUD operations and JSR-303 Bean Validation
+ * Convenient class to abstract:
+ * - hibernate session factory
+ * - CRUD operations
+ * - JSR-303 Bean Validation
  *
  * @param <T> entity class
  */
 @Repository
 public abstract class AbstractDao<T> {
 
-    private final static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private ValidatorFactory validatorFactory;
 
     private SessionFactory sessionFactory;
 
@@ -62,7 +64,7 @@ public abstract class AbstractDao<T> {
      * @throws ConstraintViolationException
      */
     protected void validate(T entity) throws ConstraintViolationException {
-        Set<ConstraintViolation<T>> constraintViolations = factory.getValidator().validate(entity);
+        Set<ConstraintViolation<T>> constraintViolations = validatorFactory.getValidator().validate(entity);
         if (!constraintViolations.isEmpty()) {
             throw new ConstraintViolationException("Invalid object of class=" + entity.getClass(), new HashSet<ConstraintViolation<?>>(constraintViolations));
         }
@@ -75,5 +77,10 @@ public abstract class AbstractDao<T> {
     @Autowired
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    @Autowired
+    public void setValidatorFactory(ValidatorFactory validatorFactory) {
+        this.validatorFactory = validatorFactory;
     }
 }

@@ -25,7 +25,7 @@ public class MeasureService {
     @RequestMapping(value = "/measure", method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Measure> createProfile(@Valid @RequestBody Measure measure, BindingResult result) {
+    public ResponseEntity<Measure> createMeasure(@Valid @RequestBody Measure measure, BindingResult result) {
         if (result.hasErrors()) {
             throw new BeanValidationException(result.getAllErrors());
         }

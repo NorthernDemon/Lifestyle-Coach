@@ -25,7 +25,7 @@ public class GoalService {
     @RequestMapping(value = "/goal", method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Goal> createProfile(@Valid @RequestBody Goal goal, BindingResult result) {
+    public ResponseEntity<Goal> createGoal(@Valid @RequestBody Goal goal, BindingResult result) {
         if (result.hasErrors()) {
             throw new BeanValidationException(result.getAllErrors());
         }
