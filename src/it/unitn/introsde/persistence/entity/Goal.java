@@ -19,7 +19,31 @@ import java.util.Objects;
 @JsonRootName("goal")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"id", "creator", "measureType", "value", "message", "start", "end", "finished"})
+@NamedQueries({
+        @NamedQuery(
+                name = Goal.FIND_BY_PERSON_AND_MEASURE_TYPE_AND_ACCOMPLISHED,
+                query = "SELECT g FROM Goal g WHERE g.person = :person AND g.measureType = :measureType" +
+                        " AND g.finished IS NOT NULL" +
+                        " ORDER BY g.finished DESC"
+        ),
+        @NamedQuery(
+                name = Goal.FIND_BY_PERSON_AND_MEASURE_TYPE_AND_CURRENT,
+                query = "SELECT g FROM Goal g WHERE g.person = :person AND g.measureType = :measureType" +
+                        " AND g.finished IS NULL AND g.end >= :currentTime" +
+                        " ORDER BY g.start"
+        ),
+        @NamedQuery(
+                name = Goal.FIND_BY_PERSON_AND_MEASURE_TYPE_AND_OVERDUE,
+                query = "SELECT g FROM Goal g WHERE g.person = :person AND g.measureType = :measureType" +
+                        " AND g.finished IS NULL AND g.end < :currentTime" +
+                        " ORDER BY g.start"
+        ),
+})
 public class Goal implements Serializable {
+
+    public static final String FIND_BY_PERSON_AND_MEASURE_TYPE_AND_ACCOMPLISHED = "Goal.findByPersonAndMeasureTypeAndAccomplished";
+    public static final String FIND_BY_PERSON_AND_MEASURE_TYPE_AND_CURRENT = "Goal.findByPersonAndMeasureTypeAndCurrent";
+    public static final String FIND_BY_PERSON_AND_MEASURE_TYPE_AND_OVERDUE = "Goal.findByPersonAndMeasureTypeAndOverdue";
 
     @Id
     @GeneratedValue

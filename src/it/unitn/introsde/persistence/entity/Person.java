@@ -17,7 +17,20 @@ import java.util.Objects;
 @JsonRootName("person")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"id", "name", "surname", "birthday", "facebookId", "googleId"})
+@NamedQueries({
+        @NamedQuery(
+                name = Person.FIND_BY_FACEBOOK_ID,
+                query = "SELECT p FROM Person p WHERE p.facebookId = :facebookId"
+        ),
+        @NamedQuery(
+                name = Person.FIND_BY_GOOGLE_ID,
+                query = "SELECT p FROM Person p WHERE p.googleId = :googleId"
+        ),
+})
 public class Person implements Serializable {
+
+    public static final String FIND_BY_FACEBOOK_ID = "Person.findByFacebookId";
+    public static final String FIND_BY_GOOGLE_ID = "Person.findByGoogleId";
 
     @Id
     @GeneratedValue
@@ -43,11 +56,11 @@ public class Person implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthday;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @JsonProperty(required = true)
     private int facebookId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @JsonProperty(required = true)
     private int googleId;
 

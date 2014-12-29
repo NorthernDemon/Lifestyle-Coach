@@ -17,7 +17,22 @@ import java.util.Objects;
 @JsonRootName("measure")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"id", "measureType", "value", "created"})
+@NamedQueries({
+        @NamedQuery(
+                name = Measure.FIND_BY_PERSON_AND_MEASURE_TYPE_SINCE_DATE,
+                query = "SELECT m FROM Measure m WHERE m.person = :person AND m.measureType = :measureType AND m.created >= :start" +
+                        " ORDER BY m.created DESC"
+        ),
+        @NamedQuery(
+                name = Measure.FIND_BY_PERSON_AND_MEASURE_TYPE_AND_LATEST_DATE,
+                query = "SELECT m FROM Measure m WHERE m.created =" +
+                        " (SELECT MAX(mm.created) FROM Measure mm WHERE mm.person = :person AND mm.measureType = :measureType)"
+        ),
+})
 public class Measure implements Serializable {
+
+    public static final String FIND_BY_PERSON_AND_MEASURE_TYPE_SINCE_DATE = "Measure.findByPersonAndMeasureTypeSinceDate";
+    public static final String FIND_BY_PERSON_AND_MEASURE_TYPE_AND_LATEST_DATE = "Measure.findByPersonAndMeasureTypeAndLatestDate";
 
     @Id
     @GeneratedValue

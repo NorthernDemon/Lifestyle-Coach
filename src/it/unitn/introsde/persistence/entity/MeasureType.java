@@ -14,11 +14,21 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "measure_type", schema = ServiceConfiguration.SCHEMA)
+@Table(name = "measure_type", schema = ServiceConfiguration.SCHEMA, uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"type", "unit"}),
+})
 @JsonRootName("measureType")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"id", "type", "unit"})
+@NamedQueries({
+        @NamedQuery(
+                name = MeasureType.FIND_BY_TYPE_AND_UNIT,
+                query = "SELECT mt FROM MeasureType mt WHERE mt.type = :type AND mt.unit = :unit"
+        ),
+})
 public class MeasureType implements Serializable {
+
+    public static final String FIND_BY_TYPE_AND_UNIT = "MeasureType.findByTypeAndUnit";
 
     @Id
     @GeneratedValue
