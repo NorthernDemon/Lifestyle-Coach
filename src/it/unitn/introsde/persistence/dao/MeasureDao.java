@@ -32,8 +32,9 @@ public class MeasureDao extends AbstractDao<Measure> {
         return (Measure) namedQuery.uniqueResult();
     }
 
+    @Override
     @Transactional
-    public Measure saveMeasure(Measure measure) {
+    public Measure save(Measure measure) {
         validate(measure);
         if (measureTypeDao.findByTypeAndUnit(measure.getMeasureType()) == null) {
             measureTypeDao.save(measure.getMeasureType());
