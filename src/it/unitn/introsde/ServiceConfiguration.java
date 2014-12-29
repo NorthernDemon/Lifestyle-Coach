@@ -9,7 +9,9 @@ import java.util.Properties;
  */
 public abstract class ServiceConfiguration {
 
-    public final static String NAME = "/lifestylecoach";
+    public final static String SCHEMA = "lifestylecoach";
+
+    public final static String NAME = "/" + SCHEMA;
 
     private static int port;
 

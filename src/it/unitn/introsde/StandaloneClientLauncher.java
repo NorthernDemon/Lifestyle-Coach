@@ -102,9 +102,9 @@ public final class StandaloneClientLauncher {
         url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId();
         String updatedFirstName = "Victor";
         Person updatedPerson = (Person) exchange.getBody();
-        updatedPerson.setFirstName(updatedFirstName);
+        updatedPerson.setName(updatedFirstName);
         exchange = restTemplate.exchange(url, httpMethod, createHeader(updatedPerson), Person.class);
-        logRequest(3, updatedFirstName.equals(((Person) exchange.getBody()).getFirstName()), exchange);
+        logRequest(3, updatedFirstName.equals(((Person) exchange.getBody()).getName()), exchange);
 
         /**
          * Step 3.4. Send R#4 to create the following person (first using JSON and then using XML). Store the id of the new person.

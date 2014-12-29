@@ -1,6 +1,7 @@
 package it.unitn.introsde.util;
 
 import it.unitn.introsde.persistence.entity.Measure;
+import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
 
 import java.util.Calendar;
@@ -30,10 +31,19 @@ public abstract class RandomUtil {
      * @return random measure
      */
     public static Measure getMeasure(Person person) {
+        return new Measure(person, getMeasureType(), getDouble(100), getDate(1950));
+    }
+
+    /**
+     * Generate random measure Type
+     *
+     * @return random measureType
+     */
+    private static MeasureType getMeasureType() {
         if (new Random().nextBoolean()) {
-            return new Measure(person, getDate(1950), "height", String.valueOf(getDouble(100)));
+            return new MeasureType("weight", "kilograms");
         } else {
-            return new Measure(person, getDate(1950), "weight", String.valueOf(getInteger(100)));
+            return new MeasureType("height", "meters");
         }
     }
 
