@@ -4,6 +4,7 @@ import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
 import org.hibernate.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,8 @@ import java.util.List;
 
 @Repository
 public class GoalDao extends AbstractDao<Goal> {
+
+    private MeasureTypeDao measureTypeDao;
 
     @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
@@ -40,5 +43,20 @@ public class GoalDao extends AbstractDao<Goal> {
         namedQuery.setParameter("measureType", measureType);
         namedQuery.setParameter("currentTime", Calendar.getInstance().getTime());
         return namedQuery.list();
+    }
+
+    @Transactional
+    public Goal saveGoal(Goal goal) {
+        validate(goal);
+        if (measureTypeDao.findByTypeAndUnit(goal.getMeasureType()) == null) {
+            measureTypeDao.save(goal.getMeasureType());
+        }
+        getSession().save(goal);
+        return goal;
+    }
+
+    @Autowired
+    public void setMeasureTypeDao(MeasureTypeDao measureTypeDao) {
+        this.measureTypeDao = measureTypeDao;
     }
 }

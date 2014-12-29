@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class MeasureTypeDao extends AbstractDao<MeasureType> {
 
     @Transactional(readOnly = true)
-    public MeasureType findByTypeAndUnit(String type, String unit) {
+    public MeasureType findByTypeAndUnit(MeasureType measureType) {
         Query namedQuery = getSession().getNamedQuery(MeasureType.FIND_BY_TYPE_AND_UNIT);
-        namedQuery.setParameter("type", type);
-        namedQuery.setParameter("unit", unit);
+        namedQuery.setParameter("type", measureType.getType());
+        namedQuery.setParameter("unit", measureType.getUnit());
         return (MeasureType) namedQuery.uniqueResult();
     }
 }
