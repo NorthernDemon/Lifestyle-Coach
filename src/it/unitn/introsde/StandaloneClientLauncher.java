@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.unitn.introsde.persistence.entity.Measure;
+import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
 import it.unitn.introsde.wrapper.MeasureTypes;
 import it.unitn.introsde.wrapper.Measures;
@@ -15,7 +16,10 @@ import org.springframework.web.client.RestTemplate;
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public final class StandaloneClientLauncher {
 
@@ -113,9 +117,6 @@ public final class StandaloneClientLauncher {
         httpMethod = HttpMethod.POST;
         url = ServiceConfiguration.getUrl() + "/person";
         Person chuckNorris = new Person("Chuck", "Norris", getDate(1945, 0, 1));
-        List<Measure> chuckMeasure = new ArrayList<>();
-        chuckMeasure.add(new Measure(chuckNorris, "height", "172.0"));
-        chuckNorris.setCurrentMeasure(chuckMeasure);
         exchange = restTemplate.exchange(url, httpMethod, createHeader(chuckNorris), Person.class);
         chuckNorris = (Person) exchange.getBody();
         logRequest(4, exchange.getStatusCode().is2xxSuccessful(), exchange);
@@ -179,7 +180,7 @@ public final class StandaloneClientLauncher {
          */
         httpMethod = HttpMethod.POST;
         url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId() + '/' + measureType;
-        exchange = restTemplate.exchange(url, httpMethod, createHeader(new Measure(firstPerson, measureType, "72.0")), Measure.class);
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(new Measure(firstPerson, new MeasureType("height", "meters"), 72.0)), Measure.class);
         Measure savedHealthHistory = (Measure) exchange.getBody();
         logRequest(8, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
@@ -197,7 +198,7 @@ public final class StandaloneClientLauncher {
          */
         httpMethod = HttpMethod.PUT;
         url = ServiceConfiguration.getUrl() + "/person/" + firstPerson.getId() + '/' + measureType + '/' + savedHealthHistory.getId();
-        savedHealthHistory.setValue("90");
+        savedHealthHistory.setValue(90);
         exchange = restTemplate.exchange(url, httpMethod, createHeader(savedHealthHistory), Measure.class);
         logRequest(10, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
