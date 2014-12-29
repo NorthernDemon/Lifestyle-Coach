@@ -49,8 +49,11 @@ public class GoalDao extends AbstractDao<Goal> {
     @Transactional
     public Goal save(Goal goal) {
         validate(goal);
-        if (measureTypeDao.findByTypeAndUnit(goal.getMeasureType()) == null) {
+        MeasureType measureType = measureTypeDao.findByTypeAndUnit(goal.getMeasureType());
+        if (measureType == null) {
             measureTypeDao.save(goal.getMeasureType());
+        } else {
+            goal.setMeasureType(measureType);
         }
         getSession().save(goal);
         return goal;

@@ -15,6 +15,8 @@ import java.util.Random;
  */
 public abstract class RandomUtil {
 
+    private static int id;
+
     private static String[] girlName = ("Sophia,Emma,Olivia,Isabella,Mia,Ava,Lily,Zoe,Emily,Chloe,Layla,Madison,Madelyn,Abigail," +
             "Aubrey,Charlotte,Amelia,Ella,Kaylee,Avery,Aaliyah,Hailey,Hannah,Addison,Riley,Harper,Aria,Arianna," +
             "Mackenzie,Lila,Evelyn,Adalyn,Grace,Brooklyn,Ellie,Anna,Kaitlyn,Isabelle,Sophie,Scarlett,Natalie,Leah," +
@@ -79,7 +81,7 @@ public abstract class RandomUtil {
      * @return random person
      */
     public static Person getPerson() {
-        return new Person(getName(), getName(), getDate(1950));
+        return new Person(getName(), getName(), getDate(1950), id++, id++);
     }
 
     /**

@@ -2,6 +2,7 @@ package it.unitn.introsde.persistence.dao;
 
 import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Measure;
+import it.unitn.introsde.persistence.entity.MeasureType;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -36,8 +37,11 @@ public class MeasureDao extends AbstractDao<Measure> {
     @Transactional
     public Measure save(Measure measure) {
         validate(measure);
-        if (measureTypeDao.findByTypeAndUnit(measure.getMeasureType()) == null) {
+        MeasureType measureType = measureTypeDao.findByTypeAndUnit(measure.getMeasureType());
+        if (measureType == null) {
             measureTypeDao.save(measure.getMeasureType());
+        } else {
+            measure.setMeasureType(measureType);
         }
         getSession().save(measure);
         return measure;
