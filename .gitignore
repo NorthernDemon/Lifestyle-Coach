@@ -4,3 +4,4 @@
 *.iml
 *.jar
 *.war
+webapp/WEB-INF/classes
