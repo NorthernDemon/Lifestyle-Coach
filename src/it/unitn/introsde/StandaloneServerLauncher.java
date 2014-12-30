@@ -1,5 +1,6 @@
 package it.unitn.introsde;
 
+import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
 
 import java.io.File;
@@ -11,10 +12,20 @@ import java.util.Enumeration;
 public final class StandaloneServerLauncher {
 
     public static void main(String[] args) throws Exception {
-        Tomcat tomcat = new Tomcat();
+        final Tomcat tomcat = new Tomcat();
         tomcat.setHostname(ServiceConfiguration.getHost());
         tomcat.setPort(ServiceConfiguration.getPort());
         tomcat.addWebapp("/", new File("webapp/").getAbsolutePath());
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                System.out.print("Stopping the Tomcat server...");
+                try {
+                    tomcat.stop();
+                } catch (LifecycleException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         tomcat.start();
         System.out.println("Standalone server is up at: " + tomcat.getHost().getName() + ':' + tomcat.getConnector().getPort() + ServiceConfiguration.getName());
         printPossibleIP();
