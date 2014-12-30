@@ -22,7 +22,7 @@ public abstract class ServiceConfiguration {
     static {
         try {
             Properties properties = new Properties();
-            properties.load(new FileInputStream("system.properties"));
+            properties.load(new FileInputStream("service.properties"));
 
             port = Integer.parseInt(properties.getProperty("port"));
             host = properties.getProperty("host");
