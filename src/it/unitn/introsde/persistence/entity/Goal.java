@@ -20,7 +20,7 @@ import java.util.Objects;
 @Table(name = "goal", schema = ServiceConfiguration.SCHEMA)
 @JsonRootName("goal")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"id", "creator", "measureType", "value", "message", "start", "end", "finished"})
+@JsonPropertyOrder({"id", "creator", "person", "measureType", "value", "message", "start", "end", "finished"})
 @NamedQueries({
         @NamedQuery(
                 name = Goal.FIND_BY_PERSON_AND_MEASURE_TYPE_AND_ACCOMPLISHED,
@@ -63,7 +63,7 @@ public class Goal implements Serializable {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "personId", nullable = false, updatable = false)
-    @JsonIgnore
+    @JsonProperty(required = true)
     private Person person;
 
     @Valid
@@ -222,9 +222,9 @@ public class Goal implements Serializable {
                 .add("measureType", measureType == null ? "null" : measureType)
                 .add("value", value)
                 .add("message", message)
-                .add("start", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(start))
-                .add("end", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(end))
-                .add("finished", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(finished))
+                .add("start", start == null ? "null" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(start))
+                .add("end", end == null ? "null" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(end))
+                .add("finished", finished == null ? "null" : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(finished))
                 .toString();
     }
 }

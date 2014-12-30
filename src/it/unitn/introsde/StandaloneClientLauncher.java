@@ -3,7 +3,9 @@ package it.unitn.introsde;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Measure;
+import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
 import it.unitn.introsde.wrapper.Measures;
 import org.springframework.http.*;
@@ -74,12 +76,31 @@ public final class StandaloneClientLauncher {
         applicationType = contentType;
         ResponseEntity<?> exchange;
 
+        MeasureType measureType = new MeasureType("height", "kilometers");
+
         /**** TEST *****/
 
         httpMethod = HttpMethod.POST;
-        url = ServiceConfiguration.getUrl() + "/profile";
-        Person chuckNorris = new Person("Chuck", "Norris", getDate(1945, 0, 1), id++, id++);
-        exchange = restTemplate.exchange(url, httpMethod, createHeader(chuckNorris), Person.class);
+        url = ServiceConfiguration.getUrl() + "/person-process";
+        Person person = new Person("Chuck", "Norris", getDate(1945, 0, 1), id++, id++);
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Person.class);
+        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
+        person = (Person) exchange.getBody();
+
+        /**** TEST *****/
+
+        httpMethod = HttpMethod.POST;
+        url = ServiceConfiguration.getUrl() + "/goal-process";
+        Goal goal = new Goal(person, person, measureType, 72.0, "You can do it!", getDate(2014, 5, 10), getDate(2014, 5, 15));
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(goal), Goal.class);
+        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
+
+        /**** TEST *****/
+
+        httpMethod = HttpMethod.POST;
+        url = ServiceConfiguration.getUrl() + "/measure-process";
+        Measure measure = new Measure(person, measureType, 72.1, getDate(2014, 5, 12));
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(measure), Measure.class);
         logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
         /**** TEST *****/

@@ -38,7 +38,7 @@ public final class StandaloneServerLauncher {
             for (; inetAddresses.hasMoreElements(); ) {
                 String hostAddress = inetAddresses.nextElement().getHostAddress();
                 if (hostAddress.contains(".") && !"127.0.0.1".equals(hostAddress) && !ServiceConfiguration.getHost().equals(hostAddress)) {
-                    logger.info('-' + hostAddress);
+                    logger.info(hostAddress);
                 }
             }
         }

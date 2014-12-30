@@ -1,6 +1,5 @@
 package it.unitn.introsde.persistence.service;
 
-import it.unitn.introsde.BeanValidationException;
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.dao.PersonDao;
 import it.unitn.introsde.persistence.entity.Person;
@@ -29,12 +28,15 @@ public class PersonService {
     @RequestMapping(value = "/person", method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Person> createPerson(@Valid @RequestBody Person person, BindingResult result) {
+    public ResponseEntity<Person> createPerson(
+            @Valid @RequestBody Person person,
+            BindingResult result) {
         if (result.hasErrors()) {
-            throw new BeanValidationException(result.getAllErrors());
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
         personDao.save(person);
-        logger.debug("PersonService with person=" + person);
+        // TODO register person with facebookId
+        logger.debug("Created person=" + person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 

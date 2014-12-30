@@ -19,7 +19,7 @@ import java.util.Objects;
 @Table(name = "measure", schema = ServiceConfiguration.SCHEMA)
 @JsonRootName("measure")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"id", "measureType", "value", "created"})
+@JsonPropertyOrder({"id", "person", "measureType", "value", "created"})
 @NamedQueries({
         @NamedQuery(
                 name = Measure.FIND_BY_PERSON_AND_MEASURE_TYPE_SINCE_DATE,
@@ -46,7 +46,7 @@ public class Measure implements Serializable {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "personId", nullable = false, updatable = false)
-    @JsonIgnore
+    @JsonProperty(required = true)
     private Person person;
 
     @Valid
