@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="goal" type="goalType"/>
+    <xs:complexType name="goalType">
+        <xs:sequence>
+            <xs:element type="xs:positiveInteger" name="id"/>
+            <xs:element type="personType" name="creator"/>
+            <xs:element type="personType" name="person"/>
+            <xs:element type="measureTypeType" name="measureType"/>
+            <xs:element type="xs:double" name="value"/>
+            <xs:element type="xs:string" name="message"/>
+            <xs:element type="xs:dateTime" name="start"/>
+            <xs:element type="xs:dateTime" name="end"/>
+            <xs:element type="xs:dateTime" name="finished"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="personType">
+        <xs:sequence>
+            <xs:element type="xs:positiveInteger" name="id"/>
+            <xs:element type="xs:string" name="name"/>
+            <xs:element type="xs:string" name="surname"/>
+            <xs:element type="xs:date" name="birthday"/>
+            <xs:element type="xs:positiveInteger" name="facebookId"/>
+            <xs:element type="xs:positiveInteger" name="googleId"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="measureTypeType">
+        <xs:sequence>
+            <xs:element type="xs:positiveInteger" name="id"/>
+            <xs:element type="xs:string" name="type"/>
+            <xs:element type="xs:string" name="unit"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

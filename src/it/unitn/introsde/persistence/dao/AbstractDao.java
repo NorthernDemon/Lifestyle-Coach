@@ -23,9 +23,9 @@ import java.util.Set;
 @Repository
 public abstract class AbstractDao<T> {
 
-    private ValidatorFactory validatorFactory;
-
     private SessionFactory sessionFactory;
+
+    private ValidatorFactory validatorFactory;
 
     @Transactional
     public T save(T entity) {
@@ -61,7 +61,7 @@ public abstract class AbstractDao<T> {
      * Performs bean validation with JSR-303
      *
      * @param entity bean to validate
-     * @throws ConstraintViolationException
+     * @throws ConstraintViolationException if bean validation fails
      */
     protected void validate(T entity) throws ConstraintViolationException {
         Set<ConstraintViolation<T>> constraintViolations = validatorFactory.getValidator().validate(entity);
@@ -70,6 +70,11 @@ public abstract class AbstractDao<T> {
         }
     }
 
+    /**
+     * Returns current hibernate session of session factory
+     *
+     * @return current session
+     */
     protected Session getSession() {
         return sessionFactory.getCurrentSession();
     }
