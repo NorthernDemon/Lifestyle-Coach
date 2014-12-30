@@ -2,6 +2,8 @@ package it.unitn.introsde.persistence.process;
 
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.entity.Person;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping(value = ServiceConfiguration.NAME)
 public class UserProcess extends AbstractProcess {
 
+    private static final Logger logger = LogManager.getLogger();
+
     private RestTemplate restTemplate;
 
     @RequestMapping(value = "/profile", method = RequestMethod.POST,
@@ -22,11 +26,11 @@ public class UserProcess extends AbstractProcess {
     public ResponseEntity<Person> createProfile(
             @RequestHeader(value = "Accept") String accept,
             @RequestBody Person person) {
-        System.out.println("Incoming UserProcess with accept=" + accept + ", person=" + person);
+        logger.debug("Incoming UserProcess with accept=" + accept + ", person=" + person);
         String url = ServiceConfiguration.getUrl() + "/person";
         ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, person), Person.class);
         Person createdPerson = (Person) exchange.getBody();
-        System.out.println("Outgoing UserProcess with accept=" + accept + ", person=" + createdPerson);
+        logger.debug("Outgoing UserProcess with accept=" + accept + ", person=" + createdPerson);
         return new ResponseEntity<>(createdPerson, HttpStatus.OK);
     }
 

@@ -1,5 +1,8 @@
 package it.unitn.introsde;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -8,6 +11,8 @@ import java.util.Properties;
  * Reads property file with service configuration
  */
 public abstract class ServiceConfiguration {
+
+    private static final Logger logger = LogManager.getLogger();
 
     public final static String SCHEMA = "lifestylecoach";
 
@@ -28,7 +33,7 @@ public abstract class ServiceConfiguration {
             host = properties.getProperty("host");
             url = "http://" + host + ":" + port + NAME;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 

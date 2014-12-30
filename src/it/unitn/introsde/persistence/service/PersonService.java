@@ -4,6 +4,8 @@ import it.unitn.introsde.BeanValidationException;
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.dao.PersonDao;
 import it.unitn.introsde.persistence.entity.Person;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,8 @@ import javax.validation.Valid;
 @RequestMapping(value = ServiceConfiguration.NAME)
 public class PersonService {
 
+    private static final Logger logger = LogManager.getLogger();
+
     private PersonDao personDao;
 
     @RequestMapping(value = "/person", method = RequestMethod.POST,
@@ -30,7 +34,7 @@ public class PersonService {
             throw new BeanValidationException(result.getAllErrors());
         }
         personDao.save(person);
-        System.out.println("PersonService with person=" + person);
+        logger.debug("PersonService with person=" + person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
