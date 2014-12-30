@@ -1,34 +1,159 @@
 FORMAT: 1A
 
-# Note for developers
-Lets use this guidelines: http://bocoup.com/weblog/documenting-your-api/
-
 # LifestyleCoach
+Lets use this guidelines: http://bocoup.com/weblog/documenting-your-api/
 Notes API is a *short texts saving* service similar to its physical paper presence on your table.
 
-# Group Notes
-Notes related resources of the **Notes API**
+## PersonService [/person]
+### Create Person [POST]
 
-## Notes Collection [/notes]
-### List all Notes [GET]
-+ Response 200 (application/json)
++ Request (application/xml)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        <person>
+            <id>0</id>
+            <name>Chuck</name>
+            <surname>Norris</surname>
+            <birthday>1945-01-01</birthday>
+            <facebookId>200500</facebookId>
+            <googleId>200501</googleId>
+        </person>
+        
++ Response 200 (application/xml)
 
-### Create a Note [POST]
-+ Request (application/json)
+        <person>
+            <id>101</id>
+            <name>Chuck</name>
+            <surname>Norris</surname>
+            <birthday>1945-01-01</birthday>
+            <facebookId>200500</facebookId>
+            <googleId>200501</googleId>
+        </person>
 
-        { "title": "Buy cheese and bread for breakfast." }
++ Response 406 (application/text)
 
-+ Response 201 (application/json)
+        Not Acceptable
 
-        { "id": 3, "title": "Buy cheese and bread for breakfast." }
+## GoalService [/goal]
+### Create Goal [POST]
 
-## Note [/notes/{id}]
++ Request (application/xml)
+
+        <goal>
+            <id>0</id>
+            <creator>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </creator>
+            <person>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </person>
+            <measureType>
+                <id>3</id>
+                <type>height</type>
+                <unit>kilometers</unit>
+            </measureType>
+            <value>72.0</value>
+            <message>You can do it!</message>
+            <start>2014-06-10 13:53:25.945</start>
+            <end>2014-06-15 13:53:25.945</end>
+            <finished/>
+        </goal>
+
++ Response 200 (application/xml)
+
+        <goal>
+            <id>101</id>
+            <creator>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </creator>
+            <person>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </person>
+            <measureType>
+                <id>3</id>
+                <type>height</type>
+                <unit>kilometers</unit>
+            </measureType>
+            <value>72.0</value>
+            <message>You can do it!</message>
+            <start>2014-06-10 13:53:25.945</start>
+            <end>2014-06-15 13:53:25.945</end>
+            <finished/>
+        </goal>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+
+## MeasureService [/measure]
+### Create Measure [POST]
+
++ Request (application/xml)
+
+        <measure>
+            <id>0</id>
+            <person>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </person>
+            <measureType>
+                <id>3</id>
+                <type>height</type>
+                <unit>kilometers</unit>
+            </measureType>
+            <value>72.1</value>
+            <created>2014-06-12 13:53:26.70</created>
+        </measure>
+
++ Response 200 (application/xml)
+
+        <measure>
+            <id>101</id>
+            <person>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </person>
+            <measureType>
+                <id>3</id>
+                <type>height</type>
+                <unit>kilometers</unit>
+            </measureType>
+            <value>72.1</value>
+            <created>2014-06-12 13:53:26.70</created>
+        </measure>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+
+## Example [/notes/{id}]
 A single Note object with all its details
 
 + Parameters
