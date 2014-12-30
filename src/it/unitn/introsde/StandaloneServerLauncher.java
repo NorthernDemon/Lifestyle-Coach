@@ -4,6 +4,7 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LifeCycle;
 
 import java.io.File;
 import java.net.InetAddress;
@@ -20,17 +21,19 @@ public final class StandaloneServerLauncher {
         tomcat.setHostname(ServiceConfiguration.getHost());
         tomcat.setPort(ServiceConfiguration.getPort());
         tomcat.addWebapp("/", new File("webapp/").getAbsolutePath());
+        tomcat.start();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                System.out.print("Stopping the Tomcat server...");
+                logger.info("Stopping the Tomcat server... ");
                 try {
-                    tomcat.stop();
+                    if (tomcat.getServer().getState().isAvailable()) {
+                        tomcat.getServer().stop();
+                    }
                 } catch (LifecycleException e) {
                     logger.error(e);
                 }
             }
         });
-        tomcat.start();
         logger.info("Standalone server is up at: " + tomcat.getHost().getName() + ':' + tomcat.getConnector().getPort() + ServiceConfiguration.getName());
         printPossibleIP();
         tomcat.getServer().await();
