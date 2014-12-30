@@ -26,7 +26,7 @@ import java.beans.PropertyVetoException;
  * - JSR-303 Bean Validation
  */
 @Configuration
-@ComponentScan("it.unitn.introsde")
+@ComponentScan("it.unitn.introsde.persistence")
 @EnableWebMvc
 @EnableTransactionManagement
 public class ApplicationContext {
