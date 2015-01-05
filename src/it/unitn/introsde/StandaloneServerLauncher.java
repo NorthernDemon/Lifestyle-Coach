@@ -4,7 +4,6 @@ import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.LifeCycle;
 
 import java.io.File;
 import java.net.InetAddress;
