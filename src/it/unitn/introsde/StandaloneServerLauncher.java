@@ -20,7 +20,6 @@ public final class StandaloneServerLauncher {
         tomcat.setHostname(ServiceConfiguration.getHost());
         tomcat.setPort(ServiceConfiguration.getPort());
         tomcat.addWebapp("/", new File("webapp/").getAbsolutePath());
-
         tomcat.start();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
