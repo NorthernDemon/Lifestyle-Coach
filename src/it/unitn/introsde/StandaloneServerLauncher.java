@@ -1,12 +1,9 @@
 package it.unitn.introsde;
 
-import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
-import org.apache.catalina.loader.WebappLoader;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.h2.server.web.WebApp;
 
 import java.io.File;
 import java.net.InetAddress;
@@ -22,11 +19,8 @@ public final class StandaloneServerLauncher {
         final Tomcat tomcat = new Tomcat();
         tomcat.setHostname(ServiceConfiguration.getHost());
         tomcat.setPort(ServiceConfiguration.getPort());
-        tomcat.setBaseDir(".");
-        tomcat.getHost().setAppBase(".");
-        tomcat.setSilent(false);
+        tomcat.addWebapp("/", new File("webapp/").getAbsolutePath());
 
-        Context context = tomcat.addWebapp("/", new File("webapp/").getAbsolutePath());
         tomcat.start();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {

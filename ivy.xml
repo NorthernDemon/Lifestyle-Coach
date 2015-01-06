@@ -42,18 +42,19 @@
         <dependency org="org.springframework" name="spring-orm" rev="4.1.3.RELEASE">
             <exclude org="org.eclipse.persistence"/>
         </dependency>
-        <!--<dependency org="org.springframework" name="spring-web" rev="4.1.3.RELEASE"/>-->
+        <dependency org="org.springframework" name="spring-web" rev="4.1.3.RELEASE"/>
         <dependency org="org.springframework" name="spring-webmvc" rev="4.1.3.RELEASE" transitive="false"/>
 
         <dependency org="org.codehaus.woodstox" name="woodstox-core-asl" rev="4.4.1"/>
 
         <dependency org="com.google.apis" name="google-api-services-calendar" rev="v3-rev111-1.19.0"/>
-
-        <dependency org="com.google.apis" name="google-api-services-calendar" rev="v3-rev111-1.19.0"/>
-
-        <dependency org="com.sun.faces" name="jsf-impl" rev="2.2.9"/>
-        <dependency org="com.sun.faces" name="jsf-api" rev="2.2.9"/>
-
         <dependency org="com.restfb" name="restfb" rev="1.7.0"/>
+
+        <dependency org="com.sun.faces" name="jsf-impl" rev="2.2.9">
+            <exclude org="javax.servlet"/>
+        </dependency>
+        <dependency org="com.sun.faces" name="jsf-api" rev="2.2.9">
+            <exclude org="javax.servlet"/>
+        </dependency>
     </dependencies>
 </ivy-module>
