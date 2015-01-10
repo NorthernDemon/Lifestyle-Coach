@@ -56,5 +56,6 @@
         <dependency org="com.sun.faces" name="jsf-api" rev="2.2.9">
             <exclude org="javax.servlet"/>
         </dependency>
+        <dependency org="javax" name="javaee-api" rev="7.0"/>
     </dependencies>
 </ivy-module>
