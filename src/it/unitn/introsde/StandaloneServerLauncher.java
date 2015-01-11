@@ -18,16 +18,14 @@ import java.util.Enumeration;
 public final class StandaloneServerLauncher extends Tomcat {
 
     private static final Logger logger = LogManager.getLogger();
-    String pathToGlobalWebXml = new File("webapp/WEB-INF/.web.xml").getAbsolutePath();
+
+    private static final String pathToGlobalWebXml = new File("webapp/WEB-INF/.web.xml").getAbsolutePath();
 
     public static void main(String[] args) throws Exception {
         final Tomcat tomcat = new Tomcat();
-        String webappFilePath = new File("webapp/").getAbsolutePath();
-
         tomcat.setHostname(ServiceConfiguration.getHost());
         tomcat.setPort(ServiceConfiguration.getPort());
-        tomcat.addWebapp("/",webappFilePath);
-        //tomcat.addWebapp("/", new File("webapp/").getAbsolutePath());
+        tomcat.addWebapp("/", new File("webapp/").getAbsolutePath());
         tomcat.start();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
@@ -54,9 +52,9 @@ public final class StandaloneServerLauncher extends Tomcat {
     private static void printPossibleIP() throws SocketException {
         logger.info("Other possible IPs:");
         Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-        for (; networkInterfaces.hasMoreElements(); ) {
+        while (networkInterfaces.hasMoreElements()) {
             Enumeration<InetAddress> inetAddresses = networkInterfaces.nextElement().getInetAddresses();
-            for (; inetAddresses.hasMoreElements(); ) {
+            while (inetAddresses.hasMoreElements()) {
                 String hostAddress = inetAddresses.nextElement().getHostAddress();
                 if (hostAddress.contains(".") && !"127.0.0.1".equals(hostAddress) && !ServiceConfiguration.getHost().equals(hostAddress)) {
                     logger.info(hostAddress);
@@ -68,14 +66,12 @@ public final class StandaloneServerLauncher extends Tomcat {
     @Override
     public Context addWebapp(String contextPath, String webappFilePath)
             throws ServletException {
-
-        Context context = null;
         try {
-            context = new StandardContext();
+            Context context = new StandardContext();
             context.setName(contextPath);
             context.setPath(contextPath);
             context.setDocBase(webappFilePath);
-            context.setRealm(this.getHost().getRealm());
+            context.setRealm(getHost().getRealm());
             ContextConfig contextConfig = new ContextConfig();
             context.addLifecycleListener(contextConfig);
             if (new File(pathToGlobalWebXml).exists()) {
@@ -84,9 +80,10 @@ public final class StandaloneServerLauncher extends Tomcat {
                 contextConfig.setDefaultWebXml("org/apache/catalin/startup/NO_DEFAULT_XML");
             }
             host.addChild(context);
+            return context;
         } catch (Exception e) {
-           System.out.println("Error deploying webapp"+e);
+            logger.error("Error deploying webapp", e);
+            return null;
         }
-        return context;
     }
 }
