@@ -15,7 +15,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-public final class StandaloneServerLauncher extends Tomcat {
+public final class StandaloneServerLauncher{
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -60,30 +60,6 @@ public final class StandaloneServerLauncher extends Tomcat {
                     logger.info(hostAddress);
                 }
             }
-        }
-    }
-
-    @Override
-    public Context addWebapp(String contextPath, String webappFilePath)
-            throws ServletException {
-        try {
-            Context context = new StandardContext();
-            context.setName(contextPath);
-            context.setPath(contextPath);
-            context.setDocBase(webappFilePath);
-            context.setRealm(getHost().getRealm());
-            ContextConfig contextConfig = new ContextConfig();
-            context.addLifecycleListener(contextConfig);
-            if (new File(pathToGlobalWebXml).exists()) {
-                contextConfig.setDefaultWebXml(pathToGlobalWebXml);
-            } else {
-                contextConfig.setDefaultWebXml("org/apache/catalin/startup/NO_DEFAULT_XML");
-            }
-            host.addChild(context);
-            return context;
-        } catch (Exception e) {
-            logger.error("Error deploying webapp", e);
-            return null;
         }
     }
 }
