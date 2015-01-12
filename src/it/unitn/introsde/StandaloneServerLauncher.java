@@ -1,25 +1,19 @@
 package it.unitn.introsde;
 
-import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
-import org.apache.catalina.core.StandardContext;
-import org.apache.catalina.startup.ContextConfig;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-public final class StandaloneServerLauncher{
+public final class StandaloneServerLauncher {
 
     private static final Logger logger = LogManager.getLogger();
-
-    private static final String pathToGlobalWebXml = new File("webapp/WEB-INF/.web.xml").getAbsolutePath();
 
     public static void main(String[] args) throws Exception {
         final Tomcat tomcat = new Tomcat();
