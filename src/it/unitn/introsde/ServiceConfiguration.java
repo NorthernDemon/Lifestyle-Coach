@@ -28,7 +28,6 @@ public abstract class ServiceConfiguration {
         try {
             Properties properties = new Properties();
             properties.load(new FileInputStream("service.properties"));
-
             port = Integer.parseInt(properties.getProperty("port"));
             host = properties.getProperty("host");
             url = "http://" + host + ":" + port + NAME;
