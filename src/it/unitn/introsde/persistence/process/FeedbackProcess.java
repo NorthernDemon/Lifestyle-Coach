@@ -4,6 +4,7 @@ import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.helpers.Awareness;
 import it.unitn.introsde.helpers.Motivation;
 import it.unitn.introsde.helpers.Progress;
+import it.unitn.introsde.helpers.Workout;
 import it.unitn.introsde.persistence.entity.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -75,6 +76,25 @@ public class FeedbackProcess extends AbstractProcess {
             return new ResponseEntity<>(progress, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [progress-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
+
+    @RequestMapping(value = "/workout-process", method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Workout> workoutPerson(
+            @RequestHeader(value = "Accept") String accept,
+            @RequestBody Person person) {
+        logger.debug("Incoming [workout-process] with accept=" + accept + ", person=" + person);
+        String url = ServiceConfiguration.getUrl() + "/workout";
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, person), Workout.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            Workout workout = (Workout) exchange.getBody();
+            logger.debug("Outgoing [workout-process] with accept=" + accept + ", workout=" + workout);
+            return new ResponseEntity<>(workout, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [workout-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
             return new ResponseEntity<>(exchange.getStatusCode());
         }
     }

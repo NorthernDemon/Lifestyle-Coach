@@ -1,7 +1,7 @@
 package it.unitn.introsde.persistence.service;
 
 import it.unitn.introsde.ServiceConfiguration;
-import it.unitn.introsde.helpers.Progress;
+import it.unitn.introsde.helpers.Workout;
 import it.unitn.introsde.persistence.dao.GoalDao;
 import it.unitn.introsde.persistence.dao.MeasureDao;
 import it.unitn.introsde.persistence.dao.PersonDao;
@@ -22,7 +22,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = ServiceConfiguration.NAME)
-public class ProgressService {
+public class WorkoutService {
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -32,18 +32,18 @@ public class ProgressService {
 
     private GoalDao goalDao;
 
-    @RequestMapping(value = "/progress", method = RequestMethod.POST,
+    @RequestMapping(value = "/workout", method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Progress> progressPerson(
+    public ResponseEntity<Workout> workoutPerson(
             @Valid @RequestBody Person person,
             BindingResult result) {
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-        Progress progress = new Progress("You", "Suck");
-        logger.debug("Person progressed with=" + progress);
-        return new ResponseEntity<>(progress, HttpStatus.OK);
+        Workout workout = new Workout("Work", "Harder");
+        logger.debug("Person workouted with=" + workout);
+        return new ResponseEntity<>(workout, HttpStatus.OK);
     }
 
     @Autowired

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import it.unitn.introsde.helpers.Awareness;
 import it.unitn.introsde.helpers.Motivation;
 import it.unitn.introsde.helpers.Progress;
+import it.unitn.introsde.helpers.Workout;
 import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Measure;
 import it.unitn.introsde.persistence.entity.MeasureType;
@@ -111,6 +112,11 @@ public final class StandaloneClientLauncher {
         httpMethod = HttpMethod.POST;
         url = ServiceConfiguration.getUrl() + "/progress-process";
         exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Progress.class);
+        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
+
+        httpMethod = HttpMethod.POST;
+        url = ServiceConfiguration.getUrl() + "/workout-process";
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Workout.class);
         logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
     }
 
