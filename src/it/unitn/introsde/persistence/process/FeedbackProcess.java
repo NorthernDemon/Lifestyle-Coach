@@ -3,6 +3,7 @@ package it.unitn.introsde.persistence.process;
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.helpers.Awareness;
 import it.unitn.introsde.helpers.Motivation;
+import it.unitn.introsde.helpers.Progress;
 import it.unitn.introsde.persistence.entity.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,6 +56,25 @@ public class FeedbackProcess extends AbstractProcess {
             return new ResponseEntity<>(awareness, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [awareness-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
+
+    @RequestMapping(value = "/progress-process", method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Progress> progressPerson(
+            @RequestHeader(value = "Accept") String accept,
+            @RequestBody Person person) {
+        logger.debug("Incoming [progress-process] with accept=" + accept + ", person=" + person);
+        String url = ServiceConfiguration.getUrl() + "/progress";
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, person), Progress.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            Progress progress = (Progress) exchange.getBody();
+            logger.debug("Outgoing [progress-process] with accept=" + accept + ", progress=" + progress);
+            return new ResponseEntity<>(progress, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [progress-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
             return new ResponseEntity<>(exchange.getStatusCode());
         }
     }
