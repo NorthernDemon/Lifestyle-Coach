@@ -3,6 +3,10 @@ package it.unitn.introsde;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import it.unitn.introsde.helpers.Awareness;
+import it.unitn.introsde.helpers.Motivation;
+import it.unitn.introsde.helpers.Progress;
+import it.unitn.introsde.helpers.Workout;
 import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Measure;
 import it.unitn.introsde.persistence.entity.MeasureType;
@@ -75,10 +79,12 @@ public final class StandaloneClientLauncher {
         ResponseEntity<?> exchange;
 
         MeasureType measureType = new MeasureType("height", "kilometers");
+        Person person = new Person("Chuck", "Norris", getDate(1945, 0, 1), id++, id++);
+
+        // USER PROCESS
 
         httpMethod = HttpMethod.POST;
         url = ServiceConfiguration.getUrl() + "/person-process";
-        Person person = new Person("Chuck", "Norris", getDate(1945, 0, 1), id++, id++);
         exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Person.class);
         logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
         person = (Person) exchange.getBody();
@@ -93,6 +99,28 @@ public final class StandaloneClientLauncher {
         url = ServiceConfiguration.getUrl() + "/measure-process";
         Measure measure = new Measure(person, measureType, 72.1, getDate(2014, 5, 12));
         exchange = restTemplate.exchange(url, httpMethod, createHeader(measure), Measure.class);
+        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
+
+        // FEEDBACK PROCESS
+
+        httpMethod = HttpMethod.GET;
+        url = ServiceConfiguration.getUrl() + "/motivation-process/" + person.getId();
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Motivation.class);
+        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
+
+        httpMethod = HttpMethod.GET;
+        url = ServiceConfiguration.getUrl() + "/awareness-process/" + person.getId();
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Awareness.class);
+        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
+
+        httpMethod = HttpMethod.GET;
+        url = ServiceConfiguration.getUrl() + "/progress-process/" + person.getId();
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Progress.class);
+        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
+
+        httpMethod = HttpMethod.GET;
+        url = ServiceConfiguration.getUrl() + "/workout-process/" + person.getId();
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Workout.class);
         logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
     }
 
