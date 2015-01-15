@@ -16,7 +16,7 @@ public abstract class ServiceConfiguration {
 
     public final static String SCHEMA = "lifestylecoach";
 
-    public final static String NAME = "/" + SCHEMA;
+    public final static String NAME = '/' + SCHEMA;
 
     private static int port;
 
@@ -24,14 +24,19 @@ public abstract class ServiceConfiguration {
 
     private static String url;
 
+    private static String soap;
+
+    private static String wsdl;
+
     static {
         try {
             Properties properties = new Properties();
             properties.load(new FileInputStream("service.properties"));
-
             port = Integer.parseInt(properties.getProperty("port"));
             host = properties.getProperty("host");
             url = "http://" + host + ":" + port + NAME;
+            soap = "http://" + host + ":" + Integer.parseInt(properties.getProperty("wsdl-port")) + NAME;
+            wsdl = soap + "?wsdl";
         } catch (IOException e) {
             logger.error(e);
         }
@@ -51,5 +56,13 @@ public abstract class ServiceConfiguration {
 
     public static String getUrl() {
         return url;
+    }
+
+    public static String getSoap() {
+        return soap;
+    }
+
+    public static String getWsdl() {
+        return wsdl;
     }
 }

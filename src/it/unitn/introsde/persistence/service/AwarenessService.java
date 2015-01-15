@@ -31,7 +31,13 @@ public class AwarenessService {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Awareness> awarePerson(@PathVariable("personId") int personId) {
         Person person = personDao.get(Person.class, personId);
+        if (person == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         Awareness awareness = awarenessDatasource.getAwareness(person);
+        if (awareness == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         logger.debug("Person awared with=" + awareness);
         return new ResponseEntity<>(awareness, HttpStatus.OK);
     }

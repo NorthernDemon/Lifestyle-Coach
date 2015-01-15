@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
+import org.springframework.remoting.jaxws.SimpleJaxWsServiceExporter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -24,12 +25,20 @@ import java.beans.PropertyVetoException;
  * - transactional manager
  * - REST Template
  * - JSR-303 Bean Validation
+ * - JAX WS service exporter
  */
 @Configuration
 @ComponentScan("it.unitn.introsde.persistence")
 @EnableWebMvc
 @EnableTransactionManagement
 public class ApplicationContext {
+
+    @Bean
+    public SimpleJaxWsServiceExporter getSimpleJaxWsServiceExporter() {
+        SimpleJaxWsServiceExporter simpleJaxWsServiceExporter = new SimpleJaxWsServiceExporter();
+        simpleJaxWsServiceExporter.setBaseAddress(ServiceConfiguration.getWsdl());
+        return simpleJaxWsServiceExporter;
+    }
 
     @Bean(name = "dataSource")
     public ComboPooledDataSource getDataSource() throws PropertyVetoException {
