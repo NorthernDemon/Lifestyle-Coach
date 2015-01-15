@@ -5,14 +5,21 @@ import it.unitn.introsde.helpers.Awareness;
 import it.unitn.introsde.helpers.Motivation;
 import it.unitn.introsde.helpers.Progress;
 import it.unitn.introsde.helpers.Workout;
+import it.unitn.introsde.persistence.service.soap.WorkoutSOAP;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 @RestController
 @RequestMapping(value = ServiceConfiguration.NAME)
@@ -86,16 +93,21 @@ public class FeedbackProcess extends AbstractProcess {
             @RequestHeader(value = "Accept") String accept,
             @PathVariable("personId") int personId) {
         logger.debug("Incoming [workout-process] with accept=" + accept + ", personId=" + personId);
-        String url = ServiceConfiguration.getUrl() + "/workout/" + personId;
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Workout.class);
-        if (exchange.getStatusCode().is2xxSuccessful()) {
-            Workout workout = (Workout) exchange.getBody();
+        try {
+            Workout workout = getSOAP().getWorkout(personId);
             logger.debug("Outgoing [workout-process] with accept=" + accept + ", workout=" + workout);
-            return new ResponseEntity<>(workout, exchange.getStatusCode());
-        } else {
-            logger.debug("Outgoing [workout-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
-            return new ResponseEntity<>(exchange.getStatusCode());
+            return new ResponseEntity<>(workout, HttpStatus.OK);
+        } catch (MalformedURLException e) {
+            logger.error("SOAP is shit", e);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
+    }
+
+    private WorkoutSOAP getSOAP() throws MalformedURLException {
+        URL url = new URL(ServiceConfiguration.getWsdl());
+        QName qname = new QName("http://soap.service.persistence.introsde.unitn.it/", "WorkoutSOAPImplService");
+        Service service = Service.create(url, qname);
+        return service.getPort(WorkoutSOAP.class);
     }
 
     @Autowired

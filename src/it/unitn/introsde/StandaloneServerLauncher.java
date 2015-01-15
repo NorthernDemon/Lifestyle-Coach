@@ -33,6 +33,7 @@ public final class StandaloneServerLauncher {
                 }
             }
         });
+        logger.info("WSDL for SOAP is published at: " + ServiceConfiguration.getWsdl());
         logger.info("Standalone server is up at: " + tomcat.getHost().getName() + ':' + tomcat.getConnector().getPort() + ServiceConfiguration.getName());
         printPossibleIP();
         tomcat.getServer().await();
