@@ -12,13 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = ServiceConfiguration.NAME)
@@ -32,15 +29,11 @@ public class ProgressService {
 
     private GoalDao goalDao;
 
-    @RequestMapping(value = "/progress", method = RequestMethod.POST,
+    @RequestMapping(value = "/progress/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Progress> progressPerson(
-            @Valid @RequestBody Person person,
-            BindingResult result) {
-        if (result.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        }
+    public ResponseEntity<Progress> progressPerson(@PathVariable("personId") int personId) {
+        Person person = personDao.get(Person.class, personId);
         Progress progress = new Progress("You", "Suck");
         logger.debug("Person progressed with=" + progress);
         return new ResponseEntity<>(progress, HttpStatus.OK);

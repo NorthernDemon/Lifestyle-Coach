@@ -5,7 +5,6 @@ import it.unitn.introsde.helpers.Awareness;
 import it.unitn.introsde.helpers.Motivation;
 import it.unitn.introsde.helpers.Progress;
 import it.unitn.introsde.helpers.Workout;
-import it.unitn.introsde.persistence.entity.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +22,15 @@ public class FeedbackProcess extends AbstractProcess {
 
     private RestTemplate restTemplate;
 
-    @RequestMapping(value = "/motivation-process", method = RequestMethod.POST,
+    @RequestMapping(value = "/motivation-process/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Motivation> motivatePerson(
             @RequestHeader(value = "Accept") String accept,
-            @RequestBody Person person) {
-        logger.debug("Incoming [motivation-process] with accept=" + accept + ", person=" + person);
-        String url = ServiceConfiguration.getUrl() + "/motivation";
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, person), Motivation.class);
+            @PathVariable("personId") int personId) {
+        logger.debug("Incoming [motivation-process] with accept=" + accept + ", personId=" + personId);
+        String url = ServiceConfiguration.getUrl() + "/motivation/" + personId;
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Motivation.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Motivation motivation = (Motivation) exchange.getBody();
             logger.debug("Outgoing [motivation-process] with accept=" + accept + ", motivation=" + motivation);
@@ -42,15 +41,15 @@ public class FeedbackProcess extends AbstractProcess {
         }
     }
 
-    @RequestMapping(value = "/awareness-process", method = RequestMethod.POST,
+    @RequestMapping(value = "/awareness-process/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Awareness> awarePerson(
             @RequestHeader(value = "Accept") String accept,
-            @RequestBody Person person) {
-        logger.debug("Incoming [awareness-process] with accept=" + accept + ", person=" + person);
-        String url = ServiceConfiguration.getUrl() + "/awareness";
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, person), Awareness.class);
+            @PathVariable("personId") int personId) {
+        logger.debug("Incoming [awareness-process] with accept=" + accept + ", personId=" + personId);
+        String url = ServiceConfiguration.getUrl() + "/awareness/" + personId;
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Awareness.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Awareness awareness = (Awareness) exchange.getBody();
             logger.debug("Outgoing [awareness-process] with accept=" + accept + ", awareness=" + awareness);
@@ -61,15 +60,15 @@ public class FeedbackProcess extends AbstractProcess {
         }
     }
 
-    @RequestMapping(value = "/progress-process", method = RequestMethod.POST,
+    @RequestMapping(value = "/progress-process/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Progress> progressPerson(
             @RequestHeader(value = "Accept") String accept,
-            @RequestBody Person person) {
-        logger.debug("Incoming [progress-process] with accept=" + accept + ", person=" + person);
-        String url = ServiceConfiguration.getUrl() + "/progress";
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, person), Progress.class);
+            @PathVariable("personId") int personId) {
+        logger.debug("Incoming [progress-process] with accept=" + accept + ", personId=" + personId);
+        String url = ServiceConfiguration.getUrl() + "/progress/" + personId;
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Progress.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Progress progress = (Progress) exchange.getBody();
             logger.debug("Outgoing [progress-process] with accept=" + accept + ", progress=" + progress);
@@ -80,15 +79,15 @@ public class FeedbackProcess extends AbstractProcess {
         }
     }
 
-    @RequestMapping(value = "/workout-process", method = RequestMethod.POST,
+    @RequestMapping(value = "/workout-process/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Workout> workoutPerson(
             @RequestHeader(value = "Accept") String accept,
-            @RequestBody Person person) {
-        logger.debug("Incoming [workout-process] with accept=" + accept + ", person=" + person);
-        String url = ServiceConfiguration.getUrl() + "/workout";
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, person), Workout.class);
+            @PathVariable("personId") int personId) {
+        logger.debug("Incoming [workout-process] with accept=" + accept + ", personId=" + personId);
+        String url = ServiceConfiguration.getUrl() + "/workout/" + personId;
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Workout.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Workout workout = (Workout) exchange.getBody();
             logger.debug("Outgoing [workout-process] with accept=" + accept + ", workout=" + workout);

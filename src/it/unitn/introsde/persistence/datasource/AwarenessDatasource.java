@@ -12,6 +12,7 @@ public class AwarenessDatasource {
     private static final Logger logger = LogManager.getLogger();
 
     public Awareness getAwareness(Person person) {
+        logger.error("Health Finder service here, found by David =)");
         return new Awareness("severe", person.getName() + ", you gonna die.");
     }
 }
