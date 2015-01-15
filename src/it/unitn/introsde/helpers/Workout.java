@@ -10,37 +10,37 @@ import java.util.Objects;
 
 @JsonRootName("workout")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"type", "value"})
+@JsonPropertyOrder({"name", "description"})
 public class Workout {
 
     @JsonProperty(required = true)
-    private String type;
+    private String name;
 
     @JsonProperty(required = true)
-    private String value;
+    private String description;
 
     public Workout() {
     }
 
-    public Workout(String type, String value) {
-        this.type = type;
-        this.value = value;
+    public Workout(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getValue() {
-        return value;
+    public String getDescription() {
+        return description;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -51,8 +51,8 @@ public class Workout {
         if (o instanceof Workout) {
             Workout object = (Workout) o;
 
-            return Objects.equals(type, object.type)
-                    && Objects.equals(value, object.value);
+            return Objects.equals(name, object.name)
+                    && Objects.equals(description, object.description);
         }
 
         return false;
@@ -60,14 +60,14 @@ public class Workout {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, value);
+        return Objects.hash(name, description);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("type", type)
-                .add("value", value)
+                .add("name", name)
+                .add("description", description)
                 .toString();
     }
 }

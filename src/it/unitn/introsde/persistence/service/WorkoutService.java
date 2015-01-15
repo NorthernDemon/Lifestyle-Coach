@@ -2,9 +2,8 @@ package it.unitn.introsde.persistence.service;
 
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.helpers.Workout;
-import it.unitn.introsde.persistence.dao.GoalDao;
-import it.unitn.introsde.persistence.dao.MeasureDao;
 import it.unitn.introsde.persistence.dao.PersonDao;
+import it.unitn.introsde.persistence.datasource.WorkoutDatasource;
 import it.unitn.introsde.persistence.entity.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,9 +24,7 @@ public class WorkoutService {
 
     private PersonDao personDao;
 
-    private MeasureDao measureDao;
-
-    private GoalDao goalDao;
+    private WorkoutDatasource workoutDatasource;
 
     @RequestMapping(value = "/workout/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
@@ -48,13 +45,8 @@ public class WorkoutService {
     }
 
     @Autowired
-    public void setGoalDao(GoalDao goalDao) {
-        this.goalDao = goalDao;
-    }
-
-    @Autowired
-    public void setMeasureDao(MeasureDao measureDao) {
-        this.measureDao = measureDao;
+    public void setWorkoutDatasource(WorkoutDatasource workoutDatasource) {
+        this.workoutDatasource = workoutDatasource;
     }
 }
 
