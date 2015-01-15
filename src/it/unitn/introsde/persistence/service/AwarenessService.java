@@ -35,6 +35,9 @@ public class AwarenessService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Awareness awareness = awarenessDatasource.getAwareness(person);
+        if (awareness == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         logger.debug("Person awared with=" + awareness);
         return new ResponseEntity<>(awareness, HttpStatus.OK);
     }

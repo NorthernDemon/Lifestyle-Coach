@@ -38,6 +38,9 @@ public class ProgressService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Progress progress = new Progress("You", "Suck");
+        if (progress == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         logger.debug("Person progressed with=" + progress);
         return new ResponseEntity<>(progress, HttpStatus.OK);
     }

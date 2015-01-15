@@ -34,7 +34,10 @@ public class WorkoutService {
         if (person == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Workout workout = new Workout("Work", "Harder");
+        Workout workout = workoutDatasource.getWorkout();
+        if (workout == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         logger.debug("Person workouted with=" + workout);
         return new ResponseEntity<>(workout, HttpStatus.OK);
     }
