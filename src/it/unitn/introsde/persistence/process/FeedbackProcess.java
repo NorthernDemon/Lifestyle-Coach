@@ -1,6 +1,7 @@
 package it.unitn.introsde.persistence.process;
 
 import it.unitn.introsde.ServiceConfiguration;
+import it.unitn.introsde.helpers.Awareness;
 import it.unitn.introsde.helpers.Motivation;
 import it.unitn.introsde.persistence.entity.Person;
 import org.apache.logging.log4j.LogManager;
@@ -35,6 +36,25 @@ public class FeedbackProcess extends AbstractProcess {
             return new ResponseEntity<>(motivation, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [motivation-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
+
+    @RequestMapping(value = "/awareness-process", method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Awareness> awarePerson(
+            @RequestHeader(value = "Accept") String accept,
+            @RequestBody Person person) {
+        logger.debug("Incoming [awareness-process] with accept=" + accept + ", person=" + person);
+        String url = ServiceConfiguration.getUrl() + "/awareness";
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, person), Awareness.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            Awareness awareness = (Awareness) exchange.getBody();
+            logger.debug("Outgoing [awareness-process] with accept=" + accept + ", awareness=" + awareness);
+            return new ResponseEntity<>(awareness, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [awareness-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
             return new ResponseEntity<>(exchange.getStatusCode());
         }
     }

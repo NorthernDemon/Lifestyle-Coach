@@ -3,6 +3,7 @@ package it.unitn.introsde;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import it.unitn.introsde.helpers.Awareness;
 import it.unitn.introsde.helpers.Motivation;
 import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Measure;
@@ -99,6 +100,11 @@ public final class StandaloneClientLauncher {
         httpMethod = HttpMethod.POST;
         url = ServiceConfiguration.getUrl() + "/motivation-process";
         exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Motivation.class);
+        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
+
+        httpMethod = HttpMethod.POST;
+        url = ServiceConfiguration.getUrl() + "/awareness-process";
+        exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Awareness.class);
         logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
     }
 
