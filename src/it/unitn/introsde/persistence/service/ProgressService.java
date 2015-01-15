@@ -34,6 +34,9 @@ public class ProgressService {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Progress> progressPerson(@PathVariable("personId") int personId) {
         Person person = personDao.get(Person.class, personId);
+        if (person == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         Progress progress = new Progress("You", "Suck");
         logger.debug("Person progressed with=" + progress);
         return new ResponseEntity<>(progress, HttpStatus.OK);

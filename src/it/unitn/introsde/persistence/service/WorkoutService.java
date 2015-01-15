@@ -34,6 +34,9 @@ public class WorkoutService {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Workout> workoutPerson(@PathVariable("personId") int personId) {
         Person person = personDao.get(Person.class, personId);
+        if (person == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         Workout workout = new Workout("Work", "Harder");
         logger.debug("Person workouted with=" + workout);
         return new ResponseEntity<>(workout, HttpStatus.OK);

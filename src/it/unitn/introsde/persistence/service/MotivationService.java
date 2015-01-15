@@ -31,6 +31,9 @@ public class MotivationService {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Motivation> motivatePerson(@PathVariable("personId") int personId) {
         Person person = personDao.get(Person.class, personId);
+        if (person == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         Motivation motivation = motivationDatasource.getMotivated(person);
         logger.debug("Person motivated with=" + motivation);
         return new ResponseEntity<>(motivation, HttpStatus.OK);
