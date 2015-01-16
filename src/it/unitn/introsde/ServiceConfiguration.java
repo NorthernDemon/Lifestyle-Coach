@@ -24,8 +24,6 @@ public abstract class ServiceConfiguration {
 
     private static String url;
 
-    private static String soap;
-
     private static String wsdl;
 
     static {
@@ -35,8 +33,7 @@ public abstract class ServiceConfiguration {
             port = Integer.parseInt(properties.getProperty("port"));
             host = properties.getProperty("host");
             url = "http://" + host + ":" + port + NAME;
-            soap = "http://" + host + ":" + Integer.parseInt(properties.getProperty("wsdl-port")) + NAME;
-            wsdl = soap + "?wsdl";
+            wsdl = "http://" + host + ":" + Integer.parseInt(properties.getProperty("wsdl-port")) + NAME + "?wsdl";
         } catch (IOException e) {
             logger.error(e);
         }
@@ -56,10 +53,6 @@ public abstract class ServiceConfiguration {
 
     public static String getUrl() {
         return url;
-    }
-
-    public static String getSoap() {
-        return soap;
     }
 
     public static String getWsdl() {

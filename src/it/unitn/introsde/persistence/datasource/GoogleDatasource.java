@@ -7,10 +7,12 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.CalendarList;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.Collections;
 
+@Component
 public class GoogleDatasource {
 
     // TODO mock up Google Calendar

@@ -3,14 +3,14 @@ package it.unitn.introsde;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import it.unitn.introsde.wrapper.Awareness;
-import it.unitn.introsde.wrapper.Motivation;
-import it.unitn.introsde.wrapper.Progress;
-import it.unitn.introsde.wrapper.Workout;
 import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Measure;
 import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
+import it.unitn.introsde.wrapper.Awareness;
+import it.unitn.introsde.wrapper.Motivation;
+import it.unitn.introsde.wrapper.Progress;
+import it.unitn.introsde.wrapper.Workout;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 

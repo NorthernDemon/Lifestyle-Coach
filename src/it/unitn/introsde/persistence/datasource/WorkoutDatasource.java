@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
+/**
+ * Workout datasource uses one REST service:
+ * - wger.de/api/v2
+ */
 @Component
 public class WorkoutDatasource {
 

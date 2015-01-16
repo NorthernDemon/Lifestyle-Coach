@@ -37,10 +37,13 @@
     </target>
 
     <!-- PART 2: General properties definitions -->
-    <property name="war.file" value="assignment2.war"/>
-    <property name="build.dir" value="webapp/WEB-INF/classes"/>
+    <property name="war.file" value="lifestylecoach.war"/>
     <property name="src.dir" value="src"/>
-    <property name="lib.dir" value="webapp/WEB-INF/lib"/>
+    <property name="log.file" value="${src.dir}/log4j2-test.xml"/>
+    <property name="webinf.dir" value="webapp/WEB-INF"/>
+    <property name="webxml.file" value="${webinf.dir}/web.xml"/>
+    <property name="build.dir" value="${webinf.dir}/classes"/>
+    <property name="lib.dir" value="${webinf.dir}/lib"/>
 
     <!-- paths where ivy libraries will be downloaded, use them as classpathref in your compilation and running tasks  -->
     <path id="lib.path.id">
@@ -73,11 +76,12 @@
     <target name="compile" depends="clean, resolve">
         <mkdir dir="${build.dir}"/>
         <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="lib.path.id" includeAntRuntime="false"/>
+        <copy file="${log.file}" todir="${build.dir}"/>
     </target>
 
     <!-- PART 4: actual meat of the application -->
     <target name="create.war" depends="compile">
-        <war destfile="${war.file}" webxml="webapp/WEB-INF/web.xml">
+        <war destfile="${war.file}" webxml="${webxml.file}">
             <fileset dir="webapp">
                 <include name="**/*.*"/>
             </fileset>
