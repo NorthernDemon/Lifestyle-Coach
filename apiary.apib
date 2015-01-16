@@ -1,7 +1,7 @@
 FORMAT: 1A
 
 # LifestyleCoach
-Ultimate Matteo helper. Specifies endpoint for client users, such as JSF, mobile apps and so on.
+Ultimate Matteo helper. Specifies endpoints for client users, such as JSF, mobile apps and so on.
 
 ## PersonService [/person-process]
 ### Create Person [POST]
@@ -152,19 +152,70 @@ Ultimate Matteo helper. Specifies endpoint for client users, such as JSF, mobile
 
         Not Acceptable
 
-## Example [/notes/{id}]
-A single Note object with all its details
+## MotivationService [/motivation-process/{personId}]
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
+    + personId (required, number, `1`) ... Id of the person we want to motivate.
 
-### Retrieve a Note [GET]
-+ Response 200 (application/json)
+### Get Motivated [GET]
++ Response 200 (application/xml)
 
-    + Header
+        <motivation>
+            <type>text</type>
+            <value>Chuck Norris uses ribbed condoms inside out, so he gets the pleasure.</value>
+        </motivation>
 
-            X-My-Header: The Value
++ Response 406 (application/text)
 
-    + Body
+        Not Acceptable
 
-            { "id": 2, "title": "Pick-up posters from post-office" }
+## AwarenessService [/awareness-process/{personId}]
+
++ Parameters
+    + personId (required, number, `1`) ... Id of the person we want to aware.
+
+### Get Motivated [GET]
++ Response 200 (application/xml)
+
+        <awareness>
+            <type>severe</type>
+            <value>Chuck, you gonna die.</value>
+        </awareness>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+
+## ProgressService [/progress-process/{personId}]
+
++ Parameters
+    + personId (required, number, `1`) ... Id of the person we want to progress.
+
+### Get Motivated [GET]
++ Response 200 (application/xml)
+
+        <progress>
+            <type>You</type>
+            <value>Suck</value>
+        </progress>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+
+## WorkoutService [/workout-process/{personId}]
+
++ Parameters
+    + personId (required, number, `1`) ... Id of the person we want to workout.
+
+### Get Motivated [GET]
++ Response 200 (application/xml)
+
+        <workout>
+            <name>Incline Plank with alternate floor touch</name>
+            <description>Perform the plank with legs elevated, feet on a gymball. Once stabilised, slowly move one foot sideways off the ball, then make it touch the floor, then come back to starting position. Alternate with the other foot. This is a core exercise.</description>
+        </workout>
+
++ Response 406 (application/text)
+
+        Not Acceptable
