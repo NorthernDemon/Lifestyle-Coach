@@ -4,7 +4,9 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.types.Page;
 import com.restfb.types.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FaceBookDatasource {
 
     public static void main(String args[]) {

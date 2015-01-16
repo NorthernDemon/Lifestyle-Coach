@@ -10,6 +10,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
+/**
+ * Motivation datasource uses at random one of the two REST services:
+ * - Cat pictures: nijikokun-random-cats.p.mashape.com
+ * - Chuck Norris jokes: api.icndb.com
+ */
 @Component
 public class MotivationDatasource {
 
