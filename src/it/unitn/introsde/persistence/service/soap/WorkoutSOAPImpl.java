@@ -1,6 +1,6 @@
 package it.unitn.introsde.persistence.service.soap;
 
-import it.unitn.introsde.helpers.Workout;
+import it.unitn.introsde.wrapper.Workout;
 import it.unitn.introsde.persistence.dao.PersonDao;
 import it.unitn.introsde.persistence.datasource.WorkoutDatasource;
 import it.unitn.introsde.persistence.entity.Person;

@@ -1,6 +1,6 @@
 package it.unitn.introsde.persistence.datasource;
 
-import it.unitn.introsde.helpers.Awareness;
+import it.unitn.introsde.wrapper.Awareness;
 import it.unitn.introsde.persistence.entity.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

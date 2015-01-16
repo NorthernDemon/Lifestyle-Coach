@@ -1,10 +1,10 @@
 package it.unitn.introsde.persistence.process;
 
 import it.unitn.introsde.ServiceConfiguration;
-import it.unitn.introsde.helpers.Awareness;
-import it.unitn.introsde.helpers.Motivation;
-import it.unitn.introsde.helpers.Progress;
-import it.unitn.introsde.helpers.Workout;
+import it.unitn.introsde.wrapper.Awareness;
+import it.unitn.introsde.wrapper.Motivation;
+import it.unitn.introsde.wrapper.Progress;
+import it.unitn.introsde.wrapper.Workout;
 import it.unitn.introsde.persistence.service.soap.WorkoutSOAP;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

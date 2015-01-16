@@ -1,7 +1,7 @@
 package it.unitn.introsde.persistence.service;
 
 import it.unitn.introsde.ServiceConfiguration;
-import it.unitn.introsde.helpers.Progress;
+import it.unitn.introsde.wrapper.Progress;
 import it.unitn.introsde.persistence.dao.GoalDao;
 import it.unitn.introsde.persistence.dao.MeasureDao;
 import it.unitn.introsde.persistence.dao.PersonDao;

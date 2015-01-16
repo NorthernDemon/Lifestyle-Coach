@@ -1,4 +1,4 @@
-package it.unitn.introsde.helpers;
+package it.unitn.introsde.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,10 +8,10 @@ import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 
-@JsonRootName("progress")
+@JsonRootName("awareness")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"type", "value"})
-public class Progress {
+public class Awareness {
 
     @JsonProperty(required = true)
     private String type;
@@ -19,10 +19,10 @@ public class Progress {
     @JsonProperty(required = true)
     private String value;
 
-    public Progress() {
+    public Awareness() {
     }
 
-    public Progress(String type, String value) {
+    public Awareness(String type, String value) {
         this.type = type;
         this.value = value;
     }
@@ -48,8 +48,8 @@ public class Progress {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        if (o instanceof Progress) {
-            Progress object = (Progress) o;
+        if (o instanceof Awareness) {
+            Awareness object = (Awareness) o;
 
             return Objects.equals(type, object.type)
                     && Objects.equals(value, object.value);

@@ -1,6 +1,6 @@
 package it.unitn.introsde.persistence.service.soap;
 
-import it.unitn.introsde.helpers.Workout;
+import it.unitn.introsde.wrapper.Workout;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;

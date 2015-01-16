@@ -1,4 +1,4 @@
-package it.unitn.introsde.helpers;
+package it.unitn.introsde.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

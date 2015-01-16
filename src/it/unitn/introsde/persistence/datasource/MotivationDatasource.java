@@ -2,7 +2,7 @@ package it.unitn.introsde.persistence.datasource;
 
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import it.unitn.introsde.helpers.Motivation;
+import it.unitn.introsde.wrapper.Motivation;
 import it.unitn.introsde.persistence.entity.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

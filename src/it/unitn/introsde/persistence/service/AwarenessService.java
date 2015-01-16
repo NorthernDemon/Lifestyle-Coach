@@ -1,7 +1,7 @@
 package it.unitn.introsde.persistence.service;
 
 import it.unitn.introsde.ServiceConfiguration;
-import it.unitn.introsde.helpers.Awareness;
+import it.unitn.introsde.wrapper.Awareness;
 import it.unitn.introsde.persistence.dao.PersonDao;
 import it.unitn.introsde.persistence.datasource.AwarenessDatasource;
 import it.unitn.introsde.persistence.entity.Person;
