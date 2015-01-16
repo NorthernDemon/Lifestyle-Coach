@@ -1,10 +1,10 @@
 package it.unitn.introsde.persistence.service;
 
 import it.unitn.introsde.ServiceConfiguration;
-import it.unitn.introsde.wrapper.Awareness;
 import it.unitn.introsde.persistence.dao.PersonDao;
 import it.unitn.introsde.persistence.datasource.AwarenessDatasource;
 import it.unitn.introsde.persistence.entity.Person;
+import it.unitn.introsde.wrapper.Awareness;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

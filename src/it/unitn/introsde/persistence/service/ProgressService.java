@@ -1,11 +1,11 @@
 package it.unitn.introsde.persistence.service;
 
 import it.unitn.introsde.ServiceConfiguration;
-import it.unitn.introsde.wrapper.Progress;
 import it.unitn.introsde.persistence.dao.GoalDao;
 import it.unitn.introsde.persistence.dao.MeasureDao;
 import it.unitn.introsde.persistence.dao.PersonDao;
 import it.unitn.introsde.persistence.entity.Person;
+import it.unitn.introsde.wrapper.Progress;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

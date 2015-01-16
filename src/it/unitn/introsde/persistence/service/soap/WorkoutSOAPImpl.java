@@ -1,9 +1,9 @@
 package it.unitn.introsde.persistence.service.soap;
 
-import it.unitn.introsde.wrapper.Workout;
 import it.unitn.introsde.persistence.dao.PersonDao;
 import it.unitn.introsde.persistence.datasource.WorkoutDatasource;
 import it.unitn.introsde.persistence.entity.Person;
+import it.unitn.introsde.wrapper.Workout;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

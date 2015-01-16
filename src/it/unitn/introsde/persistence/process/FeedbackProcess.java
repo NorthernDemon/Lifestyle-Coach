@@ -1,11 +1,11 @@
 package it.unitn.introsde.persistence.process;
 
 import it.unitn.introsde.ServiceConfiguration;
+import it.unitn.introsde.persistence.service.soap.WorkoutSOAP;
 import it.unitn.introsde.wrapper.Awareness;
 import it.unitn.introsde.wrapper.Motivation;
 import it.unitn.introsde.wrapper.Progress;
 import it.unitn.introsde.wrapper.Workout;
-import it.unitn.introsde.persistence.service.soap.WorkoutSOAP;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
