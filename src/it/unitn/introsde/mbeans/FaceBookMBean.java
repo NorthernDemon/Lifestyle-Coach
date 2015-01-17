@@ -23,11 +23,12 @@ import java.util.Map;
 public class FaceBookMBean implements Serializable {
 
     private static final Logger logger = LogManager.getLogger();
+    String fbaccesstoken = null;
 
     public void submit() {
         System.out.println("reaching here>>>");
         Map<String, String> requestParameters = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        String fbaccesstoken = requestParameters.get("fbform:fbaccesstoken");
+        fbaccesstoken = requestParameters.get("fbform:fbaccesstoken");
 
         //getting details mateo has permitted us to access
         FacebookClient facebookClient = new DefaultFacebookClient(fbaccesstoken);
