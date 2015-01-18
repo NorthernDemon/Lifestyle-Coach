@@ -11,7 +11,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -27,8 +26,9 @@ import java.util.Map;
 public class ScheduleMBean implements Serializable {
     private static final Logger logger = LogManager.getLogger();
 
+    private String successMessage;
     private ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-    private  Map<String, Object> sessionMap = externalContext.getSessionMap();
+    private Map<String, Object> sessionMap = externalContext.getSessionMap();
 
     private String startDate;
     private String endDate;
@@ -83,6 +83,14 @@ public class ScheduleMBean implements Serializable {
         this.location = location;
     }
 
+    public String getSuccessMessage() {
+        return successMessage;
+    }
+
+    public void setSuccessMessage(String successMessage) {
+        this.successMessage = successMessage;
+    }
+
     public void InitialiseToken() throws Exception {
         Map<String, String> requestParameters = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String googleaccesstoken = requestParameters.get("googleform:googleaccesstoken");
@@ -100,11 +108,16 @@ public class ScheduleMBean implements Serializable {
         Date startDate = getDate(getStartDate().split("-"));
         Date endDate = getDate(getEndDate().split("-"));
 
-        Schedule schedule = new Schedule(startDate, endDate, getSummary(), getLocation(), (String)sessionMap.get("googleaccesstoken"));
+        Schedule schedule = new Schedule(startDate, endDate, getSummary(), getLocation(), (String) sessionMap.get("googleaccesstoken"));
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(schedule), Schedule.class);
         logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.error("message payLoad === " + exchange);
+        if (exchange.getBody() == null) {
+            setSuccessMessage("oops! an error occured schedule not created");
+        } else {
+            setSuccessMessage("Schedule created Successfully!!");
+        }
     }
 
 //    public void createEvent(String accessToken) throws Exception {

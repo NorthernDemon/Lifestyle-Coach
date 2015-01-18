@@ -2,21 +2,30 @@ package it.unitn.introsde.persistence.datasource;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
+import com.restfb.Parameter;
+import com.restfb.types.FacebookType;
 import com.restfb.types.Page;
 import com.restfb.types.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FaceBookDatasource {
 
-    public static void main(String args[]) {
-        FacebookClient facebookClient = new DefaultFacebookClient("AQBDsrdjP2oXCkg8omz3E1PGekIGUmKO1V3rqFokKPPXMWndqEo6QbFWUQeMzUrpEihSLCTUZbBqyyDKC-Bcme2uxaY1TnpZklumg81ROZ8BPHfWnhFRNMkTCnPUkw1gR3nupR23qsgjtGD2-fXK-U3bjOZCwymxLTcD7MDw2VaKaL6KyNDmyEVsMqws10wwIUc43TeH3PtSw-FoHiQrAtlsmxTsQibaa_hqTgZfKeS44hlMeiw1yQ1uWwqgve9Kda9ABgF4blLRyXKQmSVckoTIKAEv2sJYHNSo5Vbj0Oyo27gfsPg4Y-RBnfxDruKymjFgAyIt32aWpap5BvQvl9ju");
+    private static final Logger logger = LogManager.getLogger();
 
+    public static void main(String args[]) {
+        //getting details mateo has permitted us to access
+        FacebookClient facebookClient = new DefaultFacebookClient("fbaccesstoken");
         User user = facebookClient.fetchObject("me", User.class);
         Page page = facebookClient.fetchObject("cocacola", Page.class);
 
         System.out.println("User name: " + user.getName());
-        System.out.println(user.getEducation());
         System.out.println("Page likes: " + page.getLikes());
+
+        //posting on mateos timeline
+        FacebookType publishMessageResponse = facebookClient.publish("me/feed", FacebookType.class, Parameter.with("message", "RestFB test"));
+        logger.error("Published message ID: " + publishMessageResponse.getId());
     }
 }

@@ -8,11 +8,11 @@
 <body>
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="content">
-
         <h1>SCHEDULE</h1>
         <h:form id="scheduleform">
             <div>
                 <fieldset>
+                    <div style="color: red;"><h5><h:outputText value="#{scheduleMBean.successMessage}"></h:outputText></h5></div>
                     <legend>Details</legend>
                     <table>
                         <tr>
@@ -34,7 +34,6 @@
                             <td><h:inputText value="#{scheduleMBean.location}" style="width:350px" required="true"/></td>
                         </tr>
                     </table>
-
                 </fieldset>
             </div>
             <div style="margin-left: 120px;">
