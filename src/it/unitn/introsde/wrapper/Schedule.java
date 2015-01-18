@@ -28,7 +28,10 @@ public class Schedule implements Serializable {
     @JsonProperty(required = true)
     private String googleAccessToken;
 
-    public Schedule(Date startDate, Date endDate, String summary, String location,String googleAccessToken) {
+    public Schedule() {
+    }
+
+    public Schedule(Date startDate, Date endDate, String summary, String location, String googleAccessToken) {
         this.endDate = endDate;
         this.startDate = startDate;
         this.summary = summary;

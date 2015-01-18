@@ -9,6 +9,8 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
 import it.unitn.introsde.wrapper.Schedule;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,7 +19,12 @@ import java.util.TimeZone;
 
 @Component
 public class GoogleDatasource {
+    private static final Logger logger = LogManager.getLogger();
     public void createEvent(Schedule schedule)throws Exception{
+
+        logger.info("access-token>> "+schedule.getGoogleAccessToken());
+        logger.info("schedule object>>> "+schedule.toString());
+
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         GoogleCredential credential = new GoogleCredential().setAccessToken(schedule.getGoogleAccessToken());

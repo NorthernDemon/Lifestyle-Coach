@@ -9,7 +9,9 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -24,7 +26,9 @@ import java.util.Map;
 @SessionScoped
 public class ScheduleMBean implements Serializable {
     private static final Logger logger = LogManager.getLogger();
-    private String googleaccesstoken;
+
+    private ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+    private  Map<String, Object> sessionMap = externalContext.getSessionMap();
 
     private String startDate;
     private String endDate;
@@ -36,7 +40,6 @@ public class ScheduleMBean implements Serializable {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(Arrays.asList(applicationType));
         httpHeaders.setContentType(applicationType);
-        System.out.println("reaching here");
         return new HttpEntity<>(body, httpHeaders);
     }
 
@@ -82,7 +85,9 @@ public class ScheduleMBean implements Serializable {
 
     public void InitialiseToken() throws Exception {
         Map<String, String> requestParameters = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        googleaccesstoken = requestParameters.get("googleform:googleaccesstoken");
+        String googleaccesstoken = requestParameters.get("googleform:googleaccesstoken");
+        sessionMap.put("googleaccesstoken", googleaccesstoken);
+        logger.error("googleaccesstoken>>> " + googleaccesstoken);
     }
 
     public void registerSchedule() throws Exception {
@@ -95,11 +100,11 @@ public class ScheduleMBean implements Serializable {
         Date startDate = getDate(getStartDate().split("-"));
         Date endDate = getDate(getEndDate().split("-"));
 
-        Schedule schedule = new Schedule(startDate, endDate, getSummary(), getLocation(), googleaccesstoken);
+        Schedule schedule = new Schedule(startDate, endDate, getSummary(), getLocation(), (String)sessionMap.get("googleaccesstoken"));
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(schedule), Schedule.class);
-        logger.info("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
-        logger.info("message payLoad === " + exchange);
+        logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
+        logger.error("message payLoad === " + exchange);
     }
 
 //    public void createEvent(String accessToken) throws Exception {
