@@ -3,6 +3,7 @@ package it.unitn.introsde.persistence.process;
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Measure;
+import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
 import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
@@ -93,7 +94,26 @@ public class UserProcess extends AbstractProcess {
             logger.debug("Outgoing [schedule-process] with accept=" + accept + ", schedule=" + createdschedule);
             return new ResponseEntity<>(createdschedule, exchange.getStatusCode());
         } else {
-            logger.debug("Outgoing [measure-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            logger.debug("Outgoing [schedule-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
+
+    @RequestMapping(value = "/measuretype-process", method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<MeasureType> createMeasureType(
+            @RequestHeader(value = "Accept") String accept,
+            @RequestBody MeasureType measureType) {
+        logger.debug("Incoming [measuretype-process] with accept=" + accept + ", measuretype=" + measureType);
+        String url = ServiceConfiguration.getUrl() + "/measuretype";
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, measureType), MeasureType.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            MeasureType createdmeasuretype = (MeasureType) exchange.getBody();
+            logger.debug("Outgoing [measureType-process] with accept=" + accept + ", createdmeasuretype=" + createdmeasuretype);
+            return new ResponseEntity<>(createdmeasuretype, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [measureType-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
             return new ResponseEntity<>(exchange.getStatusCode());
         }
     }
