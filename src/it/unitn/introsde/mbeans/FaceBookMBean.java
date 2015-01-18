@@ -23,7 +23,7 @@ import java.util.Map;
 public class FaceBookMBean implements Serializable {
 
     private static final Logger logger = LogManager.getLogger();
-    String fbaccesstoken = null;
+    private String fbaccesstoken = null;
 
     public void submit() {
         System.out.println("reaching here>>>");

@@ -8,6 +8,9 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     <style>
         #top {
             position: relative;
@@ -96,7 +99,6 @@
             font-weight : bold;
             text-decoration : underline;
         }
-
     </style>
     <title>Life Coach</title>
 </h:head>
@@ -113,6 +115,7 @@
             <ui:insert name="left">
                 <h:form>
                     <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/facebook/facebookLogin.xhtml">Login With FaceBook</h:outputLink>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/schedule/loignwithgoogle.xhtml">Login with G+</h:outputLink>
                     <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/schedule/schedule.xhtml">Schedule</h:outputLink>
                     <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/measure/measure.xhtml">Create Measure</h:outputLink>
                     <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/goal/goal.xhtml">Create Goal</h:outputLink>

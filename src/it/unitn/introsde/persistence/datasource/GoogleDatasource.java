@@ -2,61 +2,45 @@ package it.unitn.introsde.persistence.datasource;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.model.CalendarList;
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
+import com.google.api.services.calendar.model.EventDateTime;
+import it.unitn.introsde.wrapper.Schedule;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 @Component
 public class GoogleDatasource {
-
-    // TODO mock up Google Calendar
-    // this works as service connection
-    // we need JSF to get user to expose his calendar to us
-    // that will require different type of OAuth
-    // Go to google dev console: https://console.developers.google.com
-    //      Create Client ID
-    //          APPLICATION TYPE
-    //              Web application
-    //              Accessed by web browsers over a network.
-
-    // LOGIN with G+ account (similar to Facebook)
-    // - https://developers.google.com/+/web/signin/
-
-    // https://developers.google.com/google-apps/calendar/auth
-    // Docs for service:
-    // - https://developers.google.com/accounts/docs/OAuth2ServiceAccount
-    // Docs for web-app:
-    // - https://developers.google.com/accounts/docs/OAuth2WebServer
-    // - https://code.google.com/p/google-api-java-client/wiki/OAuth2
-
-    // All Calendar REST API:
-    // - https://developers.google.com/google-apps/calendar/firstapp
-    public static void main(String args[]) throws Exception {
+    public void createEvent(Schedule schedule)throws Exception{
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-        GoogleCredential credential = new GoogleCredential.Builder()
-                .setTransport(GoogleNetHttpTransport.newTrustedTransport())
-                .setJsonFactory(jsonFactory)
-                .setServiceAccountId("815360076208-m9vi0hcjq2q1uqgku2e8rk856qjvrv47@developer.gserviceaccount.com")
-                .setServiceAccountPrivateKeyFromP12File(new File("My Project-6fdeb93221d2.p12"))
-                .setServiceAccountScopes(Collections.singleton("https://www.googleapis.com/auth/calendar"))
-                .build();
+        GoogleCredential credential = new GoogleCredential().setAccessToken(schedule.getGoogleAccessToken());
+        // Initialize Calendar service with valid OAuth credentials
+        com.google.api.services.calendar.Calendar service = new com.google.api.services.calendar.Calendar.Builder(httpTransport, jsonFactory, credential)
+                .setApplicationName("LifestyleCoach").build();
 
-        Calendar service = new Calendar.Builder(httpTransport, jsonFactory, credential).setApplicationName("LifestyleCoach").build();
-        Calendar.CalendarList.List list = service.calendarList().list();
-        CalendarList calendars = list.execute();
-        System.out.println(calendars.toPrettyString());
-        for (Object calendarListEntry : calendars.getItems()) {
-            System.out.println(calendarListEntry);
-        }
-        HttpResponse httpResponse = list.executeUsingHead();
-        System.out.println(httpResponse.getContentType());
-        System.out.println(httpResponse.getStatusMessage());
+        // Create and initialize a new event
+        Event event = new Event();
+        event.setSummary("walk 300km");
+        event.setLocation("queens park");
+
+        ArrayList<EventAttendee> attendees = new ArrayList<EventAttendee>();
+        attendees.add(new EventAttendee().setEmail("matteo.matteovich@gmail.com"));
+        event.setAttendees(attendees);
+
+        DateTime start = new DateTime(schedule.getStartDate(), TimeZone.getTimeZone("UTC"));
+        event.setStart(new EventDateTime().setDateTime(start));
+        DateTime end = new DateTime(schedule.getEndDate(), TimeZone.getTimeZone("UTC"));
+        event.setEnd(new EventDateTime().setDateTime(end));
+
+       // Insert the new event
+        Event createdEvent = service.events().insert("primary", event).execute();
     }
+
 }

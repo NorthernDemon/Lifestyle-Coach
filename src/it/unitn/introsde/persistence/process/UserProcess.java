@@ -4,6 +4,7 @@ import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Measure;
 import it.unitn.introsde.persistence.entity.Person;
+import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,25 @@ public class UserProcess extends AbstractProcess {
             Measure createdMeasure = (Measure) exchange.getBody();
             logger.debug("Outgoing [measure-process] with accept=" + accept + ", measure=" + createdMeasure);
             return new ResponseEntity<>(createdMeasure, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [measure-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
+
+    @RequestMapping(value = "/schedule-process", method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Schedule> createSchedule(
+            @RequestHeader(value = "Accept") String accept,
+            @RequestBody Schedule schedule) {
+        logger.debug("Incoming [schdule-process] with accept=" + accept + ", schedule=" + schedule);
+        String url = ServiceConfiguration.getUrl() + "/schedule";
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, schedule), Schedule.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            Schedule createdschedule = (Schedule) exchange.getBody();
+            logger.debug("Outgoing [schedule-process] with accept=" + accept + ", schedule=" + createdschedule);
+            return new ResponseEntity<>(createdschedule, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [measure-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
             return new ResponseEntity<>(exchange.getStatusCode());
