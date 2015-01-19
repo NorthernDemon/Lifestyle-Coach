@@ -5,4 +5,3 @@
 *.jar
 *.war
 webapp/WEB-INF/classes
-*.p12
