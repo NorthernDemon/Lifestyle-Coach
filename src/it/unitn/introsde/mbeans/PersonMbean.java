@@ -52,7 +52,6 @@ public class PersonMbean implements Serializable {
     }
 
     public PersonMbean() {
-
         RestTemplate restTemplate = new RestTemplate();
         HttpMethod httpMethod = HttpMethod.GET;
         String url = ServiceConfiguration.getUrl() + "/fbuser-process/" + sessionMap.get("fbaccesstoken");
@@ -113,10 +112,12 @@ public class PersonMbean implements Serializable {
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Person.class);
         logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.debug("message payLoad === " + exchange.getBody().toString());
-        if (exchange.getBody() == null) {
-            setSuccessMessage("oops! an error occured!!");
+        person = (Person) exchange.getBody();
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            sessionMap.put("personId", person.getId());
+            setSuccessMessage("Person Registered Successfully!");
         } else {
-            setSuccessMessage("Person Registered Successfully!!");
+            setSuccessMessage("oops! an error occured!!");
         }
     }
 }

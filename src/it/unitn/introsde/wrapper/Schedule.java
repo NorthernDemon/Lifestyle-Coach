@@ -19,13 +19,17 @@ public class Schedule implements Serializable {
     @JsonProperty(required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.S")
     private Date startDate;
+
     @JsonProperty(required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.S")
     private Date endDate;
+
     @JsonProperty(required = true)
     private String summary;
+
     @JsonProperty(required = true)
     private String location;
+
     @JsonProperty(required = true)
     private String googleAccessToken;
 
@@ -72,6 +76,14 @@ public class Schedule implements Serializable {
         this.location = location;
     }
 
+    public String getGoogleAccessToken() {
+        return googleAccessToken;
+    }
+
+    public void setGoogleAccessToken(String googleAccessToken) {
+        this.googleAccessToken = googleAccessToken;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -87,14 +99,6 @@ public class Schedule implements Serializable {
         }
 
         return false;
-    }
-
-    public String getGoogleAccessToken() {
-        return googleAccessToken;
-    }
-
-    public void setGoogleAccessToken(String googleAccessToken) {
-        this.googleAccessToken = googleAccessToken;
     }
 
     @Override
