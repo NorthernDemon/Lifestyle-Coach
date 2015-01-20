@@ -145,9 +145,9 @@ public class UserProcess extends AbstractProcess {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Person> getFBUser(
             @RequestHeader(value = "Accept") String accept,
-            @QueryParam("accesstoken") String accesstoken) {
+            @PathVariable("accesstoken") String accessToken) {
         logger.debug("Incoming [fbuser-process] with accept=" + accept);
-        String url = ServiceConfiguration.getUrl() + "/fbuser/" + accesstoken;
+        String url = ServiceConfiguration.getUrl() + "/fbuser/" + accessToken;
         ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Person.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Person person = (Person) exchange.getBody();
