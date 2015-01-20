@@ -22,11 +22,11 @@ public class MotivationDatasource {
 
     public Motivation getMotivated(Person person) {
         try {
-            if (new Random().nextBoolean()) {
-                return new Motivation("image", getCat());
-            } else {
+//            if (new Random().nextBoolean()) {
+//                return new Motivation("image", getCat());
+//            } else {
                 return new Motivation("text", getJoke(person.getName(), person.getSurname()));
-            }
+//            }
         } catch (UnirestException e) {
             logger.error("Unirest failed in motivation datasource", e);
             return null;
@@ -43,8 +43,7 @@ public class MotivationDatasource {
         return Unirest.get("https://nijikokun-random-cats.p.mashape.com/random")
                 .header("X-Mashape-Key", "B57UnpnPUsmsh2D8N0huZESZ4ne7p1W9vZIjsnaEdJ5JbY7Ndf")
                 .header("Accept", "application/json")
-//                .asJson().getBody().getObject().getString("source");
-                .asString().getBody(); // for testing purpose: service fails due to 502 ATM
+                .asJson().getBody().getObject().getString("source");
     }
 
     /**

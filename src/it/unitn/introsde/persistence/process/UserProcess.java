@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.ws.rs.QueryParam;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,7 +133,7 @@ public class UserProcess extends AbstractProcess {
         ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), new ArrayList<Person>().getClass());
         if (exchange.getStatusCode().is2xxSuccessful()) {
             List<Person> people = (List<Person>) exchange.getBody();
-            logger.debug("Outgoing [people-process] with accept=" + accept + "");
+            logger.debug("Outgoing [people-process] with accept=" + accept);
             return new ResponseEntity<>(people, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [people-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
@@ -145,13 +146,13 @@ public class UserProcess extends AbstractProcess {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Person> getFBUser(
             @RequestHeader(value = "Accept") String accept,
-            @PathVariable("accesstoken") String accesstoken) {
+            @PathVariable("accesstoken") String accessToken) {
         logger.debug("Incoming [fbuser-process] with accept=" + accept);
-        String url = ServiceConfiguration.getUrl() + "/fbuser/" + accesstoken;
+        String url = ServiceConfiguration.getUrl() + "/fbuser/" + accessToken;
         ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Person.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Person person = (Person) exchange.getBody();
-            logger.debug("Outgoing [fbuser-process] with accept=" + accept + "");
+            logger.debug("Outgoing [fbuser-process] with accept=" + accept);
             return new ResponseEntity<>(person, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [fbuser-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
@@ -159,18 +160,18 @@ public class UserProcess extends AbstractProcess {
         }
     }
 
-    @RequestMapping(value = "/event-process/{accesstoken}", method = RequestMethod.GET,
+    @RequestMapping(value = "/event-process", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Schedule>> getEvent(
             @RequestHeader(value = "Accept") String accept,
-            @PathVariable("accesstoken") String accesstoken) {
+            @RequestParam(value = "accessToken") String accessToken) {
         logger.debug("Incoming [event-process] with accept=" + accept);
-        String url = ServiceConfiguration.getUrl() + "/calendarEvent/" + accesstoken;
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Schedule.class);
+        String url = ServiceConfiguration.getUrl() + "/calendarEvent/?accessToken=" + accessToken;
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), List.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             List<Schedule> schedules = (List<Schedule>) exchange.getBody();
-            logger.debug("Outgoing [event-process] with accept=" + accept + "");
+            logger.debug("Outgoing [event-process] with accept=" + accept);
             return new ResponseEntity<>(schedules, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [event-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());

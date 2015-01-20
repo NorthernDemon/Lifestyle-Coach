@@ -102,7 +102,7 @@ public class ScheduleMBean implements Serializable {
         ResponseEntity<?> exchange = getResponse("schedule-process", schedule, HttpMethod.POST);
         logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.error("message payLoad === " + exchange);
-        if (exchange.getBody() == null) {
+        if (exchange.getStatusCode().is2xxSuccessful()) {
             setSuccessMessage("oops! an error occured schedule not created");
         } else {
             setSuccessMessage("Schedule created Successfully!!");
@@ -111,10 +111,10 @@ public class ScheduleMBean implements Serializable {
 
     public List<Schedule> getEvents() {
         RestTemplate restTemplate = new RestTemplate();
-        String url = ServiceConfiguration.getUrl() + "/event-process/" + sessionMap.get("googleaccesstoken");
+        String url = ServiceConfiguration.getUrl() + "/event-process/?accessToken=" + sessionMap.get("googleaccesstoken");
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(null), List.class);
-        List<Schedule> schedules = null;
+        List<Schedule> schedules;
         if (exchange.getStatusCode().is2xxSuccessful()) {
             schedules = (List<Schedule>) exchange.getBody();
             logger.debug("Incoming [event-process] with Schedules=" + schedules + "");

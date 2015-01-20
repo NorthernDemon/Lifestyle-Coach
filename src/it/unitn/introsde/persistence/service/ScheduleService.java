@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 /**
@@ -40,23 +38,22 @@ public class ScheduleService {
         return new ResponseEntity<>(schedule, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/calendarEvent/{accesstoken}", method = RequestMethod.GET,
+    @RequestMapping(value = "/calendarEvent", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<Schedule>> getEvent(@PathVariable("accesstoken") String accesstoken) {
-        List<Schedule> schedules = null;
+    public ResponseEntity<List<Schedule>> getEvents(
+            @RequestParam(value = "accessToken") String accessToken) {
         try {
-            schedules = googleDatasource.getCalendarEvent(accesstoken);
+            List<Schedule> schedules = googleDatasource.getCalendarEvent(accessToken);
+            logger.debug("Schedules =" + schedules);
             if (schedules.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-        } catch (GeneralSecurityException e) {
+            return new ResponseEntity<>(schedules, HttpStatus.OK);
+        } catch (Exception e) {
             logger.error(e);
-        } catch (IOException e) {
-            logger.error(e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        logger.debug("Schedules =" + schedules);
-        return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
 
     @Autowired

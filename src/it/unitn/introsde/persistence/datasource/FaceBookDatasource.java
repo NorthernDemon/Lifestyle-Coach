@@ -19,17 +19,16 @@ public class FaceBookDatasource {
     private static final Logger logger = LogManager.getLogger();
 
     public Person getUser(String accessToken) throws ParseException {
-        //getting details mateo has permitted us to access
         FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
-        User me = facebookClient.fetchObject("me", User.class);
-        logger.info("name>> " + me.getFirstName());
+        User user = facebookClient.fetchObject("me", User.class);
+        logger.info("name>> " + user.getFirstName());
         logger.info("accessToken>> " + accessToken);
-        logger.info("me>> " + me);
-        logger.info("me.getBirthday>> " + me.getBirthday());
-        return new Person(me.getFirstName(), me.getLastName(), new SimpleDateFormat("MM/dd/yyyy").parse(me.getBirthday()));
+        logger.info("me>> " + user);
+        logger.info("me.getBirthday>> " + user.getBirthday());
+        return new Person(user.getFirstName(), user.getLastName(), new SimpleDateFormat("MM/dd/yyyy").parse(user.getBirthday()));
     }
 
-    public void posttoFacebook(String accessToken) {
+    public void postToWall(String accessToken) {
         FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
         FacebookType publishMessageResponse = facebookClient.publish("me/feed", FacebookType.class, Parameter.with("message", "RestFB test"));
         logger.debug("Published message ID: " + publishMessageResponse.getId());
