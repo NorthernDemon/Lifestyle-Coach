@@ -49,6 +49,55 @@ public class GoalMBean implements Serializable {
         return calendar.getTime();
     }
 
+
+    public List<Person> getPeople() {
+        ResponseEntity<?> exchange = getResponse("people-process", null, HttpMethod.GET);
+        List<Person> people = null;
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            people = (List<Person>) exchange.getBody();
+            logger.debug("Incoming [people-process] with People=" + people + "");
+            return people;
+        } else {
+            people = (List<Person>) exchange.getBody();
+            logger.error("Incoming [people-process] with People=" + people + "");
+            return people;
+        }
+    }
+
+    public void registerGoal() {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpMethod httpMethod = HttpMethod.POST;
+        String url = ServiceConfiguration.getUrl();
+        Date startDate = getDate(getEndDate().split("-"));
+        Date endDate = getDate(getStartDate().split("-"));
+
+        ResponseEntity<?> personExchange = getGenericResponse("/getpersonbyid-process/" + getPerson(), HttpMethod.GET, Person.class, null);
+        ResponseEntity<?> creatorExchange = getGenericResponse("/getpersonbyid-process/" + getCreator(), HttpMethod.GET, Person.class, null);
+        ResponseEntity<?> measureTypeExchange = getGenericResponse("/getmeasureTypeById-process/" + getMeasureType(), HttpMethod.GET, MeasureType.class, null);
+
+        Goal goal = new Goal((Person) creatorExchange.getBody(), (Person) creatorExchange.getBody(), (MeasureType) measureTypeExchange.getBody(), 0, getMessage(), startDate, endDate);
+        ResponseEntity<?> exchange = restTemplate.exchange(url + "/goal-process", httpMethod, createHeader(goal), Goal.class);
+        logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
+        logger.debug("message payLoad === " + exchange.getBody().toString());
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            setSuccessMessage("Goal Registered Successfully!!");
+        } else {
+            setSuccessMessage("oops! an error occured!!");
+        }
+    }
+
+    public ResponseEntity<?> getResponse(String restPath, Schedule schedule, HttpMethod httpMethod) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = ServiceConfiguration.getUrl() + "/" + restPath;
+        return restTemplate.exchange(url, httpMethod, createHeader(schedule), List.class);
+    }
+
+    public <T> ResponseEntity<?> getGenericResponse(String restPath, HttpMethod httpMethod, Class<T> clazz, T object) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = ServiceConfiguration.getUrl() + "/" + restPath;
+        return restTemplate.exchange(url, httpMethod, createHeader(object), clazz);
+    }
+
     public String getSuccessMessage() {
         return successMessage;
     }
@@ -106,56 +155,4 @@ public class GoalMBean implements Serializable {
         this.measureType = measureType;
     }
 
-    public List<Person> getPeople() {
-        ResponseEntity<?> exchange = getResponse("people-process", null, HttpMethod.GET);
-        List<Person> people = null;
-        if (exchange.getStatusCode().is2xxSuccessful()) {
-            people = (List<Person>) exchange.getBody();
-            logger.debug("Incoming [people-process] with People=" + people + "");
-            return people;
-        } else {
-            people = (List<Person>) exchange.getBody();
-            logger.error("Incoming [people-process] with People=" + people + "");
-            return people;
-        }
-    }
-
-    public void registerGoal() {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpMethod httpMethod = HttpMethod.POST;
-        String url = ServiceConfiguration.getUrl();
-        Date startDate = getDate(getEndDate().split("-"));
-        Date endDate = getDate(getStartDate().split("-"));
-
-        ResponseEntity<?> personExchange = getGenericResponse("/getpersonbyid-process/" + getPerson(), HttpMethod.GET, Person.class, null);
-
-        ResponseEntity<?> creatorExchange = getGenericResponse("/getpersonbyid-process/" + getCreator(), HttpMethod.GET, Person.class, null);
-
-        ResponseEntity<?> measureTypeExchange = getGenericResponse("/getmeasureTypeById-process/" + getMeasureType(), HttpMethod.GET, MeasureType.class, null);
-
-
-        logger.info(getMessage() + "" + getStartDate() + "" + getEndDate() + "" + getCreator() + "" + getCreator() + "" + getPerson() + "" + getMeasureType());
-
-        Goal goal = new Goal((Person) creatorExchange.getBody(), (Person) creatorExchange.getBody(), (MeasureType) measureTypeExchange.getBody(), 0, getMessage(), startDate, endDate);
-        ResponseEntity<?> exchange = restTemplate.exchange(url + "/goal-process", httpMethod, createHeader(goal), Goal.class);
-        logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
-        logger.debug("message payLoad === " + exchange.getBody().toString());
-        if (exchange.getStatusCode().is2xxSuccessful()) {
-            setSuccessMessage("Goal Registered Successfully!!");
-        } else {
-            setSuccessMessage("oops! an error occured!!");
-        }
-    }
-
-    public ResponseEntity<?> getResponse(String restPath, Schedule schedule, HttpMethod httpMethod) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = ServiceConfiguration.getUrl() + "/" + restPath;
-        return restTemplate.exchange(url, httpMethod, createHeader(schedule), List.class);
-    }
-
-    public <T> ResponseEntity<?> getGenericResponse(String restPath, HttpMethod httpMethod, Class<T> clazz, T object) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = ServiceConfiguration.getUrl() + "/" + restPath;
-        return restTemplate.exchange(url, httpMethod, createHeader(object), clazz);
-    }
 }

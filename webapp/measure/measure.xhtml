@@ -2,11 +2,43 @@
 <!DOCTYPE html
         PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title></title>
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
 <body>
-<h1>Still under Development</h1>
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h1>Goal</h1>
+        <h:form id="scheduleform">
+            <div>
+                <fieldset>
+                    <div style="color: red;"><h3><h:outputText value="#{measureMBean.successMessage}"></h:outputText></h3></div>
+                    <legend>Details</legend>
+                    <table>
+                        <tr>
+                            <td>Measure Type</td>
+                            <td>
+                                <h:selectOneMenu value="#{measureMBean.measureType}" style="width: 350px;">
+                                    <f:selectItems value="#{measureTypeMBean.measureTypes}" var="m"
+                                                   itemLabel="#{m.type}" itemValue="#{m.id}" />
+                                </h:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Value:</td>
+                            <td><h:inputText id="message" value="#{measureMBean.value}" style="width:350px" required="true"/></td>
+                        </tr>
+
+                    </table>
+                </fieldset>
+            </div>
+            <div style="margin-left: 120px;">
+                <h:commandButton value="Create Measure" action="measure"
+                                 actionListener="#{measureMBean.registerMeasure}"/>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
 </body>
 </html>
