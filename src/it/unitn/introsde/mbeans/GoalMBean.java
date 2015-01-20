@@ -130,8 +130,8 @@ public class GoalMBean implements Serializable {
         Goal goal = new Goal(new Person(Integer.parseInt(getCreator())), new Person(Integer.parseInt(getPerson())), new MeasureType(Integer.parseInt(getMeasureType())), 0, getMessage(), startDate, endDate);
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(goal), Goal.class);
-        logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
-        logger.error("message payLoad === " + exchange.getBody().toString());
+        logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
+        logger.debug("message payLoad === " + exchange.getBody().toString());
         if (exchange.getBody() == null) {
             setSuccessMessage("oops! an error occured!!");
         } else {

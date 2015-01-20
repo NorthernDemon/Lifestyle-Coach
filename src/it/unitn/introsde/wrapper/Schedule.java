@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.google.common.base.MoreObjects;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -104,8 +105,8 @@ public class Schedule implements Serializable {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("startDate", startDate)
-                .add("endDate", endDate)
+                .add("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(startDate))
+                .add("endDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(endDate))
                 .add("summary", summary)
                 .add("location", location)
                 .toString();

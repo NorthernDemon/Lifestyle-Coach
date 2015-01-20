@@ -58,15 +58,15 @@ public class PersonMbean implements Serializable {
         String url = ServiceConfiguration.getUrl() + "/fbuser-process/" + sessionMap.get("fbaccesstoken");
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(null), Person.class);
-        logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
-        logger.error("message payLoad === " + exchange);
+        logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
+        logger.debug("message payLoad === " + exchange);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Person person = (Person) exchange.getBody();
             setBirthday(new SimpleDateFormat("yyyy-MM-dd").format(person.getBirthday()));
             setName(person.getName());
             setSurname(person.getSurname());
         } else {
-            logger.debug("request not successful");
+            logger.error("request not successful");
         }
     }
 
@@ -111,8 +111,8 @@ public class PersonMbean implements Serializable {
         Person person = new Person(getName(), getSurname(), birthDate, sessionMap.get("fbaccesstoken").toString(), sessionMap.get("googleaccesstoken").toString());
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Person.class);
-        logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
-        logger.error("message payLoad === " + exchange.getBody().toString());
+        logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
+        logger.debug("message payLoad === " + exchange.getBody().toString());
         if (exchange.getBody() == null) {
             setSuccessMessage("oops! an error occured!!");
         } else {

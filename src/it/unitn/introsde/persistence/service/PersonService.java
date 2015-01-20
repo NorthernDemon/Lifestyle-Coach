@@ -56,7 +56,7 @@ public class PersonService {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Person> getFaceBookUser(@PathVariable("accesstoken") String accesstoken) {
-        Person person = null;
+        Person person;
         try {
             person = faceBookDatasource.getUser(accesstoken);
         } catch (ParseException e) {
