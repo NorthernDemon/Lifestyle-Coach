@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.*;
 import com.google.common.base.MoreObjects;
 import it.unitn.introsde.ServiceConfiguration;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -72,9 +71,11 @@ public class Person implements Serializable {
 
     public Person() {
     }
+
     public Person(int id) {
-        this.id=id;
+        this.id = id;
     }
+
     public Person(String name, String surname, Date birthday) {
         this.name = name;
         this.surname = surname;

@@ -13,7 +13,10 @@ import org.springframework.web.client.RestTemplate;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by davie on 1/10/2015.
@@ -117,14 +120,14 @@ public class GoalMBean implements Serializable {
         }
     }
 
-    public void registerGoal(){
+    public void registerGoal() {
         RestTemplate restTemplate = new RestTemplate();
         HttpMethod httpMethod = HttpMethod.POST;
         String url = ServiceConfiguration.getUrl() + "/goal-process";
         Date startDate = getDate(getEndDate().split("-"));
-        Date endDate =getDate(getStartDate().split("-"));
+        Date endDate = getDate(getStartDate().split("-"));
 
-        Goal goal = new Goal(new Person(Integer.parseInt(getCreator())),new Person(Integer.parseInt(getPerson())),new MeasureType(Integer.parseInt(getMeasureType())),0,getMessage(),startDate, endDate);
+        Goal goal = new Goal(new Person(Integer.parseInt(getCreator())), new Person(Integer.parseInt(getPerson())), new MeasureType(Integer.parseInt(getMeasureType())), 0, getMessage(), startDate, endDate);
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(goal), Goal.class);
         logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());

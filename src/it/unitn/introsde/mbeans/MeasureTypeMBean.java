@@ -1,26 +1,18 @@
 package it.unitn.introsde.mbeans;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.entity.MeasureType;
-import it.unitn.introsde.persistence.entity.Person;
-import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by davie on 1/18/2015.
@@ -67,11 +59,11 @@ public class MeasureTypeMBean implements Serializable {
         return new HttpEntity<>(body, httpHeaders);
     }
 
-    public void createMeasureType(){
+    public void createMeasureType() {
         RestTemplate restTemplate = new RestTemplate();
         HttpMethod httpMethod = HttpMethod.POST;
         String url = ServiceConfiguration.getUrl() + "/measuretype-process";
-        MeasureType measureType = new MeasureType(getType(),getUnit());
+        MeasureType measureType = new MeasureType(getType(), getUnit());
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(measureType), MeasureType.class);
         logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
@@ -83,12 +75,12 @@ public class MeasureTypeMBean implements Serializable {
         }
     }
 
-    public List<MeasureType> getMeasureTypes(){
+    public List<MeasureType> getMeasureTypes() {
         ResponseEntity<?> exchange = getResponse("measureTypes-process", null, HttpMethod.GET);
         List<MeasureType> measureTypes = null;
         if (exchange.getStatusCode().is2xxSuccessful()) {
             measureTypes = (List<MeasureType>) exchange.getBody();
-            logger.debug("Incoming [measureTypes-process] with MeasureType=" +measureTypes+ "");
+            logger.debug("Incoming [measureTypes-process] with MeasureType=" + measureTypes + "");
             return measureTypes;
         } else {
             measureTypes = (List<MeasureType>) exchange.getBody();

@@ -47,13 +47,13 @@ public class GoogleDatasource {
 
     public List<Schedule> getCalendarEvent(String accesstoken) throws GeneralSecurityException, IOException {
         logger.error("events here>>>> ");
-       // Events events = getGoogleService(accesstoken).events().list("primary").setPageToken(null).execute();
+        // Events events = getGoogleService(accesstoken).events().list("primary").setPageToken(null).execute();
         Events events = getGoogleService(accesstoken).events().list("primary").execute();
-        logger.debug("events>>>> "+events);
+        logger.debug("events>>>> " + events);
         List<Event> items = events.getItems();
         List<Schedule> schedules = new ArrayList<Schedule>();
-        for(Event event:items){
-            schedules.add(new Schedule(new Date(),new Date(),event.getDescription(),event.getLocation(),""));
+        for (Event event : items) {
+            schedules.add(new Schedule(new Date(), new Date(), event.getDescription(), event.getLocation(), ""));
         }
 
         return schedules;

@@ -1,8 +1,6 @@
 package it.unitn.introsde.mbeans;
 
-import com.google.api.services.calendar.model.Event;
 import it.unitn.introsde.ServiceConfiguration;
-import it.unitn.introsde.persistence.entity.Person;
 import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +12,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -102,7 +99,7 @@ public class ScheduleMBean implements Serializable {
         Date endDate = getDate(getEndDate().split("-"));
 
         Schedule schedule = new Schedule(startDate, endDate, getSummary(), getLocation(), (String) sessionMap.get("googleaccesstoken"));
-        ResponseEntity<?> exchange = getResponse("schedule-process", schedule,HttpMethod.POST);
+        ResponseEntity<?> exchange = getResponse("schedule-process", schedule, HttpMethod.POST);
         logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.error("message payLoad === " + exchange);
         if (exchange.getBody() == null) {
@@ -114,12 +111,12 @@ public class ScheduleMBean implements Serializable {
 
     public List<Schedule> getEvents() {
         RestTemplate restTemplate = new RestTemplate();
-        String url = ServiceConfiguration.getUrl() + "/event-process/"+sessionMap.get("googleaccesstoken");
+        String url = ServiceConfiguration.getUrl() + "/event-process/" + sessionMap.get("googleaccesstoken");
 
-        ResponseEntity<?> exchange = restTemplate.exchange(url,HttpMethod.GET, createHeader(null), List.class);
-        List<Schedule> schedules=null;
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(null), List.class);
+        List<Schedule> schedules = null;
         if (exchange.getStatusCode().is2xxSuccessful()) {
-             schedules = (List<Schedule>) exchange.getBody();
+            schedules = (List<Schedule>) exchange.getBody();
             logger.debug("Incoming [event-process] with Schedules=" + schedules + "");
             return schedules;
         } else {
@@ -129,7 +126,7 @@ public class ScheduleMBean implements Serializable {
         }
     }
 
-    public ResponseEntity<?> getResponse(String restPath, Schedule schedule,HttpMethod httpMethod) {
+    public ResponseEntity<?> getResponse(String restPath, Schedule schedule, HttpMethod httpMethod) {
         RestTemplate restTemplate = new RestTemplate();
         String url = ServiceConfiguration.getUrl() + "/" + restPath;
         return restTemplate.exchange(url, httpMethod, createHeader(schedule), Schedule.class);

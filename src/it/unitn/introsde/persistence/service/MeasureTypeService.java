@@ -2,11 +2,7 @@ package it.unitn.introsde.persistence.service;
 
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.dao.MeasureTypeDao;
-import it.unitn.introsde.persistence.dao.PersonDao;
-import it.unitn.introsde.persistence.datasource.MotivationDatasource;
 import it.unitn.introsde.persistence.entity.MeasureType;
-import it.unitn.introsde.persistence.entity.Person;
-import it.unitn.introsde.wrapper.Motivation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;

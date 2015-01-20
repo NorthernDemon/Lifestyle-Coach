@@ -51,10 +51,11 @@ public class PersonService {
         logger.debug("People =" + people);
         return new ResponseEntity<>(people, HttpStatus.OK);
     }
+
     @RequestMapping(value = "/fbuser/{accesstoken}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Person> getFaceBookUser( @PathVariable("accesstoken") String accesstoken) {
+    public ResponseEntity<Person> getFaceBookUser(@PathVariable("accesstoken") String accesstoken) {
         Person person = null;
         try {
             person = faceBookDatasource.getUser(accesstoken);

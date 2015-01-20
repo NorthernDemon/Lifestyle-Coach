@@ -2,7 +2,6 @@ package it.unitn.introsde.mbeans;
 
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.entity.Person;
-import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.*;
@@ -52,17 +51,17 @@ public class PersonMbean implements Serializable {
         return new HttpEntity<>(body, httpHeaders);
     }
 
-    public PersonMbean(){
+    public PersonMbean() {
 
         RestTemplate restTemplate = new RestTemplate();
         HttpMethod httpMethod = HttpMethod.GET;
-        String url = ServiceConfiguration.getUrl() + "/fbuser-process/"+sessionMap.get("fbaccesstoken");
+        String url = ServiceConfiguration.getUrl() + "/fbuser-process/" + sessionMap.get("fbaccesstoken");
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(null), Person.class);
         logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.error("message payLoad === " + exchange);
         if (exchange.getStatusCode().is2xxSuccessful()) {
-         Person person = (Person)exchange.getBody();
+            Person person = (Person) exchange.getBody();
             setBirthday(new SimpleDateFormat("yyyy-MM-dd").format(person.getBirthday()));
             setName(person.getName());
             setSurname(person.getSurname());
@@ -76,7 +75,7 @@ public class PersonMbean implements Serializable {
     }
 
     public void setName(String name) {
-        this.name =name;
+        this.name = name;
     }
 
     public String getSurname() {

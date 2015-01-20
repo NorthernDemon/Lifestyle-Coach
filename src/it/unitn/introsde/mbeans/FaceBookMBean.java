@@ -27,7 +27,7 @@ public class FaceBookMBean implements Serializable {
     public void submit() {
         Map<String, String> requestParameters = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         fbaccesstoken = requestParameters.get("fbform:fbaccesstoken");
-        logger.info("mbeanfbaccesstoken "+fbaccesstoken);
+        logger.info("mbeanfbaccesstoken " + fbaccesstoken);
 
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         Map<String, Object> sessionMap = externalContext.getSessionMap();

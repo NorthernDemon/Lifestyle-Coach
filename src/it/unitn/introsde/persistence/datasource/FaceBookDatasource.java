@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Component
 public class FaceBookDatasource {
@@ -23,11 +22,11 @@ public class FaceBookDatasource {
         //getting details mateo has permitted us to access
         FacebookClient facebookClient = new DefaultFacebookClient(accessToken);
         User me = facebookClient.fetchObject("me", User.class);
-        logger.info("name>> "+me.getFirstName());
-        logger.info("accessToken>> "+accessToken);
-        logger.info("me>> "+me);
-        logger.info("me.getBirthday>> "+me.getBirthday());
-        return new Person(me.getFirstName(),me.getLastName(),new SimpleDateFormat("MM/dd/yyyy").parse(me.getBirthday()) );
+        logger.info("name>> " + me.getFirstName());
+        logger.info("accessToken>> " + accessToken);
+        logger.info("me>> " + me);
+        logger.info("me.getBirthday>> " + me.getBirthday());
+        return new Person(me.getFirstName(), me.getLastName(), new SimpleDateFormat("MM/dd/yyyy").parse(me.getBirthday()));
     }
 
     public void posttoFacebook(String accessToken) {
