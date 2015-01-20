@@ -53,6 +53,10 @@ public class MeasureType implements Serializable {
     public MeasureType() {
     }
 
+    public MeasureType(int id) {
+        this.id=id;
+    }
+
     public MeasureType(String type, String unit) {
         this.type = type;
         this.unit = unit;

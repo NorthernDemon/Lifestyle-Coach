@@ -62,31 +62,31 @@ public class Person implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthday;
 
-    @Range
     @Column(nullable = false, unique = true)
     @JsonProperty(required = true)
-    private int facebookId;
+    private String facebookId;
 
-    @Range
     @Column(nullable = false, unique = true)
     @JsonProperty(required = true)
-    private int googleId;
+    private String googleId;
 
     public Person() {
     }
-
+    public Person(int id) {
+        this.id=id;
+    }
     public Person(String name, String surname, Date birthday) {
         this.name = name;
         this.surname = surname;
         this.birthday = birthday;
     }
 
-    public Person(String name, String surname, Date birthday, int facebookId) {
+    public Person(String name, String surname, Date birthday, String facebookId) {
         this(name, surname, birthday);
         this.facebookId = facebookId;
     }
 
-    public Person(String name, String surname, Date birthday, int facebookId, int googleId) {
+    public Person(String name, String surname, Date birthday, String facebookId, String googleId) {
         this(name, surname, birthday, facebookId);
         this.googleId = googleId;
     }
@@ -123,19 +123,19 @@ public class Person implements Serializable {
         this.birthday = birthday;
     }
 
-    public int getFacebookId() {
+    public String getFacebookId() {
         return facebookId;
     }
 
-    public void setFacebookId(int facebookId) {
+    public void setFacebookId(String facebookId) {
         this.facebookId = facebookId;
     }
 
-    public int getGoogleId() {
+    public String getGoogleId() {
         return googleId;
     }
 
-    public void setGoogleId(int googleId) {
+    public void setGoogleId(String googleId) {
         this.googleId = googleId;
     }
 

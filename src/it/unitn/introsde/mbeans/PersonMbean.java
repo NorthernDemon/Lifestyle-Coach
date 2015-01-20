@@ -2,6 +2,7 @@ package it.unitn.introsde.mbeans;
 
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.entity.Person;
+import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.*;
@@ -27,6 +28,9 @@ public class PersonMbean implements Serializable {
 
     private static final Logger logger = LogManager.getLogger();
 
+    private ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+    private Map<String, Object> sessionMap = externalContext.getSessionMap();
+
     private String successMessage;
     private String name;
     private String surname;
@@ -48,12 +52,31 @@ public class PersonMbean implements Serializable {
         return new HttpEntity<>(body, httpHeaders);
     }
 
+    public PersonMbean(){
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpMethod httpMethod = HttpMethod.GET;
+        String url = ServiceConfiguration.getUrl() + "/fbuser-process/"+sessionMap.get("fbaccesstoken");
+
+        ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(null), Person.class);
+        logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
+        logger.error("message payLoad === " + exchange);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+         Person person = (Person)exchange.getBody();
+            setBirthday(new SimpleDateFormat("yyyy-MM-dd").format(person.getBirthday()));
+            setName(person.getName());
+            setSurname(person.getSurname());
+        } else {
+            logger.debug("request not successful");
+        }
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name =name;
     }
 
     public String getSurname() {
@@ -81,16 +104,12 @@ public class PersonMbean implements Serializable {
     }
 
     public void registerPerson() {
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        Map<String, Object> sessionMap = externalContext.getSessionMap();
-
         RestTemplate restTemplate = new RestTemplate();
         HttpMethod httpMethod = HttpMethod.POST;
         String url = ServiceConfiguration.getUrl() + "/person-process";
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date birthDate = getDate(getBirthday().split("-"));
-        Person person = new Person(getName(), getSurname(), birthDate, 1000000,100000000);
+        Person person = new Person(getName(), getSurname(), birthDate, sessionMap.get("fbaccesstoken").toString(), sessionMap.get("googleaccesstoken").toString());
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Person.class);
         logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());

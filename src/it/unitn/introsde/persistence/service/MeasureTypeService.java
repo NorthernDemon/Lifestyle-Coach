@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by davie on 1/18/2015.
@@ -40,6 +41,18 @@ public class MeasureTypeService {
         measreTypeDao.save(measureType);
         logger.debug("Created measureType=" + measureType);
         return new ResponseEntity<>(measureType, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/measureTypes", method = RequestMethod.GET,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<MeasureType>> getPeople() {
+        List<MeasureType> measureTypes = measreTypeDao.getAll("FROM MeasureType");
+        if (measureTypes.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        logger.debug("MeasureTypes =" + measureTypes);
+        return new ResponseEntity<>(measureTypes, HttpStatus.OK);
     }
 
     @Autowired

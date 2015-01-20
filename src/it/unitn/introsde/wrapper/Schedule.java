@@ -1,10 +1,12 @@
 package it.unitn.introsde.wrapper;
 
 import com.fasterxml.jackson.annotation.*;
+import com.google.api.services.calendar.model.Event;
 import com.google.common.base.MoreObjects;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**

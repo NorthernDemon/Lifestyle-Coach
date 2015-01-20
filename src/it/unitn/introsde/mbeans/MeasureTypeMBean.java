@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
+import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -19,9 +20,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by davie on 1/18/2015.
@@ -69,7 +68,6 @@ public class MeasureTypeMBean implements Serializable {
     }
 
     public void createMeasureType(){
-
         RestTemplate restTemplate = new RestTemplate();
         HttpMethod httpMethod = HttpMethod.POST;
         String url = ServiceConfiguration.getUrl() + "/measuretype-process";
@@ -84,4 +82,25 @@ public class MeasureTypeMBean implements Serializable {
             setSuccessMessage("Measure Type Registered Successfully!!");
         }
     }
+
+    public List<MeasureType> getMeasureTypes(){
+        ResponseEntity<?> exchange = getResponse("measureTypes-process", null, HttpMethod.GET);
+        List<MeasureType> measureTypes = null;
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            measureTypes = (List<MeasureType>) exchange.getBody();
+            logger.debug("Incoming [measureTypes-process] with MeasureType=" +measureTypes+ "");
+            return measureTypes;
+        } else {
+            measureTypes = (List<MeasureType>) exchange.getBody();
+            logger.error("Incoming [measureTypes-process] with MeasureTypes=" + measureTypes + "");
+            return measureTypes;
+        }
+    }
+
+    public ResponseEntity<?> getResponse(String restPath, MeasureType measureType, HttpMethod httpMethod) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = ServiceConfiguration.getUrl() + "/" + restPath;
+        return restTemplate.exchange(url, httpMethod, createHeader(measureType), new ArrayList<MeasureType>().getClass());
+    }
+
 }

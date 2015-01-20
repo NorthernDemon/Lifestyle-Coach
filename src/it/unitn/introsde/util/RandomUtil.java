@@ -81,7 +81,7 @@ public abstract class RandomUtil {
      * @return random person
      */
     public static Person getPerson() {
-        return new Person(getName(), getName(), getDate(1950), id++, id++);
+        return new Person(getName(), getName(), getDate(1950), String.valueOf(id++), String.valueOf(id++));
     }
 
     /**

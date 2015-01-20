@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = ServiceConfiguration.NAME)
 public class UserProcess extends AbstractProcess {
@@ -114,6 +117,80 @@ public class UserProcess extends AbstractProcess {
             return new ResponseEntity<>(createdmeasuretype, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [measureType-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
+
+    @RequestMapping(value = "/people-process", method = RequestMethod.GET,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<Person>> getPeople(
+            @RequestHeader(value = "Accept") String accept) {
+        logger.debug("Incoming [people-process] with accept=" + accept);
+        String url = ServiceConfiguration.getUrl() + "/people";
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), new ArrayList<Person>().getClass());
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            List<Person> people = (List<Person>) exchange.getBody();
+            logger.debug("Outgoing [people-process] with accept=" + accept + "");
+            return new ResponseEntity<>(people, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [people-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
+
+    @RequestMapping(value = "/fbuser-process/{accesstoken}", method = RequestMethod.GET,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Person> getFBUser(
+            @RequestHeader(value = "Accept") String accept,
+            @PathVariable("accesstoken") String accesstoken) {
+        logger.debug("Incoming [fbuser-process] with accept=" + accept);
+        String url = ServiceConfiguration.getUrl() + "/fbuser/" + accesstoken;
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Person.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            Person person = (Person) exchange.getBody();
+            logger.debug("Outgoing [fbuser-process] with accept=" + accept + "");
+            return new ResponseEntity<>(person, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [fbuser-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
+
+    @RequestMapping(value = "/event-process/{accesstoken}", method = RequestMethod.GET,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<Schedule>> getEvent(
+            @RequestHeader(value = "Accept") String accept,
+            @PathVariable("accesstoken") String accesstoken) {
+        logger.debug("Incoming [event-process] with accept=" + accept);
+        String url = ServiceConfiguration.getUrl() + "/calendarEvent/" + accesstoken;
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Schedule.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            List<Schedule> schedules = (List<Schedule>) exchange.getBody();
+            logger.debug("Outgoing [event-process] with accept=" + accept + "");
+            return new ResponseEntity<>(schedules, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [event-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
+
+    @RequestMapping(value = "/measureTypes-process", method = RequestMethod.GET,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<MeasureType>> getEvent(
+            @RequestHeader(value = "Accept") String accept) {
+        logger.debug("Incoming [measureTypes-process] with accept=" + accept);
+        String url = ServiceConfiguration.getUrl() + "/measureTypes";
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), new ArrayList<Person>().getClass());
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            List<MeasureType> schedules = (List<MeasureType>) exchange.getBody();
+            logger.debug("Outgoing [measureTypes-process] with accept=" + accept + "");
+            return new ResponseEntity<>(schedules, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [measureTypes-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
             return new ResponseEntity<>(exchange.getStatusCode());
         }
     }

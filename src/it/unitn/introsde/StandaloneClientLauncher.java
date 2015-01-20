@@ -79,7 +79,7 @@ public final class StandaloneClientLauncher {
         ResponseEntity<?> exchange;
 
         MeasureType measureType = new MeasureType("height", "kilometers");
-        Person person = new Person("Chuck", "Norris", getDate(1945, 0, 1), id++, id++);
+        Person person = new Person("Chuck", "Norris", getDate(1945, 0, 1), String.valueOf(id++), String.valueOf(id++));
 
         // USER PROCESS
 
