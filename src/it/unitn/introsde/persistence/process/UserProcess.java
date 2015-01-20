@@ -5,6 +5,7 @@ import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Measure;
 import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
+import it.unitn.introsde.wrapper.Progress;
 import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -194,7 +195,43 @@ public class UserProcess extends AbstractProcess {
             return new ResponseEntity<>(exchange.getStatusCode());
         }
     }
+    @RequestMapping(value = "/getpersonbyid-process/{personId}", method = RequestMethod.GET,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Person> getPersonByID(
+            @RequestHeader(value = "Accept") String accept,
+            @PathVariable("personId") int personId) {
+        logger.debug("Incoming [getpersonbyid-process] with accept=" + accept + ", personId=" + personId);
+        String url = ServiceConfiguration.getUrl() + "/getpersonbyid/" + personId;
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Person.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            Person person = (Person) exchange.getBody();
+            logger.debug("Outgoing [getpersonbyid-process] with accept=" + accept + ", person=" + person);
+            return new ResponseEntity<>(person, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [getpersonbyids-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
 
+    @RequestMapping(value = "/getmeasureTypeById-process/{measureTypeId}", method = RequestMethod.GET,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<MeasureType> getMeasureTypeByID(
+            @RequestHeader(value = "Accept") String accept,
+            @PathVariable("measureTypeId") int measureTypeId) {
+        logger.debug("Incoming [getmeasureTypeById-process] with accept=" + accept + ", measureTypeId=" + measureTypeId);
+        String url = ServiceConfiguration.getUrl() + "/getmeasureTypeById/" +measureTypeId;
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), MeasureType.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            MeasureType measureType = (MeasureType) exchange.getBody();
+            logger.debug("Outgoing [getmeasureTypeById-process] with accept=" + accept + ", measureType=" + measureType);
+            return new ResponseEntity<>(measureType, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [getmeasureTypeById-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;

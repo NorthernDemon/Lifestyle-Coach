@@ -1,17 +1,18 @@
 package it.unitn.introsde.mbeans;
 
-import com.restfb.DefaultFacebookClient;
-import com.restfb.FacebookClient;
-import com.restfb.types.Page;
-import com.restfb.types.User;
+import it.unitn.introsde.ServiceConfiguration;
+import it.unitn.introsde.persistence.entity.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -24,6 +25,14 @@ public class FaceBookMBean implements Serializable {
     private static final Logger logger = LogManager.getLogger();
     private String fbaccesstoken;
 
+    private static HttpEntity<Object> createHeader(Object body) {
+        MediaType applicationType = MediaType.APPLICATION_XML;
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setAccept(Arrays.asList(applicationType));
+        httpHeaders.setContentType(applicationType);
+        return new HttpEntity<>(body, httpHeaders);
+    }
+
     public void submit() {
         Map<String, String> requestParameters = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         fbaccesstoken = requestParameters.get("fbform:fbaccesstoken");
@@ -33,9 +42,32 @@ public class FaceBookMBean implements Serializable {
         Map<String, Object> sessionMap = externalContext.getSessionMap();
         sessionMap.put("fbaccesstoken", fbaccesstoken);
 
-        FacebookClient facebookClient = new DefaultFacebookClient(fbaccesstoken);
-        User user = facebookClient.fetchObject("me", User.class);
-        Page page = facebookClient.fetchObject("cocacola", Page.class);
-        sessionMap.put("fbusername", user.getName());
+        RestTemplate restTemplate = new RestTemplate();
+        HttpMethod httpMethod = HttpMethod.GET;
+        String url = ServiceConfiguration.getUrl() + "/fbuser-process/" + sessionMap.get("fbaccesstoken");
+
+        ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(null), Person.class);
+        logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
+        logger.error("message payLoad === " + exchange);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            Person person = (Person) exchange.getBody();
+        } else {
+            logger.debug("request not successful");
+        }
+    }
+
+    public Person faceBookProcessCentricSavePerson(Person person) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpMethod httpMethod = HttpMethod.POST;
+        String url = ServiceConfiguration.getUrl() + "/person-process";
+
+        ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Person.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            logger.debug("created Person=== " + exchange.getBody());
+        } else {
+            logger.error("failed to create person!");
+        }
+        
+        return person;
     }
 }

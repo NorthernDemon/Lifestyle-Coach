@@ -68,6 +68,17 @@ public class PersonService {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/getpersonbyid/{personId}", method = RequestMethod.GET,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Person> getPersonbyid( @PathVariable("personId") int personId) {
+        Person person = personDao.get(Person.class,personId);
+        if (person == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        logger.debug("Person =" + person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
+    }
 
     @Autowired
     public void setPersonDao(PersonDao personDao) {
