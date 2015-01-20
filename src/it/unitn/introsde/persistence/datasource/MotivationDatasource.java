@@ -8,8 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import java.util.Random;
-
 /**
  * Motivation datasource uses at random one of the two REST services:
  * - Cat pictures: nijikokun-random-cats.p.mashape.com
@@ -22,11 +20,13 @@ public class MotivationDatasource {
 
     public Motivation getMotivated(Person person) {
         try {
+            // Cat service fails with 502
 //            if (new Random().nextBoolean()) {
 //                return new Motivation("image", getCat());
 //            } else {
-                return new Motivation("text", getJoke(person.getName(), person.getSurname()));
+//                return new Motivation("text", getJoke(person.getName(), person.getSurname()));
 //            }
+            return new Motivation("text", getJoke(person.getName(), person.getSurname()));
         } catch (UnirestException e) {
             logger.error("Unirest failed in motivation datasource", e);
             return null;

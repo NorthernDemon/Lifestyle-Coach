@@ -55,8 +55,8 @@ public class MeasureTypeService {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<MeasureType> getMeasureTypeByID(@PathVariable("measureTypeId") int measureTypeId) {
-        MeasureType measureType = measreTypeDao.get(MeasureType.class,measureTypeId);
-        if (measureType==null) {
+        MeasureType measureType = measreTypeDao.get(MeasureType.class, measureTypeId);
+        if (measureType == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         logger.debug("MeasureType =" + measureType);

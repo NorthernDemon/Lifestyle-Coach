@@ -5,7 +5,6 @@ import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Measure;
 import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
-import it.unitn.introsde.wrapper.Progress;
 import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import javax.ws.rs.QueryParam;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -196,6 +194,7 @@ public class UserProcess extends AbstractProcess {
             return new ResponseEntity<>(exchange.getStatusCode());
         }
     }
+
     @RequestMapping(value = "/getpersonbyid-process/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -222,7 +221,7 @@ public class UserProcess extends AbstractProcess {
             @RequestHeader(value = "Accept") String accept,
             @PathVariable("measureTypeId") int measureTypeId) {
         logger.debug("Incoming [getmeasureTypeById-process] with accept=" + accept + ", measureTypeId=" + measureTypeId);
-        String url = ServiceConfiguration.getUrl() + "/getmeasureTypeById/" +measureTypeId;
+        String url = ServiceConfiguration.getUrl() + "/getmeasureTypeById/" + measureTypeId;
         ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), MeasureType.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             MeasureType measureType = (MeasureType) exchange.getBody();
@@ -233,6 +232,7 @@ public class UserProcess extends AbstractProcess {
             return new ResponseEntity<>(exchange.getStatusCode());
         }
     }
+
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;

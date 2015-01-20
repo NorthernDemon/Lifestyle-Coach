@@ -71,8 +71,8 @@ public class PersonService {
     @RequestMapping(value = "/getpersonbyid/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Person> getPersonbyid( @PathVariable("personId") int personId) {
-        Person person = personDao.get(Person.class,personId);
+    public ResponseEntity<Person> getPersonbyid(@PathVariable("personId") int personId) {
+        Person person = personDao.get(Person.class, personId);
         if (person == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

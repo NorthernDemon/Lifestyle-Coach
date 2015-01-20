@@ -1,7 +1,6 @@
 package it.unitn.introsde.mbeans;
 
 import it.unitn.introsde.ServiceConfiguration;
-import it.unitn.introsde.persistence.entity.Person;
 import it.unitn.introsde.wrapper.Motivation;
 import it.unitn.introsde.wrapper.Workout;
 import org.apache.logging.log4j.LogManager;
@@ -14,10 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 @ManagedBean(name = "feedbackMBean", eager = true)
