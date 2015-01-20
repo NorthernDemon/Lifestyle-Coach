@@ -6,37 +6,43 @@ Introduction
 
 SDE project 2014/2015
 
-1. Application is done with Spring Framework, Hibernate, JPA, H2 in-memory database and Jackson
+LifestyleCoach is designed to help fatty lazy guys, like Matteo Matteovich, to get in shape! Our solution is a web service oriented and opened for integration with other datasources.
 
-2. For JSON array list unwrapping issue I have used header parameter on the server side
-    - @RequestHeader(value = "Accept") String accept
-    to differentiate between wrapper for XML and collection for JSON
-    Client is reading array [] for JSON and wrapper object for XML
-    I made a switch JSON_UNWRAP_LIST to toggle between two conventions
+We have designed an N-tier architecture with Client layer, Process layer, Service layer, Local and External datasources.
 
-3. Run:
-    - *(Optional for JSON array list wrapper) in StandaloneClientLauncher.java
-        JSON_UNWRAP_LIST = true (default) : DO NOT PRINT ARRAY PARENT ELEMENT (follow lab7)
-        JSON_UNWRAP_LIST = false : DO PRINT ARRAY PARENT ELEMENT (follow common sense)
-    - *(Optional for different server) Modify IP, PORT and SERVER_STUDENT_NAME in StandaloneClientLauncher.java
-        values are picked up by both server and client, therefore after each change project needs to be recompiled
-    - Apache ANT task: compile
-    - Run main StandaloneServerLauncher.java
-    - Run main StandaloneClientLauncher.java
-    - inspect "*_result.txt" in the root folder (on the same level as "ReadMe.txt")
+Application is done using Spring Framework, Hibernate, JSF, JPA, Log4J, Jackson, H2 in-memory database and embedded Tomcat. External datasource include Google, Facebook, Mashape and much more! 
 
-4. When starting the server you get exception
-    - java.lang.ClassNotFoundException: org.apache.jasper.servlet.JspServlet
-    Do not worry, that the situation is under control
+User can log in with his Facebook account to import personal data and post to the wall.
+User can log in with his Google account to browse the calendar and create new event.
 
-Use Case
+Installation
 -------
+Requirements: *JDK 7*, *ANT*, *IVY*
 
-Entity Relationship
--------
+Configure service parameters in **service.properties** file.
 
-Architecture
+###To run inside of IDE:
+    - ant compile
+    - run main StandaloneServerLauncher.java
+    - (optional test) run main StandaloneClientLauncher.java
+    - http://{host}:{port} (example: http://127.0.0.1:9915)
+    
+###To run inside of Application Server:
+    - ant create.war
+    - deploy to Application Server
+    - http://{host}:{port} (example: http://127.0.0.1:9915)
+
+Use Case Diagram
 -------
+![Diagram](/diagrams/Use_Case_Diagram.png)
+
+Entity Relationship Diagram
+-------
+![Diagram](/diagrams/Entity_Relationship_Diagram.png)
+
+Architecture Diagram
+-------
+![Diagram](/diagrams/Architecture_Diagram.png)
 
 Documentation
 -------
