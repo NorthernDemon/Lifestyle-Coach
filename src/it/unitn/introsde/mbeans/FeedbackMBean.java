@@ -28,6 +28,7 @@ public class FeedbackMBean implements Serializable {
 
     private ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
     private Map<String, Object> sessionMap = externalContext.getSessionMap();
+
     private RestTemplate restTemplate = new RestTemplate();
     private HttpMethod httpMethod = HttpMethod.GET;
 

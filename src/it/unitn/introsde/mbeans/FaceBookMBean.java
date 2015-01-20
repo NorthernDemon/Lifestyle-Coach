@@ -23,6 +23,10 @@ import java.util.Map;
 public class FaceBookMBean implements Serializable {
 
     private static final Logger logger = LogManager.getLogger();
+
+    private ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+    private Map<String, Object> sessionMap = externalContext.getSessionMap();
+
     private String fbaccesstoken;
 
     private static HttpEntity<Object> createHeader(Object body) {
@@ -34,21 +38,17 @@ public class FaceBookMBean implements Serializable {
     }
 
     public void submit() {
-        Map<String, String> requestParameters = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        fbaccesstoken = requestParameters.get("fbform:fbaccesstoken");
+        fbaccesstoken = externalContext.getRequestParameterMap().get("fbform:fbaccesstoken");
         logger.info("mbeanfbaccesstoken " + fbaccesstoken);
-
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        Map<String, Object> sessionMap = externalContext.getSessionMap();
         sessionMap.put("fbaccesstoken", fbaccesstoken);
 
-        RestTemplate restTemplate = new RestTemplate();
-        HttpMethod httpMethod = HttpMethod.GET;
-        Person person = getFbUser(sessionMap, restTemplate, httpMethod);
+        Person person = getFbUser();
         faceBookProcessCentricSavePerson(person);
     }
 
-    private Person getFbUser(Map<String, Object> sessionMap, RestTemplate restTemplate, HttpMethod httpMethod) {
+    private Person getFbUser() {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpMethod httpMethod = HttpMethod.GET;
         String url = ServiceConfiguration.getUrl() + "/fbuser-process/" + sessionMap.get("fbaccesstoken");
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(null), Person.class);
@@ -69,11 +69,13 @@ public class FaceBookMBean implements Serializable {
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Person.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
-            logger.debug("created Person=== " + exchange.getBody());
+            person = (Person) exchange.getBody();
+            logger.debug("created Person=== " + person);
+            sessionMap.put("personId", person.getId());
+            return person;
         } else {
             logger.error("failed to create person!");
+            return null;
         }
-
-        return person;
     }
 }
