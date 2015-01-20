@@ -25,7 +25,7 @@ public class FaceBookDatasource {
         logger.info("accessToken>> " + accessToken);
         logger.info("me>> " + user);
         logger.info("me.getBirthday>> " + user.getBirthday());
-        return new Person(user.getFirstName(), user.getLastName(), new SimpleDateFormat("MM/dd/yyyy").parse(user.getBirthday()));
+        return new Person(user.getFirstName(), user.getLastName(), new SimpleDateFormat("MM/dd/yyyy").parse(user.getBirthday()),accessToken);
     }
 
     public void postToWall(String accessToken) {

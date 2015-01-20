@@ -47,46 +47,6 @@ public class ScheduleMBean implements Serializable {
         return calendar.getTime();
     }
 
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getSuccessMessage() {
-        return successMessage;
-    }
-
-    public void setSuccessMessage(String successMessage) {
-        this.successMessage = successMessage;
-    }
-
     public void InitialiseToken() throws Exception {
         Map<String, String> requestParameters = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String googleaccesstoken = requestParameters.get("googleform:googleaccesstoken");
@@ -131,51 +91,44 @@ public class ScheduleMBean implements Serializable {
         String url = ServiceConfiguration.getUrl() + "/" + restPath;
         return restTemplate.exchange(url, httpMethod, createHeader(schedule), Schedule.class);
     }
-//    public void createEvent(String accessToken) throws Exception {
-//        HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-//        JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-//        GoogleCredential credential = new GoogleCredential().setAccessToken(accessToken);
-//        // Initialize Calendar service with valid OAuth credentials
-//        com.google.api.services.calendar.Calendar service = new com.google.api.services.calendar.Calendar.Builder(httpTransport, jsonFactory, credential)
-//                .setApplicationName("LifestyleCoach").build();
-//
-//        // Create and initialize a new event
-//        Event event = new Event();
-//        event.setSummary("walk 300km");
-//        event.setLocation("queens park");
-//
-//        ArrayList<EventAttendee> attendees = new ArrayList<EventAttendee>();
-//        attendees.add(new EventAttendee().setEmail("matteo.matteovich@gmail.com"));
-//// ...
-//        event.setAttendees(attendees);
-//
-//        Date startDate = new Date();
-//        Date endDate = new Date(startDate.getTime() + 3600000);
-//        DateTime start = new DateTime(startDate, TimeZone.getTimeZone("UTC"));
-//        event.setStart(new EventDateTime().setDateTime(start));
-//        DateTime end = new DateTime(endDate, TimeZone.getTimeZone("UTC"));
-//        event.setEnd(new EventDateTime().setDateTime(end));
-//
-//// Insert the new event
-//        Event createdEvent = service.events().insert("primary", event).execute();
-//
-//        System.out.println(createdEvent.getId());
-//    }
-//
-//    public void createCalendar(String accessToken) throws Exception {
-//        HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-//        JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-//        GoogleCredential credential = new GoogleCredential().setAccessToken(accessToken);
-//
-//        com.google.api.services.calendar.Calendar service = new com.google.api.services.calendar.Calendar.Builder(httpTransport, jsonFactory, credential)
-//                .setApplicationName("LifestyleCoach").build();
-//
-//        // Create a new calendar
-//        com.google.api.services.calendar.model.Calendar calendar = new Calendar();
-//        calendar.setSummary("MateoCalendar");
-//
-//        // Insert the new calendar
-//        com.google.api.services.calendar.model.Calendar createdCalendar = service.calendars().insert(calendar).execute();
-//        System.out.println(createdCalendar.getId());
-//    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getSuccessMessage() {
+        return successMessage;
+    }
+
+    public void setSuccessMessage(String successMessage) {
+        this.successMessage = successMessage;
+    }
 }

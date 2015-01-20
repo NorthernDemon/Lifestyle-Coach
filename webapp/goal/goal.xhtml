@@ -21,7 +21,7 @@
                         <td>
                             <h:selectOneMenu value="#{goalMBean.creator}" style="width: 350px;">
                                 <f:selectItems value="#{goalMBean.people}" var="c"
-                                               itemLabel="#{c.name}#{c.surname}" itemValue="#{c.id}" />
+                                               itemLabel="#{c.name} #{c.surname}" itemValue="#{c.id}" />
                             </h:selectOneMenu>
                         </td>
                     </tr>
@@ -30,7 +30,7 @@
                             <td>
                                 <h:selectOneMenu value="#{goalMBean.person}" style="width: 350px;">
                                     <f:selectItems value="#{goalMBean.people}" var="c"
-                                                   itemLabel="#{c.name}#{c.surname}" itemValue="#{c.id}" />
+                                                   itemLabel="#{c.name} #{c.surname}" itemValue="#{c.id}" />
                                 </h:selectOneMenu>
                             </td>
                         </tr>

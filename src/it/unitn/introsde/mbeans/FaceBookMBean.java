@@ -44,15 +44,21 @@ public class FaceBookMBean implements Serializable {
 
         RestTemplate restTemplate = new RestTemplate();
         HttpMethod httpMethod = HttpMethod.GET;
+        Person person = getFbUser(sessionMap, restTemplate, httpMethod);
+        faceBookProcessCentricSavePerson(person);
+    }
+
+    private Person getFbUser(Map<String, Object> sessionMap, RestTemplate restTemplate, HttpMethod httpMethod) {
         String url = ServiceConfiguration.getUrl() + "/fbuser-process/" + sessionMap.get("fbaccesstoken");
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(null), Person.class);
         logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.error("message payLoad === " + exchange);
         if (exchange.getStatusCode().is2xxSuccessful()) {
-            Person person = (Person) exchange.getBody();
+            return (Person) exchange.getBody();
         } else {
             logger.debug("request not successful");
+            return null;
         }
     }
 
@@ -67,7 +73,7 @@ public class FaceBookMBean implements Serializable {
         } else {
             logger.error("failed to create person!");
         }
-        
+
         return person;
     }
 }
