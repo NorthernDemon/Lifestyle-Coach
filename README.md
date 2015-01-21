@@ -72,4 +72,4 @@ Apiary: http://docs.lifestylecoach1.apiary.io/
 
 Authors
 -------
-David Nyaika and Victor Ekimov
+[David Nyaika](https://github.com/DNyaika) and [Victor Ekimov](https://github.com/NorthernDemon)
