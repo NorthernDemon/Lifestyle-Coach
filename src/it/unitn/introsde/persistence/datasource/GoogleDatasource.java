@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,9 +48,11 @@ public class GoogleDatasource {
     public List<Schedule> getCalendarEvent(String accessToken) throws Exception {
         Events events = getGoogleService(accessToken).events().list("primary").execute();
         logger.debug("events>>>> " + events);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<Schedule> schedules = new ArrayList<>(events.size());
         for (Event event : events.getItems()) {
-            schedules.add(new Schedule(new Date(), new Date(), event.getSummary(), event.getLocation(), accessToken));
+            //logger.debug("event date"+event.);
+            schedules.add(new Schedule(dateFormat.parse(dateFormat.format(new Date())),dateFormat.parse(dateFormat.format(new Date())), event.getSummary(), event.getLocation(), accessToken));
         }
         return schedules;
     }
