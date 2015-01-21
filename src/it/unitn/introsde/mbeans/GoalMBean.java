@@ -1,84 +1,58 @@
 package it.unitn.introsde.mbeans;
 
-import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
-import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
-/**
- * Created by davie on 1/10/2015.
- */
 @ManagedBean(name = "goalMBean", eager = true)
 @SessionScoped
-public class GoalMBean implements Serializable {
+public class GoalMBean extends AbstractMBean implements Serializable {
+
     private static final Logger logger = LogManager.getLogger();
+
+    private String successMessage;
+
     private String startDate;
     private String endDate;
     private String message;
-    private String successMessage;
     private String Creator;
     private String person;
     private String measureType;
 
-    private static HttpEntity<Object> createHeader(Object body) {
-        MediaType applicationType = MediaType.APPLICATION_XML;
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setAccept(Arrays.asList(applicationType));
-        httpHeaders.setContentType(applicationType);
-        return new HttpEntity<>(body, httpHeaders);
-    }
-
-    private static Date getDate(String[] arr) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, Integer.parseInt(arr[0]));
-        calendar.set(Calendar.MONTH, Integer.parseInt(arr[1]));
-        calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(arr[2]));
-        return calendar.getTime();
-    }
-
-
+    @SuppressWarnings("unchecked")
     public List<Person> getPeople() {
-        ResponseEntity<?> exchange = getResponse("people-process", null, HttpMethod.GET);
-        List<Person> people = null;
+        ResponseEntity<?> exchange = request("people-process", HttpMethod.GET, List.class, MediaType.APPLICATION_XML_VALUE);
         if (exchange.getStatusCode().is2xxSuccessful()) {
-            people = (List<Person>) exchange.getBody();
+            List<Person> people = (List<Person>) exchange.getBody();
             logger.debug("Incoming [people-process] with People=" + people + "");
             return people;
         } else {
-            people = (List<Person>) exchange.getBody();
+            List<Person> people = (List<Person>) exchange.getBody();
             logger.error("Incoming [people-process] with People=" + people + "");
             return people;
         }
     }
 
     public void registerGoal() {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpMethod httpMethod = HttpMethod.POST;
-        String url = ServiceConfiguration.getUrl();
         Date startDate = getDate(getEndDate().split("-"));
         Date endDate = getDate(getStartDate().split("-"));
 
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        Map<String, Object> sessionMap = externalContext.getSessionMap();
-
-        ResponseEntity<?> personExchange = getGenericResponse("/getPersonById-process/" + getPerson(), HttpMethod.GET, Person.class, null);
-        ResponseEntity<?> creatorExchange = getGenericResponse("/getPersonById-process/" + getCreator(), HttpMethod.GET, Person.class, null);
-        ResponseEntity<?> measureTypeExchange = getGenericResponse("/getMeasureTypeById-process/" + getMeasureType(), HttpMethod.GET, MeasureType.class, null);
+        ResponseEntity<?> creatorExchange = request("/getPersonById-process/" + getCreator(), HttpMethod.GET, Person.class, MediaType.APPLICATION_XML_VALUE);
+        ResponseEntity<?> measureTypeExchange = request("/getMeasureTypeById-process/" + getMeasureType(), HttpMethod.GET, MeasureType.class, MediaType.APPLICATION_XML_VALUE);
 
         Goal goal = new Goal((Person) creatorExchange.getBody(), (Person) creatorExchange.getBody(), (MeasureType) measureTypeExchange.getBody(), 0, getMessage(), startDate, endDate);
-        ResponseEntity<?> exchange = restTemplate.exchange(url + "/goal-process?fbAccessToken=" + sessionMap.get("fbaccesstoken"), httpMethod, createHeader(goal), Goal.class);
+        ResponseEntity<?> exchange = request("/goal-process?fbAccessToken=" + sessionMap.get("fbaccesstoken"), HttpMethod.POST, Goal.class, goal, MediaType.APPLICATION_XML_VALUE);
         logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.debug("message payLoad === " + exchange.getBody().toString());
         if (exchange.getStatusCode().is2xxSuccessful()) {
@@ -86,18 +60,6 @@ public class GoalMBean implements Serializable {
         } else {
             setSuccessMessage("oops! an error occured!!");
         }
-    }
-
-    public ResponseEntity<?> getResponse(String restPath, Schedule schedule, HttpMethod httpMethod) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = ServiceConfiguration.getUrl() + "/" + restPath;
-        return restTemplate.exchange(url, httpMethod, createHeader(schedule), List.class);
-    }
-
-    public <T> ResponseEntity<?> getGenericResponse(String restPath, HttpMethod httpMethod, Class<T> clazz, T object) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = ServiceConfiguration.getUrl() + "/" + restPath;
-        return restTemplate.exchange(url, httpMethod, createHeader(object), clazz);
     }
 
     public String getSuccessMessage() {
@@ -125,7 +87,6 @@ public class GoalMBean implements Serializable {
     }
 
     public String getEndDate() {
-
         return endDate;
     }
 
@@ -156,5 +117,4 @@ public class GoalMBean implements Serializable {
     public void setMeasureType(String measureType) {
         this.measureType = measureType;
     }
-
 }

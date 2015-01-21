@@ -1,32 +1,22 @@
 package it.unitn.introsde.mbeans;
 
-import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.wrapper.Motivation;
 import it.unitn.introsde.wrapper.Workout;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Map;
 
 @ManagedBean(name = "feedbackMBean", eager = true)
 @SessionScoped
-public class FeedbackMBean implements Serializable {
+public class FeedbackMBean extends AbstractMBean implements Serializable {
 
     private static final Logger logger = LogManager.getLogger();
-
-    private ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-    private Map<String, Object> sessionMap = externalContext.getSessionMap();
-
-    private RestTemplate restTemplate = new RestTemplate();
-    private HttpMethod httpMethod = HttpMethod.GET;
 
     private Motivation motivation;
 
@@ -38,8 +28,7 @@ public class FeedbackMBean implements Serializable {
     }
 
     private void requestMotivation() {
-        String url = ServiceConfiguration.getUrl() + "/motivation-process/" + sessionMap.get("personId");
-        ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(null), Motivation.class);
+        ResponseEntity<?> exchange = request("/motivation-process/" + sessionMap.get("personId"), HttpMethod.GET, Motivation.class, MediaType.APPLICATION_XML_VALUE);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             motivation = (Motivation) exchange.getBody();
             logger.debug("Motivation=" + motivation);
@@ -49,22 +38,13 @@ public class FeedbackMBean implements Serializable {
     }
 
     private void requestWorkout() {
-        String url = ServiceConfiguration.getUrl() + "/workout-process/" + sessionMap.get("personId");
-        ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(null), Workout.class);
+        ResponseEntity<?> exchange = request("/workout-process/" + sessionMap.get("personId"), HttpMethod.GET, Workout.class, MediaType.APPLICATION_XML_VALUE);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             workout = (Workout) exchange.getBody();
             logger.debug("Workout=" + workout);
         } else {
             logger.error("Failed to fetch workout");
         }
-    }
-
-    private static HttpEntity<Object> createHeader(Object body) {
-        MediaType applicationType = MediaType.APPLICATION_XML;
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setAccept(Arrays.asList(applicationType));
-        httpHeaders.setContentType(applicationType);
-        return new HttpEntity<>(body, httpHeaders);
     }
 
     public Motivation getMotivation() {
