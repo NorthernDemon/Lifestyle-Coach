@@ -230,8 +230,9 @@ public class UserProcess extends AbstractProcess {
         logger.debug("Incoming [goals-process] with accept=" + accept);
         ResponseEntity<?> exchange = request("/goals", HttpMethod.GET, List.class, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
+            @SuppressWarnings("unchecked")
             List<Goal> goals = (List<Goal>) exchange.getBody();
-            logger.debug("Outgoing [goals-process] with accept=" + accept);
+            logger.debug("Outgoing [goals-process] with accept=" + accept + ", goals=" + goals);
             return new ResponseEntity<>(goals, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [goals-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());

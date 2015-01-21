@@ -61,16 +61,16 @@ public class GoalMBean extends AbstractMBean implements Serializable {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public List<Goal> getGoals() {
         ResponseEntity<?> exchange = request("/goals-process", HttpMethod.GET, List.class, MediaType.APPLICATION_XML_VALUE);
-        List<Goal> goals;
         if (exchange.getStatusCode().is2xxSuccessful()) {
-            goals = (List<Goal>) exchange.getBody();
-            logger.debug("Incoming [goals-process] with goals=" + goals + "");
+            List<Goal> goals = (List<Goal>) exchange.getBody();
+            logger.debug("Incoming [goals-process] with goals=" + goals);
             return goals;
         } else {
-            goals = (List<Goal>) exchange.getBody();
-            logger.error("Incoming [goals-process] with goals=" + goals + "");
+            List<Goal> goals = (List<Goal>) exchange.getBody();
+            logger.error("Incoming [goals-process] with goals=" + goals);
             return goals;
         }
     }
