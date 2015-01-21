@@ -8,14 +8,14 @@ SDE project 2014/2015
 
 LifestyleCoach is designed to help fatty lazy guys, like Matteo Matteovich, to get in shape! Our solution is web service oriented and opened for integration with other datasources.
 
-###N-tier architecture includes
+####N-tier architecture includes
     - Client layer
     - Process layer
     - Service layer
     - Local datasource
     - External datasources
 
-###Application is done using
+####Application is done using
     - Spring Framework
     - Hibernate
     - JSF
@@ -25,13 +25,13 @@ LifestyleCoach is designed to help fatty lazy guys, like Matteo Matteovich, to g
     - H2 in-memory database
     - Embedded Tomcat
     
-###External datasource
+####External datasource
     - Google Calendar
     - Facebook
     - Mashape
     - and much more! 
 
-###Features
+####Features
     - login with Facebook account to import personal data and post to the wall.
     - login with Google account to browse the calendar and create new event.
     - create Measure, Goal and MeasureType
@@ -43,13 +43,13 @@ Requirements: *JDK 7*, *ANT*, *IVY*
 
 Configure service parameters in **service.properties** file.
 
-###To run inside of IDE:
+####To run inside of IDE:
     - ant compile
     - run main StandaloneServerLauncher.java
     - (optional test) run main StandaloneClientLauncher.java
     - http://{host}:{port} (example: http://localhost:9915)
     
-###To run inside of Application Server:
+####To run inside of Application Server:
     - ant create.war
     - deploy to Application Server
     - http://{host}:{port} (example: http://localhost:9915)
