@@ -11,7 +11,6 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.remoting.jaxws.SimpleJaxWsServiceExporter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.validation.Validation;
@@ -65,11 +64,6 @@ public class ApplicationContext {
     @Bean(name = "transactionManager")
     public HibernateTransactionManager getTransactionManager(SessionFactory sessionFactory) {
         return new HibernateTransactionManager(sessionFactory);
-    }
-
-    @Bean(name = "restTemplate")
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
     }
 
     @Bean(name = "validatorFactory")

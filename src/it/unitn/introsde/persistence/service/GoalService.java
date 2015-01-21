@@ -32,12 +32,12 @@ public class GoalService {
     public ResponseEntity<Goal> createGoal(
             @Valid @RequestBody Goal goal,
             BindingResult result,
-            @RequestParam(value = "fbAccessToken") String fbaccessToken) {
+            @RequestParam(value = "fbAccessToken") String fbAccessToken) {
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
         goalDao.save(goal);
-        faceBookDatasource.postToWall(fbaccessToken, goal);
+        faceBookDatasource.postToWall(fbAccessToken, goal);
         logger.debug("Created goal=" + goal);
         return new ResponseEntity<>(goal, HttpStatus.OK);
     }

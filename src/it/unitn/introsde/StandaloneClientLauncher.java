@@ -3,7 +3,6 @@ package it.unitn.introsde;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Measure;
 import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
@@ -89,11 +88,11 @@ public final class StandaloneClientLauncher {
         logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
         person = (Person) exchange.getBody();
 
-        httpMethod = HttpMethod.POST;
-        url = ServiceConfiguration.getUrl() + "/goal-process";
-        Goal goal = new Goal(person, person, measureType, 72.0, "You can do it!", getDate(2014, 5, 10), getDate(2014, 5, 15));
-        exchange = restTemplate.exchange(url, httpMethod, createHeader(goal), Goal.class);
-        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
+//        httpMethod = HttpMethod.POST;
+//        url = ServiceConfiguration.getUrl() + "/goal-process?fbAccessToken=fbAccessToken";
+//        Goal goal = new Goal(person, person, measureType, 72.0, "You can do it!", getDate(2014, 5, 10), getDate(2014, 5, 15));
+//        exchange = restTemplate.exchange(url, httpMethod, createHeader(goal), Goal.class);
+//        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
         httpMethod = HttpMethod.POST;
         url = ServiceConfiguration.getUrl() + "/measure-process";

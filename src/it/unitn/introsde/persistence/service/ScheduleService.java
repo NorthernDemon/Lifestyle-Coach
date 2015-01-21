@@ -14,14 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by davie on 1/17/2015.
- */
 @RestController
 @RequestMapping(value = ServiceConfiguration.NAME)
 public class ScheduleService {
 
     private static final Logger logger = LogManager.getLogger();
+
     private GoogleDatasource googleDatasource;
 
     @RequestMapping(value = "/schedule", method = RequestMethod.POST,
@@ -30,29 +28,34 @@ public class ScheduleService {
     public ResponseEntity<Schedule> createSchedule(
             @RequestBody Schedule schedule,
             BindingResult result,
-            @RequestParam(value = "googleaccesstoken") String googleaccesstoken) throws Exception {
+            @RequestParam(value = "googleAccessToken") String googleAccessToken) {
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-        googleDatasource.createEvent(schedule, googleaccesstoken);
-        logger.debug("Created schedule=" + schedule);
-        return new ResponseEntity<>(schedule, HttpStatus.OK);
+        try {
+            googleDatasource.createEvent(schedule, googleAccessToken);
+            logger.debug("Created schedule=" + schedule);
+            return new ResponseEntity<>(schedule, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Failed to create google calendar event", e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @RequestMapping(value = "/calendarEvent", method = RequestMethod.GET,
+    @RequestMapping(value = "/event", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Schedule>> getEvents(
             @RequestParam(value = "accessToken") String accessToken) {
         try {
-            List<Schedule> schedules = googleDatasource.getCalendarEvent(accessToken);
-            logger.debug("Schedules =" + schedules);
-            if (schedules.isEmpty()) {
+            List<Schedule> events = googleDatasource.getCalendarEvent(accessToken);
+            logger.debug("Events=" + events);
+            if (events.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(schedules, HttpStatus.OK);
+            return new ResponseEntity<>(events, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("Failed to fetch google calendar events", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

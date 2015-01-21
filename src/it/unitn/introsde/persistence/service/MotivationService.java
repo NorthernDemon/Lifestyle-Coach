@@ -29,7 +29,8 @@ public class MotivationService {
     @RequestMapping(value = "/motivation/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Motivation> motivatePerson(@PathVariable("personId") int personId) {
+    public ResponseEntity<Motivation> motivatePerson(
+            @PathVariable("personId") int personId) {
         Person person = personDao.get(Person.class, personId);
         if (person == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

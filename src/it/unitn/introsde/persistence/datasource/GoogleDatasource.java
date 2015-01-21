@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,14 +30,12 @@ public class GoogleDatasource {
         logger.debug("access-token>> " + googleAccessToken);
         logger.debug("schedule object>>> " + schedule.toString());
 
-        // Create and initialize a new event
         Event event = new Event();
         event.setSummary(schedule.getSummary());
         event.setLocation(schedule.getLocation());
         event.setStart(getDate(schedule.getStartDate()));
         event.setEnd(getDate(schedule.getEndDate()));
 
-        // Insert the new event
         Event createdEvent = getGoogleService(googleAccessToken).events().insert("primary", event).execute();
         logger.info("createdEvent>>> " + createdEvent);
         return createdEvent;

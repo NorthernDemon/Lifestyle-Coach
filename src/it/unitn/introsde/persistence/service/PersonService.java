@@ -53,25 +53,26 @@ public class PersonService {
         return new ResponseEntity<>(people, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/fbuser/{accesstoken}", method = RequestMethod.GET,
+    @RequestMapping(value = "/fbUser/{accessToken}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Person> getFaceBookUser(@PathVariable("accesstoken") String accesstoken) {
-        Person person;
+    public ResponseEntity<Person> getFaceBookUser(
+            @PathVariable("accessToken") String accessToken) {
         try {
-            person = faceBookDatasource.getUser(accesstoken);
+            Person person = faceBookDatasource.getUser(accessToken);
+            logger.debug("Person=" + person);
+            return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (ParseException e) {
             logger.error(e);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        logger.debug("Person =" + person);
-        return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getpersonbyid/{personId}", method = RequestMethod.GET,
+    @RequestMapping(value = "/getPersonById/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Person> getPersonById(@PathVariable("personId") int personId) {
+    public ResponseEntity<Person> getPersonById(
+            @PathVariable("personId") int personId) {
         Person person = personDao.get(Person.class, personId);
         if (person == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -1,6 +1,5 @@
 package it.unitn.introsde.persistence.dao;
 
-import it.unitn.introsde.persistence.entity.Person;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
