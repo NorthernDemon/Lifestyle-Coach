@@ -26,10 +26,4 @@ public class PersonDao extends AbstractDao<Person> {
         namedQuery.setParameter("googleId", googleId);
         return (Person) namedQuery.uniqueResult();
     }
-
-    @SuppressWarnings("unchecked")
-    @Transactional
-    public List<Person> list() {
-        return (List<Person>) getSession().createCriteria(Person.class).list();
-    }
 }

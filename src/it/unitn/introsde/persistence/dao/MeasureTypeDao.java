@@ -19,10 +19,4 @@ public class MeasureTypeDao extends AbstractDao<MeasureType> {
         namedQuery.setParameter("unit", measureType.getUnit());
         return (MeasureType) namedQuery.uniqueResult();
     }
-
-    @SuppressWarnings("unchecked")
-    @Transactional
-    public List<MeasureType> list() {
-        return (List<MeasureType>) getSession().createCriteria(MeasureType.class).list();
-    }
 }

@@ -35,11 +35,8 @@ public class GoogleDatasource {
         Event event = new Event();
         event.setSummary(schedule.getSummary());
         event.setLocation(schedule.getLocation());
-
-        DateTime start = new DateTime(schedule.getStartDate(), TimeZone.getTimeZone("UTC"));
-        event.setStart(new EventDateTime().setDateTime(start));
-        DateTime end = new DateTime(schedule.getEndDate(), TimeZone.getTimeZone("UTC"));
-        event.setEnd(new EventDateTime().setDateTime(end));
+        event.setStart(getDate(schedule.getStartDate()));
+        event.setEnd(getDate(schedule.getEndDate()));
 
         // Insert the new event
         Event createdEvent = getGoogleService(schedule.getGoogleAccessToken()).events().insert("primary", event).execute();
@@ -47,18 +44,21 @@ public class GoogleDatasource {
         return createdEvent;
     }
 
+    private EventDateTime getDate(Date date) {
+        return new EventDateTime().setDateTime(new DateTime(date, TimeZone.getTimeZone("UTC")));
+    }
+
     public List<Schedule> getCalendarEvent(String accessToken) throws Exception {
         Events events = getGoogleService(accessToken).events().list("primary").execute();
         logger.debug("events>>>> " + events);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<Schedule> schedules = new ArrayList<>(events.size());
         for (Event event : events.getItems()) {
-            schedules.add(new Schedule(dateFormat.parse(dateFormat.format(new Date())), dateFormat.parse(dateFormat.format(new Date())), event.getSummary(), event.getLocation(), accessToken));
+            schedules.add(new Schedule(new Date(), new Date(), event.getSummary(), event.getLocation(), accessToken));
         }
         return schedules;
     }
 
-    public Calendar getGoogleService(String accessToken) throws GeneralSecurityException, IOException {
+    private Calendar getGoogleService(String accessToken) throws GeneralSecurityException, IOException {
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         GoogleCredential credential = new GoogleCredential().setAccessToken(accessToken);

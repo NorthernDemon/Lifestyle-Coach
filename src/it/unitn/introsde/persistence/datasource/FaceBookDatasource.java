@@ -22,10 +22,7 @@ public class FaceBookDatasource {
 
     public Person getUser(String accessToken) throws ParseException {
         User user = getFacebookClient(accessToken).fetchObject("me", User.class);
-        logger.info("name>> " + user.getFirstName());
-        logger.info("accessToken>> " + accessToken);
         logger.info("me>> " + user);
-        logger.info("me.getBirthday>> " + user.getBirthday());
         return new Person(user.getFirstName(), user.getLastName(), new SimpleDateFormat("MM/dd/yyyy").parse(user.getBirthday()), accessToken);
     }
 

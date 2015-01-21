@@ -45,7 +45,7 @@ public class PersonService {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Person>> getPeople() {
-        List<Person> people = personDao.list();
+        List<Person> people = personDao.list(Person.class);
         if (people.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

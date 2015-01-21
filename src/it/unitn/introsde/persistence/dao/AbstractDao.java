@@ -1,5 +1,6 @@
 package it.unitn.introsde.persistence.dao;
 
+import it.unitn.introsde.persistence.entity.Person;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidatorFactory;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -57,6 +59,13 @@ public abstract class AbstractDao<T> {
     @Transactional
     public T load(Class<T> clazz, int id) {
         return clazz.cast(getSession().load(clazz, id));
+    }
+
+    // FIXME this call is performance killer, needs pagination
+    @SuppressWarnings("unchecked")
+    @Transactional
+    public List<T> list(Class<T> clazz) {
+        return (List<T>) getSession().createCriteria(clazz).list();
     }
 
     /**
