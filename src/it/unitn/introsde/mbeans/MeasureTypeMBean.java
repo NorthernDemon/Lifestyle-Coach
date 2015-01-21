@@ -26,12 +26,11 @@ public class MeasureTypeMBean extends AbstractMBean implements Serializable {
     public void createMeasureType() {
         MeasureType measureType = new MeasureType(getType(), getUnit());
         ResponseEntity<?> exchange = request("/measureType-process", HttpMethod.POST, MeasureType.class, measureType, MediaType.APPLICATION_XML_VALUE);
-        logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.debug("message payLoad === " + exchange.getBody().toString());
-        if (exchange.getBody() == null) {
-            setSuccessMessage("oops! an error occured!!");
-        } else {
+        if (exchange.getStatusCode().is2xxSuccessful()) {
             setSuccessMessage("Measure Type Registered Successfully!!");
+        } else {
+            setSuccessMessage("oops! an error occured!!");
         }
     }
 
@@ -40,11 +39,11 @@ public class MeasureTypeMBean extends AbstractMBean implements Serializable {
         ResponseEntity<?> exchange = request("measureTypes-process", HttpMethod.GET, List.class, MediaType.APPLICATION_XML_VALUE);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             List<MeasureType> measureTypes = (List<MeasureType>) exchange.getBody();
-            logger.debug("Incoming [measureTypes-process] with MeasureType=" + measureTypes + "");
+            logger.debug("Incoming [measureTypes-process] with MeasureType=" + measureTypes);
             return measureTypes;
         } else {
             List<MeasureType> measureTypes = (List<MeasureType>) exchange.getBody();
-            logger.error("Incoming [measureTypes-process] with MeasureTypes=" + measureTypes + "");
+            logger.error("Incoming [measureTypes-process] with MeasureTypes=" + measureTypes);
             return measureTypes;
         }
     }

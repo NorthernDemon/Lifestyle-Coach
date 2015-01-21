@@ -30,7 +30,6 @@ public class MeasureMBean extends AbstractMBean implements Serializable {
 
         Measure measure = new Measure((Person) personExchange.getBody(), (MeasureType) measureTypeExchange.getBody(), Double.parseDouble(getValue()));
         ResponseEntity<?> exchange = request("/measure-process", HttpMethod.POST, Measure.class, measure, MediaType.APPLICATION_XML_VALUE);
-        logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.debug("message payLoad === " + exchange.getBody().toString());
         if (exchange.getStatusCode().is2xxSuccessful()) {
             setSuccessMessage("Measure Registered Successfully!!");

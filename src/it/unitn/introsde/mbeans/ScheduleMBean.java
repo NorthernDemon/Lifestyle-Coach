@@ -9,15 +9,14 @@ import org.springframework.http.ResponseEntity;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @ManagedBean(name = "scheduleMBean", eager = true)
 @SessionScoped
 public class ScheduleMBean extends AbstractMBean implements Serializable {
+
     private static final Logger logger = LogManager.getLogger();
 
     private String successMessage;
@@ -28,10 +27,9 @@ public class ScheduleMBean extends AbstractMBean implements Serializable {
     private String location;
 
     public void InitialiseToken() throws Exception {
-        Map<String, String> requestParameters = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        String googleaccesstoken = requestParameters.get("googleform:googleaccesstoken");
-        sessionMap.put("googleaccesstoken", googleaccesstoken);
-        logger.debug("googleaccesstoken>>> " + googleaccesstoken);
+        String googleAccessToken = externalContext.getRequestParameterMap().get("googleform:googleaccesstoken");
+        sessionMap.put("googleaccesstoken", googleAccessToken);
+        logger.debug("googleaccesstoken>>> " + googleAccessToken);
     }
 
     public void registerSchedule() throws Exception {
@@ -40,7 +38,6 @@ public class ScheduleMBean extends AbstractMBean implements Serializable {
 
         Schedule schedule = new Schedule(startDate, endDate, getSummary(), getLocation());
         ResponseEntity<?> exchange = request("schedule-process/?googleAccessToken=" + sessionMap.get("googleaccesstoken"), HttpMethod.POST, Schedule.class, schedule, MediaType.APPLICATION_XML_VALUE);
-        logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.debug("message payLoad === " + exchange);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             setSuccessMessage("Schedule created Successfully!!");
@@ -54,11 +51,11 @@ public class ScheduleMBean extends AbstractMBean implements Serializable {
         ResponseEntity<?> exchange = request("/event-process/?accessToken=" + sessionMap.get("googleaccesstoken"), HttpMethod.GET, List.class, MediaType.APPLICATION_XML_VALUE);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             List<Schedule> schedules = (List<Schedule>) exchange.getBody();
-            logger.debug("Incoming [event-process] with Schedules=" + schedules + "");
+            logger.debug("Incoming [event-process] with Schedules=" + schedules);
             return schedules;
         } else {
             List<Schedule> schedules = (List<Schedule>) exchange.getBody();
-            logger.error("Incoming [event-process] with Schedules=" + schedules + "");
+            logger.error("Incoming [event-process] with Schedules=" + schedules);
             return schedules;
         }
     }

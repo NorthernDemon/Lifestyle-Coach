@@ -35,11 +35,11 @@ public class GoalMBean extends AbstractMBean implements Serializable {
         ResponseEntity<?> exchange = request("people-process", HttpMethod.GET, List.class, MediaType.APPLICATION_XML_VALUE);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             List<Person> people = (List<Person>) exchange.getBody();
-            logger.debug("Incoming [people-process] with People=" + people + "");
+            logger.debug("Incoming [people-process] with People=" + people);
             return people;
         } else {
             List<Person> people = (List<Person>) exchange.getBody();
-            logger.error("Incoming [people-process] with People=" + people + "");
+            logger.error("Incoming [people-process] with People=" + people);
             return people;
         }
     }
@@ -53,7 +53,6 @@ public class GoalMBean extends AbstractMBean implements Serializable {
 
         Goal goal = new Goal((Person) creatorExchange.getBody(), (Person) creatorExchange.getBody(), (MeasureType) measureTypeExchange.getBody(), 0, getMessage(), startDate, endDate);
         ResponseEntity<?> exchange = request("/goal-process?fbAccessToken=" + sessionMap.get("fbaccesstoken"), HttpMethod.POST, Goal.class, goal, MediaType.APPLICATION_XML_VALUE);
-        logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.debug("message payLoad === " + exchange.getBody().toString());
         if (exchange.getStatusCode().is2xxSuccessful()) {
             setSuccessMessage("Goal Registered Successfully!!");

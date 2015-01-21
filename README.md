@@ -6,7 +6,7 @@ Introduction
 
 SDE project 2014/2015
 
-LifestyleCoach is designed to help fatty lazy guys, like Matteo Matteovich, to get in shape! Our solution is a web service oriented and opened for integration with other datasources.
+LifestyleCoach is designed to help fatty lazy guys, like Matteo Matteovich, to get in shape! Our solution is web service oriented and opened for integration with other datasources.
 
 ###N-tier architecture includes
     - Client layer

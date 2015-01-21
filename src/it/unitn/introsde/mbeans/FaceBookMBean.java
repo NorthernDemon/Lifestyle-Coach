@@ -23,14 +23,11 @@ public class FaceBookMBean extends AbstractMBean implements Serializable {
         fbaccesstoken = externalContext.getRequestParameterMap().get("fbform:fbaccesstoken");
         logger.info("mbeanfbaccesstoken " + fbaccesstoken);
         sessionMap.put("fbaccesstoken", fbaccesstoken);
-
-        Person person = getFbUser();
-        registerPerson(person);
+        registerPerson(getFbUser());
     }
 
     private Person getFbUser() {
         ResponseEntity<?> exchange = request("/fbUser-process/" + sessionMap.get("fbaccesstoken"), HttpMethod.GET, Person.class, MediaType.APPLICATION_XML_VALUE);
-        logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.debug("message payLoad === " + exchange);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             return (Person) exchange.getBody();
@@ -40,7 +37,7 @@ public class FaceBookMBean extends AbstractMBean implements Serializable {
         }
     }
 
-    public Person registerPerson(Person person) {
+    private Person registerPerson(Person person) {
         ResponseEntity<?> exchange = request("/person-process", HttpMethod.POST, Person.class, person, MediaType.APPLICATION_XML_VALUE);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             person = (Person) exchange.getBody();
