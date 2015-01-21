@@ -39,7 +39,7 @@
                             <td>
                                 <h:selectOneMenu value="#{goalMBean.measureType}" style="width: 350px;">
                                     <f:selectItems value="#{measureTypeMBean.measureTypes}" var="m"
-                                                   itemLabel="#{m.type}" itemValue="#{m.id}" />
+                                                   itemLabel="#{m.type} [#{m.unit}]" itemValue="#{m.id}" />
                                 </h:selectOneMenu>
                             </td>
                         </tr>
