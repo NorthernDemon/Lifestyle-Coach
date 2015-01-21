@@ -152,12 +152,204 @@ Ultimate Matteo helper. Specifies endpoints for client users, such as JSF, mobil
 
         Not Acceptable
 
+## ScheduleService [/schedule-process?googleAccessToken={googleAccessToken}]
+### Create Schedule [POST]
+
++ Parameters
+    + googleAccessToken (required, string, `googleAccessToken`) ... Google access token, received after sign in.
+
++ Request (application/xml)
+
+        <schedule>
+            <startDate>2014-06-12 13:53:26.70</startDate>
+            <endDate>2015-06-12 13:53:26.70</endDate>
+            <summary>Go to Doctor</summary>
+            <location>Hospital</location>
+        </measure>
+
++ Response 200 (application/xml)
+
+        <schedule>
+            <startDate>2014-06-12 13:53:26.70</startDate>
+            <endDate>2015-06-12 13:53:26.70</endDate>
+            <summary>Go to Doctor</summary>
+            <location>Hospital</location>
+        </schedule>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+        
++ Response 400 (application/text)
+
+        Bad Request
+
+## MeasureTypeService [/measureType-process]
+### Create MeasureType [POST]
+
++ Request (application/xml)
+
+        <measureType>
+            <id>0</id>
+            <type>weight</type>
+            <unit>kg</unit>
+        </measureType>
+
++ Response 200 (application/xml)
+
+        <measureType>
+            <id>3</id>
+            <type>weight</type>
+            <unit>kg</unit>
+        </measureType>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+        
+## PersonService [/people-process]
+### Get People [GET]
+
++ Response 200 (application/xml)
+
+        <people>
+            <person>
+                <id>100</id>
+                <name>Matteo</name>
+                <surname>Matteovich</surname>
+                <birthday>1965-01-01</birthday>
+                <facebookId>200556</facebookId>
+                <googleId>200557</googleId>
+            </person>
+            <person>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </person>
+        </people>
+
++ Response 404 (application/text)
+
+        Not Found
+
+## PersonService [/fbUser-process/{accessToken}]
+### Get Person From FaceBook [GET]
+
++ Parameters
+    + accessToken (required, string, `accessToken`) ... Facebook access token, received after sign in.
+
++ Response 200 (application/xml)
+
+        <person>
+            <id>101</id>
+            <name>Chuck</name>
+            <surname>Norris</surname>
+            <birthday>1945-01-01</birthday>
+            <facebookId>200500</facebookId>
+            <googleId>200501</googleId>
+        </person>
+
++ Response 404 (application/text)
+
+        Not Found
+
+## ScheduleService [/event-process?accessToken={accessToken}]
+### Get Daily Events [GET]
+
++ Parameters
+    + accessToken (required, string, `accessToken`) ... Facebook access token, received after sign in.
+
++ Response 200 (application/xml)
+
+        <schedules>
+            <schedule>
+                <startDate>2014-06-12 13:53:26.70</startDate>
+                <endDate>2015-06-12 13:53:26.70</endDate>
+                <summary>Go to Doctor</summary>
+                <location>Hospital</location>
+            </schedule>
+            <schedule>
+                <startDate>2015-06-12 13:53:26.70</startDate>
+                <endDate>2015-06-12 13:53:26.70</endDate>
+                <summary>Go to Doctor</summary>
+                <location>Hospital</location>
+            </schedule>
+        </schedules>
+        
++ Response 404 (application/text)
+
+        Not Found
+
+## MeasureTypeService [/measureTypes-process]
+### Get MeasureTypes [GET]
+
++ Response 200 (application/xml)
+    
+        <measureTypes>
+            <measureType>
+                <id>1</id>
+                <type>weight</type>
+                <unit>kg</unit>
+            </measureType>
+            <measureType>
+                <id>2</id>
+                <type>height</type>
+                <unit>m</unit>
+            </measureType>
+        </measureTypes>
+
++ Response 404 (application/text)
+
+        Not Found
+        
+## PersonService [/getPersonById-process/{personId}]
+### Get Person By Id [GET]
+
++ Parameters
+    + personId (required, number, `101`) ... Id of the person we want to get.
+
++ Response 200 (application/xml)
+
+        <person>
+            <id>101</id>
+            <name>Chuck</name>
+            <surname>Norris</surname>
+            <birthday>1945-01-01</birthday>
+            <facebookId>200500</facebookId>
+            <googleId>200501</googleId>
+        </person>
+
++ Response 404 (application/text)
+
+        Not Found
+        
+## MeasureTypeService [/getMeasureTypeById-process/{measureTypeId}]
+### Get MeasureType By Id [GET]
+
++ Parameters
+    + measureTypeId (required, number, `1`) ... Id of the measure type we want to get.
+
++ Response 200 (application/xml)
+    
+        <measureType>
+            <id>1</id>
+            <type>weight</type>
+            <unit>kg</unit>
+        </measureType>
+
++ Response 404 (application/text)
+
+        Not Found
+        
 ## MotivationService [/motivation-process/{personId}]
+### Get Motivated [GET]
 
 + Parameters
     + personId (required, number, `1`) ... Id of the person we want to motivate.
 
-### Get Motivated [GET]
 + Response 200 (application/xml)
 
         <motivation>
@@ -170,11 +362,11 @@ Ultimate Matteo helper. Specifies endpoints for client users, such as JSF, mobil
         Not Acceptable
 
 ## AwarenessService [/awareness-process/{personId}]
+### Get Awareness [GET]
 
 + Parameters
     + personId (required, number, `1`) ... Id of the person we want to aware.
 
-### Get Awareness [GET]
 + Response 200 (application/xml)
 
         <awareness>
@@ -187,11 +379,11 @@ Ultimate Matteo helper. Specifies endpoints for client users, such as JSF, mobil
         Not Acceptable
 
 ## ProgressService [/progress-process/{personId}]
+### Get Progress [GET]
 
 + Parameters
     + personId (required, number, `1`) ... Id of the person we want to progress.
 
-### Get Progress [GET]
 + Response 200 (application/xml)
 
         <progress>
@@ -204,11 +396,11 @@ Ultimate Matteo helper. Specifies endpoints for client users, such as JSF, mobil
         Not Acceptable
 
 ## WorkoutService [/workout-process/{personId}]
+### Get Workout [GET]
 
 + Parameters
     + personId (required, number, `1`) ... Id of the person we want to workout.
 
-### Get Workout [GET]
 + Response 200 (application/xml)
 
         <workout>
