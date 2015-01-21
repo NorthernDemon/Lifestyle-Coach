@@ -58,8 +58,8 @@ public class ScheduleMBean implements Serializable {
         Date startDate = getDate(getStartDate().split("-"));
         Date endDate = getDate(getEndDate().split("-"));
 
-        Schedule schedule = new Schedule(startDate, endDate, getSummary(), getLocation(), (String) sessionMap.get("googleaccesstoken"));
-        ResponseEntity<?> exchange = getResponse("schedule-process", schedule, HttpMethod.POST);
+        Schedule schedule = new Schedule(startDate, endDate, getSummary(), getLocation());
+        ResponseEntity<?> exchange = getResponse("schedule-process/?googleaccesstoken=" + sessionMap.get("googleaccesstoken"), schedule, HttpMethod.POST);
         logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.error("message payLoad === " + exchange);
         if (exchange.getStatusCode().is2xxSuccessful()) {

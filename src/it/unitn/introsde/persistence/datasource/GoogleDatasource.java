@@ -27,8 +27,8 @@ public class GoogleDatasource {
 
     private static final Logger logger = LogManager.getLogger();
 
-    public Event createEvent(Schedule schedule) throws Exception {
-        logger.debug("access-token>> " + schedule.getGoogleAccessToken());
+    public Event createEvent(Schedule schedule, String googleAccessToken) throws Exception {
+        logger.debug("access-token>> " + googleAccessToken);
         logger.debug("schedule object>>> " + schedule.toString());
 
         // Create and initialize a new event
@@ -39,7 +39,7 @@ public class GoogleDatasource {
         event.setEnd(getDate(schedule.getEndDate()));
 
         // Insert the new event
-        Event createdEvent = getGoogleService(schedule.getGoogleAccessToken()).events().insert("primary", event).execute();
+        Event createdEvent = getGoogleService(googleAccessToken).events().insert("primary", event).execute();
         logger.info("createdEvent>>> " + createdEvent);
         return createdEvent;
     }
@@ -53,7 +53,7 @@ public class GoogleDatasource {
         logger.debug("events>>>> " + events);
         List<Schedule> schedules = new ArrayList<>(events.size());
         for (Event event : events.getItems()) {
-            schedules.add(new Schedule(new Date(), new Date(), event.getSummary(), event.getLocation(), accessToken));
+            schedules.add(new Schedule(new Date(), new Date(), event.getSummary(), event.getLocation()));
         }
         return schedules;
     }

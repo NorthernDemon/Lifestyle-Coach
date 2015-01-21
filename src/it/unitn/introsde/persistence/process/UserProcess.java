@@ -89,14 +89,15 @@ public class UserProcess extends AbstractProcess {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Schedule> createSchedule(
             @RequestHeader(value = "Accept") String accept,
-            @RequestBody Schedule schedule) {
+            @RequestBody Schedule schedule,
+            @RequestParam(value = "googleaccesstoken") String googleaccesstoken) {
         logger.debug("Incoming [schdule-process] with accept=" + accept + ", schedule=" + schedule);
-        String url = ServiceConfiguration.getUrl() + "/schedule";
+        String url = ServiceConfiguration.getUrl() + "/schedule/?googleaccesstoken=" + googleaccesstoken;
         ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, schedule), Schedule.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
-            Schedule createdschedule = (Schedule) exchange.getBody();
-            logger.debug("Outgoing [schedule-process] with accept=" + accept + ", schedule=" + createdschedule);
-            return new ResponseEntity<>(createdschedule, exchange.getStatusCode());
+            Schedule createdSchedule = (Schedule) exchange.getBody();
+            logger.debug("Outgoing [schedule-process] with accept=" + accept + ", schedule=" + createdSchedule);
+            return new ResponseEntity<>(createdSchedule, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [schedule-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
             return new ResponseEntity<>(exchange.getStatusCode());
@@ -113,9 +114,9 @@ public class UserProcess extends AbstractProcess {
         String url = ServiceConfiguration.getUrl() + "/measuretype";
         ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, measureType), MeasureType.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
-            MeasureType createdmeasuretype = (MeasureType) exchange.getBody();
-            logger.debug("Outgoing [measureType-process] with accept=" + accept + ", createdmeasuretype=" + createdmeasuretype);
-            return new ResponseEntity<>(createdmeasuretype, exchange.getStatusCode());
+            MeasureType createdMeasureType = (MeasureType) exchange.getBody();
+            logger.debug("Outgoing [measureType-process] with accept=" + accept + ", createdmeasuretype=" + createdMeasureType);
+            return new ResponseEntity<>(createdMeasureType, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [measureType-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
             return new ResponseEntity<>(exchange.getStatusCode());

@@ -29,11 +29,12 @@ public class ScheduleService {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Schedule> createSchedule(
             @RequestBody Schedule schedule,
-            BindingResult result) throws Exception {
+            BindingResult result,
+            @RequestParam(value = "googleaccesstoken") String googleaccesstoken) throws Exception {
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-        googleDatasource.createEvent(schedule);
+        googleDatasource.createEvent(schedule, googleaccesstoken);
         logger.debug("Created schedule=" + schedule);
         return new ResponseEntity<>(schedule, HttpStatus.OK);
     }

@@ -30,18 +30,14 @@ public class Schedule implements Serializable {
     @JsonProperty(required = true)
     private String location;
 
-    @JsonProperty(required = true)
-    private String googleAccessToken;
-
     public Schedule() {
     }
 
-    public Schedule(Date startDate, Date endDate, String summary, String location, String googleAccessToken) {
+    public Schedule(Date startDate, Date endDate, String summary, String location) {
         this.endDate = endDate;
         this.startDate = startDate;
         this.summary = summary;
         this.location = location;
-        this.googleAccessToken = googleAccessToken;
     }
 
     public Date getStartDate() {
@@ -76,14 +72,6 @@ public class Schedule implements Serializable {
         this.location = location;
     }
 
-    public String getGoogleAccessToken() {
-        return googleAccessToken;
-    }
-
-    public void setGoogleAccessToken(String googleAccessToken) {
-        this.googleAccessToken = googleAccessToken;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,7 +101,6 @@ public class Schedule implements Serializable {
                 .add("endDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(endDate))
                 .add("summary", summary)
                 .add("location", location)
-                .add("googleAccessToken", googleAccessToken)
                 .toString();
     }
 }
