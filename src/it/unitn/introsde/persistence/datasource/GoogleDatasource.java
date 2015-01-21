@@ -24,9 +24,10 @@ import java.util.TimeZone;
 
 @Component
 public class GoogleDatasource {
+
     private static final Logger logger = LogManager.getLogger();
 
-    public void createEvent(Schedule schedule) throws Exception {
+    public Event createEvent(Schedule schedule) throws Exception {
         logger.debug("access-token>> " + schedule.getGoogleAccessToken());
         logger.debug("schedule object>>> " + schedule.toString());
 
@@ -43,6 +44,7 @@ public class GoogleDatasource {
         // Insert the new event
         Event createdEvent = getGoogleService(schedule.getGoogleAccessToken()).events().insert("primary", event).execute();
         logger.info("createdEvent>>> " + createdEvent);
+        return createdEvent;
     }
 
     public List<Schedule> getCalendarEvent(String accessToken) throws Exception {
@@ -51,8 +53,7 @@ public class GoogleDatasource {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<Schedule> schedules = new ArrayList<>(events.size());
         for (Event event : events.getItems()) {
-            //logger.debug("event date"+event.);
-            schedules.add(new Schedule(dateFormat.parse(dateFormat.format(new Date())),dateFormat.parse(dateFormat.format(new Date())), event.getSummary(), event.getLocation(), accessToken));
+            schedules.add(new Schedule(dateFormat.parse(dateFormat.format(new Date())), dateFormat.parse(dateFormat.format(new Date())), event.getSummary(), event.getLocation(), accessToken));
         }
         return schedules;
     }

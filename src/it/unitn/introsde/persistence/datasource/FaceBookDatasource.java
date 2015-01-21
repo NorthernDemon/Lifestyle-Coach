@@ -21,8 +21,7 @@ public class FaceBookDatasource {
     private static final Logger logger = LogManager.getLogger();
 
     public Person getUser(String accessToken) throws ParseException {
-        FacebookClient facebookClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_2);
-        User user = facebookClient.fetchObject("me", User.class);
+        User user = getFacebookClient(accessToken).fetchObject("me", User.class);
         logger.info("name>> " + user.getFirstName());
         logger.info("accessToken>> " + accessToken);
         logger.info("me>> " + user);
@@ -30,11 +29,15 @@ public class FaceBookDatasource {
         return new Person(user.getFirstName(), user.getLastName(), new SimpleDateFormat("MM/dd/yyyy").parse(user.getBirthday()), accessToken);
     }
 
-    public <T>void postToWall(String accessToken,T object) {
-        Goal goal = (Goal)object;
-        FacebookClient facebookClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_2);
-        FacebookType publishMessageResponse = facebookClient.publish("me/feed", FacebookType.class, Parameter.with("message","Goal to Achieve: " +
-                goal.getMessage()+" from: "+goal.getStart()+" to "+goal.getEnd()+" Created by: "+goal.getPerson().getName() ));
+    public void postToWall(String accessToken, Goal goal) {
+        FacebookType publishMessageResponse = getFacebookClient(accessToken).publish("me/feed", FacebookType.class,
+                Parameter.with("message",
+                        "Goal to Achieve: " + goal.getMessage() + " from: " + goal.getStart() +
+                                " to " + goal.getEnd() + " Created by: " + goal.getPerson().getName()));
         logger.debug("Published message ID: " + publishMessageResponse.getId());
+    }
+
+    private FacebookClient getFacebookClient(String accessToken) {
+        return new DefaultFacebookClient(accessToken, Version.VERSION_2_2);
     }
 }

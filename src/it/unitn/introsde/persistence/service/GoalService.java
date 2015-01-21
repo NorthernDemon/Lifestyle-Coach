@@ -22,6 +22,7 @@ public class GoalService {
     private static final Logger logger = LogManager.getLogger();
 
     private GoalDao goalDao;
+
     private FaceBookDatasource faceBookDatasource;
 
     @RequestMapping(value = "/goal", method = RequestMethod.POST,
@@ -29,12 +30,13 @@ public class GoalService {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Goal> createGoal(
             @Valid @RequestBody Goal goal,
-            BindingResult result,@RequestParam(value = "fbAccessToken") String fbaccessToken) {
+            BindingResult result,
+            @RequestParam(value = "fbAccessToken") String fbaccessToken) {
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
         goalDao.save(goal);
-        faceBookDatasource.postToWall(fbaccessToken,goal);
+        faceBookDatasource.postToWall(fbaccessToken, goal);
         logger.debug("Created goal=" + goal);
         return new ResponseEntity<>(goal, HttpStatus.OK);
     }

@@ -1,7 +1,6 @@
 package it.unitn.introsde.persistence.service;
 
 import it.unitn.introsde.ServiceConfiguration;
-import it.unitn.introsde.persistence.datasource.FaceBookDatasource;
 import it.unitn.introsde.persistence.datasource.GoogleDatasource;
 import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;

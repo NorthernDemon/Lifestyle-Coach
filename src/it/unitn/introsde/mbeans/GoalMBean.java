@@ -73,12 +73,12 @@ public class GoalMBean implements Serializable {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         Map<String, Object> sessionMap = externalContext.getSessionMap();
 
-        ResponseEntity<?> personExchange = getGenericResponse("/getpersonbyid-process/" + getPerson(), HttpMethod.GET, Person.class,null);
+        ResponseEntity<?> personExchange = getGenericResponse("/getpersonbyid-process/" + getPerson(), HttpMethod.GET, Person.class, null);
         ResponseEntity<?> creatorExchange = getGenericResponse("/getpersonbyid-process/" + getCreator(), HttpMethod.GET, Person.class, null);
         ResponseEntity<?> measureTypeExchange = getGenericResponse("/getmeasureTypeById-process/" + getMeasureType(), HttpMethod.GET, MeasureType.class, null);
 
         Goal goal = new Goal((Person) creatorExchange.getBody(), (Person) creatorExchange.getBody(), (MeasureType) measureTypeExchange.getBody(), 0, getMessage(), startDate, endDate);
-        ResponseEntity<?> exchange = restTemplate.exchange(url + "/goal-process?fbAccessToken="+sessionMap.get("fbaccesstoken"), httpMethod, createHeader(goal), Goal.class);
+        ResponseEntity<?> exchange = restTemplate.exchange(url + "/goal-process?fbAccessToken=" + sessionMap.get("fbaccesstoken"), httpMethod, createHeader(goal), Goal.class);
         logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.debug("message payLoad === " + exchange.getBody().toString());
         if (exchange.getStatusCode().is2xxSuccessful()) {
