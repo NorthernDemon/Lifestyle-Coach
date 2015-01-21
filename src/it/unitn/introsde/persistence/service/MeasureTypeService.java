@@ -15,17 +15,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * Created by davie on 1/18/2015.
- */
 @RestController
 @RequestMapping(value = ServiceConfiguration.NAME)
 public class MeasureTypeService {
+
     private static final Logger logger = LogManager.getLogger();
 
     private MeasureTypeDao measureTypeDao;
 
-    @RequestMapping(value = "/measuretype", method = RequestMethod.POST,
+    @RequestMapping(value = "/measureType", method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<MeasureType> createMeasureType(
@@ -42,27 +40,27 @@ public class MeasureTypeService {
     @RequestMapping(value = "/measureTypes", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<MeasureType>> getPeople() {
+    public ResponseEntity<List<MeasureType>> getMeasureTypes() {
         List<MeasureType> measureTypes = measureTypeDao.list(MeasureType.class);
         if (measureTypes.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        logger.debug("MeasureTypes =" + measureTypes);
+        logger.debug("MeasureTypes=" + measureTypes);
         return new ResponseEntity<>(measureTypes, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getmeasureTypeById/{measureTypeId}", method = RequestMethod.GET,
+    @RequestMapping(value = "/getMeasureTypeById/{measureTypeId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<MeasureType> getMeasureTypeByID(@PathVariable("measureTypeId") int measureTypeId) {
+    public ResponseEntity<MeasureType> getMeasureTypeById(
+            @PathVariable("measureTypeId") int measureTypeId) {
         MeasureType measureType = measureTypeDao.get(MeasureType.class, measureTypeId);
         if (measureType == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        logger.debug("MeasureType =" + measureType);
+        logger.debug("MeasureTypeById=" + measureType);
         return new ResponseEntity<>(measureType, HttpStatus.OK);
     }
-
 
     @Autowired
     public void setMeasureTypeDao(MeasureTypeDao measureTypeDao) {

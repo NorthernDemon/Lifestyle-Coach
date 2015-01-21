@@ -32,7 +32,8 @@ public class ProgressService {
     @RequestMapping(value = "/progress/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Progress> progressPerson(@PathVariable("personId") int personId) {
+    public ResponseEntity<Progress> progressPerson(
+            @PathVariable("personId") int personId) {
         Person person = personDao.get(Person.class, personId);
         if (person == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -49,7 +49,7 @@ public class FaceBookMBean implements Serializable {
     private Person getFbUser() {
         RestTemplate restTemplate = new RestTemplate();
         HttpMethod httpMethod = HttpMethod.GET;
-        String url = ServiceConfiguration.getUrl() + "/fbuser-process/" + sessionMap.get("fbaccesstoken");
+        String url = ServiceConfiguration.getUrl() + "/fbUser-process/" + sessionMap.get("fbaccesstoken");
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(null), Person.class);
         logger.error("Status Code === " + exchange.getStatusCode().is2xxSuccessful());

@@ -10,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,7 +61,7 @@ public class MeasureTypeMBean implements Serializable {
     public void createMeasureType() {
         RestTemplate restTemplate = new RestTemplate();
         HttpMethod httpMethod = HttpMethod.POST;
-        String url = ServiceConfiguration.getUrl() + "/measuretype-process";
+        String url = ServiceConfiguration.getUrl() + "/measureType-process";
         MeasureType measureType = new MeasureType(getType(), getUnit());
 
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(measureType), MeasureType.class);
@@ -92,7 +91,7 @@ public class MeasureTypeMBean implements Serializable {
     public ResponseEntity<?> getResponse(String restPath, MeasureType measureType, HttpMethod httpMethod) {
         RestTemplate restTemplate = new RestTemplate();
         String url = ServiceConfiguration.getUrl() + "/" + restPath;
-        return restTemplate.exchange(url, httpMethod, createHeader(measureType), new ArrayList<MeasureType>().getClass());
+        return restTemplate.exchange(url, httpMethod, createHeader(measureType), List.class);
     }
 
 }

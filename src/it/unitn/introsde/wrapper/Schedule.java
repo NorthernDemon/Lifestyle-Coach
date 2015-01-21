@@ -8,9 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-/**
- * Created by davie on 1/17/2015.
- */
 @JsonRootName("schedule")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"startDate", "endDate", "summary", "location"})

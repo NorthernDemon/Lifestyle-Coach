@@ -36,8 +36,8 @@ public class MeasureMBean implements Serializable {
         RestTemplate restTemplate = new RestTemplate();
         HttpMethod httpMethod = HttpMethod.POST;
         String url = ServiceConfiguration.getUrl() + "/measure-process";
-        ResponseEntity<?> personExchange = getGenericResponse("/getpersonbyid-process/" + sessionMap.get("personId"), HttpMethod.GET, Person.class, null);
-        ResponseEntity<?> measureTypeExchange = getGenericResponse("/getmeasureTypeById-process/" + getMeasureType(), HttpMethod.GET, MeasureType.class, null);
+        ResponseEntity<?> personExchange = getGenericResponse("/getPersonById-process/" + sessionMap.get("personId"), HttpMethod.GET, Person.class, null);
+        ResponseEntity<?> measureTypeExchange = getGenericResponse("/getMeasureTypeById-process/" + getMeasureType(), HttpMethod.GET, MeasureType.class, null);
 
         Measure measure = new Measure((Person) personExchange.getBody(), (MeasureType) measureTypeExchange.getBody(), Double.parseDouble(getValue()));
         ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(measure), Measure.class);
