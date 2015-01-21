@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = ServiceConfiguration.NAME)
@@ -39,6 +40,18 @@ public class GoalService {
         faceBookDatasource.postToWall(fbaccessToken, goal);
         logger.debug("Created goal=" + goal);
         return new ResponseEntity<>(goal, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/goals", method = RequestMethod.GET,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<Goal>> getGoals() {
+        List<Goal> goals = goalDao.list(Goal.class);
+        if (goals.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        logger.debug("goals =" + goals);
+        return new ResponseEntity<>(goals, HttpStatus.OK);
     }
 
     @Autowired

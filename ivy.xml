@@ -58,5 +58,6 @@
             <exclude org="javax.servlet"/>
         </dependency>
         <dependency org="javax" name="javaee-api" rev="7.0"/>
+        <dependency org="org.apache.httpcomponents" name="httpclient" rev="4.1.1"/>
     </dependencies>
 </ivy-module>

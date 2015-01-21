@@ -10,11 +10,8 @@ import java.util.Objects;
 
 @JsonRootName("awareness")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"type", "value"})
+@JsonPropertyOrder({"value"})
 public class Awareness {
-
-    @JsonProperty(required = true)
-    private String type;
 
     @JsonProperty(required = true)
     private String value;
@@ -22,17 +19,8 @@ public class Awareness {
     public Awareness() {
     }
 
-    public Awareness(String type, String value) {
-        this.type = type;
+    public Awareness(String value) {
         this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getValue() {
@@ -51,8 +39,7 @@ public class Awareness {
         if (o instanceof Awareness) {
             Awareness object = (Awareness) o;
 
-            return Objects.equals(type, object.type)
-                    && Objects.equals(value, object.value);
+            return Objects.equals(value, object.value);
         }
 
         return false;
@@ -60,13 +47,12 @@ public class Awareness {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, value);
+        return Objects.hash(value);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("type", type)
                 .add("value", value)
                 .toString();
     }

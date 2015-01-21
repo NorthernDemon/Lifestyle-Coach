@@ -235,6 +235,24 @@ public class UserProcess extends AbstractProcess {
         }
     }
 
+    @RequestMapping(value = "/goals-process", method = RequestMethod.GET,
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<Goal>> getGoals(
+            @RequestHeader(value = "Accept") String accept) {
+        logger.debug("Incoming [goals-process] with accept=" + accept);
+        String url = ServiceConfiguration.getUrl() + "/goals";
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), List.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            List<Goal> goals = (List<Goal>) exchange.getBody();
+            logger.debug("Outgoing [goals-process] with accept=" + accept);
+            return new ResponseEntity<>(goals, exchange.getStatusCode());
+        } else {
+            logger.debug("Outgoing [goals-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
+            return new ResponseEntity<>(exchange.getStatusCode());
+        }
+    }
+
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;

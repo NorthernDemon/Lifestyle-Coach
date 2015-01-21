@@ -17,7 +17,6 @@ import java.text.SimpleDateFormat;
 
 @Component
 public class FaceBookDatasource {
-
     private static final Logger logger = LogManager.getLogger();
 
     public Person getUser(String accessToken) throws ParseException {

@@ -1,6 +1,7 @@
 package it.unitn.introsde.mbeans;
 
 import it.unitn.introsde.ServiceConfiguration;
+import it.unitn.introsde.wrapper.Awareness;
 import it.unitn.introsde.wrapper.Motivation;
 import it.unitn.introsde.wrapper.Workout;
 import org.apache.logging.log4j.LogManager;
@@ -32,9 +33,21 @@ public class FeedbackMBean implements Serializable {
 
     private Workout workout;
 
+
+    private Awareness awareness;
+
     public FeedbackMBean() {
         requestWorkout();
         requestMotivation();
+        requestAwareness();
+    }
+
+    private static HttpEntity<Object> createHeader(Object body) {
+        MediaType applicationType = MediaType.APPLICATION_XML;
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setAccept(Arrays.asList(applicationType));
+        httpHeaders.setContentType(applicationType);
+        return new HttpEntity<>(body, httpHeaders);
     }
 
     private void requestMotivation() {
@@ -59,12 +72,19 @@ public class FeedbackMBean implements Serializable {
         }
     }
 
-    private static HttpEntity<Object> createHeader(Object body) {
-        MediaType applicationType = MediaType.APPLICATION_XML;
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setAccept(Arrays.asList(applicationType));
-        httpHeaders.setContentType(applicationType);
-        return new HttpEntity<>(body, httpHeaders);
+    private void requestAwareness() {
+        String url = ServiceConfiguration.getUrl() + "/awareness-process/" + sessionMap.get("personId");
+        ResponseEntity<?> exchange = restTemplate.exchange(url, httpMethod, createHeader(null), Awareness.class);
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            awareness = (Awareness) exchange.getBody();
+            logger.debug("Awareness=" + awareness);
+        } else {
+            logger.error("Failed to fetch awareness");
+        }
+    }
+
+    public Awareness getAwareness() {
+        return awareness;
     }
 
     public Motivation getMotivation() {

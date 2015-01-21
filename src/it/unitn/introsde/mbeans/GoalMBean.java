@@ -88,6 +88,23 @@ public class GoalMBean implements Serializable {
         }
     }
 
+    public List<Goal> getGoals() {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = ServiceConfiguration.getUrl() + "/goals-process";
+
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(null), List.class);
+        List<Goal> goals;
+        if (exchange.getStatusCode().is2xxSuccessful()) {
+            goals = (List<Goal>) exchange.getBody();
+            logger.debug("Incoming [goals-process] with goals=" + goals + "");
+            return goals;
+        } else {
+            goals = (List<Goal>) exchange.getBody();
+            logger.error("Incoming [goals-process] with goals=" + goals + "");
+            return goals;
+        }
+    }
+
     public ResponseEntity<?> getResponse(String restPath, Schedule schedule, HttpMethod httpMethod) {
         RestTemplate restTemplate = new RestTemplate();
         String url = ServiceConfiguration.getUrl() + "/" + restPath;
