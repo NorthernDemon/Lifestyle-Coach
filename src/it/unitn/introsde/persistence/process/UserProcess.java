@@ -8,12 +8,10 @@ import it.unitn.introsde.persistence.entity.Person;
 import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -23,8 +21,6 @@ public class UserProcess extends AbstractProcess {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private RestTemplate restTemplate;
-
     @RequestMapping(value = "/person-process", method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -32,8 +28,7 @@ public class UserProcess extends AbstractProcess {
             @RequestHeader(value = "Accept") String accept,
             @RequestBody Person person) {
         logger.debug("Incoming [person-process] with accept=" + accept + ", person=" + person);
-        String url = ServiceConfiguration.getUrl() + "/person";
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, person), Person.class);
+        ResponseEntity<?> exchange = request("/person", HttpMethod.POST, Person.class, person, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Person createdPerson = (Person) exchange.getBody();
             logger.debug("Outgoing [person-process] with accept=" + accept + ", person=" + createdPerson);
@@ -52,8 +47,7 @@ public class UserProcess extends AbstractProcess {
             @RequestBody Goal goal,
             @RequestParam(value = "fbAccessToken") String fbAccessToken) {
         logger.debug("Incoming [goal-process] with accept=" + accept + ", goal=" + goal);
-        String url = ServiceConfiguration.getUrl() + "/goal?fbAccessToken=" + fbAccessToken;
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, goal), Goal.class);
+        ResponseEntity<?> exchange = request("/goal?fbAccessToken=" + fbAccessToken, HttpMethod.POST, Goal.class, goal, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Goal createdGoal = (Goal) exchange.getBody();
             logger.debug("Outgoing [goal-process] with accept=" + accept + ", goal=" + createdGoal);
@@ -71,8 +65,7 @@ public class UserProcess extends AbstractProcess {
             @RequestHeader(value = "Accept") String accept,
             @RequestBody Measure measure) {
         logger.debug("Incoming [measure-process] with accept=" + accept + ", measure=" + measure);
-        String url = ServiceConfiguration.getUrl() + "/measure";
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, measure), Measure.class);
+        ResponseEntity<?> exchange = request("/measure", HttpMethod.POST, Measure.class, measure, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Measure createdMeasure = (Measure) exchange.getBody();
             logger.debug("Outgoing [measure-process] with accept=" + accept + ", measure=" + createdMeasure);
@@ -91,8 +84,7 @@ public class UserProcess extends AbstractProcess {
             @RequestBody Schedule schedule,
             @RequestParam(value = "googleAccessToken") String googleAccessToken) {
         logger.debug("Incoming [schedule-process] with accept=" + accept + ", schedule=" + schedule);
-        String url = ServiceConfiguration.getUrl() + "/schedule?googleAccessToken=" + googleAccessToken;
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, schedule), Schedule.class);
+        ResponseEntity<?> exchange = request("/schedule?googleAccessToken=" + googleAccessToken, HttpMethod.POST, Schedule.class, schedule, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Schedule createdSchedule = (Schedule) exchange.getBody();
             logger.debug("Outgoing [schedule-process] with accept=" + accept + ", schedule=" + createdSchedule);
@@ -110,8 +102,7 @@ public class UserProcess extends AbstractProcess {
             @RequestHeader(value = "Accept") String accept,
             @RequestBody MeasureType measureType) {
         logger.debug("Incoming [measureType-process] with accept=" + accept + ", measureType=" + measureType);
-        String url = ServiceConfiguration.getUrl() + "/measureType";
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, measureType), MeasureType.class);
+        ResponseEntity<?> exchange = request("/measureType", HttpMethod.POST, MeasureType.class, measureType, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             MeasureType createdMeasureType = (MeasureType) exchange.getBody();
             logger.debug("Outgoing [measureType-process] with accept=" + accept + ", measureType=" + createdMeasureType);
@@ -128,8 +119,7 @@ public class UserProcess extends AbstractProcess {
     public ResponseEntity<List<Person>> getPeople(
             @RequestHeader(value = "Accept") String accept) {
         logger.debug("Incoming [people-process] with accept=" + accept);
-        String url = ServiceConfiguration.getUrl() + "/people";
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept), List.class);
+        ResponseEntity<?> exchange = request("/people", HttpMethod.GET, List.class, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             @SuppressWarnings("unchecked")
             List<Person> people = (List<Person>) exchange.getBody();
@@ -148,8 +138,7 @@ public class UserProcess extends AbstractProcess {
             @RequestHeader(value = "Accept") String accept,
             @PathVariable("accessToken") String accessToken) {
         logger.debug("Incoming [fbUser-process] with accept=" + accept);
-        String url = ServiceConfiguration.getUrl() + "/fbUser/" + accessToken;
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept), Person.class);
+        ResponseEntity<?> exchange = request("/fbUser/" + accessToken, HttpMethod.GET, Person.class, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Person person = (Person) exchange.getBody();
             logger.debug("Outgoing [fbUser-process] with accept=" + accept + ", person=" + person);
@@ -167,8 +156,7 @@ public class UserProcess extends AbstractProcess {
             @RequestHeader(value = "Accept") String accept,
             @RequestParam(value = "accessToken") String accessToken) {
         logger.debug("Incoming [event-process] with accept=" + accept);
-        String url = ServiceConfiguration.getUrl() + "/event?accessToken=" + accessToken;
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept), List.class);
+        ResponseEntity<?> exchange = request("/event?accessToken=" + accessToken, HttpMethod.GET, List.class, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             @SuppressWarnings("unchecked")
             List<Schedule> events = (List<Schedule>) exchange.getBody();
@@ -186,8 +174,7 @@ public class UserProcess extends AbstractProcess {
     public ResponseEntity<List<MeasureType>> getMeasureTypes(
             @RequestHeader(value = "Accept") String accept) {
         logger.debug("Incoming [measureTypes-process] with accept=" + accept);
-        String url = ServiceConfiguration.getUrl() + "/measureTypes";
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept), List.class);
+        ResponseEntity<?> exchange = request("/measureTypes", HttpMethod.GET, List.class, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             @SuppressWarnings("unchecked")
             List<MeasureType> measureTypes = (List<MeasureType>) exchange.getBody();
@@ -206,8 +193,7 @@ public class UserProcess extends AbstractProcess {
             @RequestHeader(value = "Accept") String accept,
             @PathVariable("personId") int personId) {
         logger.debug("Incoming [getPersonById-process] with accept=" + accept + ", personId=" + personId);
-        String url = ServiceConfiguration.getUrl() + "/getPersonById/" + personId;
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept), Person.class);
+        ResponseEntity<?> exchange = request("/getPersonById/" + personId, HttpMethod.GET, Person.class, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Person person = (Person) exchange.getBody();
             logger.debug("Outgoing [getPersonById-process] with accept=" + accept + ", person=" + person);
@@ -225,8 +211,7 @@ public class UserProcess extends AbstractProcess {
             @RequestHeader(value = "Accept") String accept,
             @PathVariable("measureTypeId") int measureTypeId) {
         logger.debug("Incoming [getMeasureTypeById-process] with accept=" + accept + ", measureTypeId=" + measureTypeId);
-        String url = ServiceConfiguration.getUrl() + "/getMeasureTypeById/" + measureTypeId;
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept), MeasureType.class);
+        ResponseEntity<?> exchange = request("/getMeasureTypeById/" + measureTypeId, HttpMethod.GET, MeasureType.class, accept);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             MeasureType measureType = (MeasureType) exchange.getBody();
             logger.debug("Outgoing [getMeasureTypeById-process] with accept=" + accept + ", measureType=" + measureType);
@@ -235,10 +220,5 @@ public class UserProcess extends AbstractProcess {
             logger.debug("Outgoing [getMeasureTypeById-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
             return new ResponseEntity<>(exchange.getStatusCode());
         }
-    }
-
-    @Autowired
-    public void setRestTemplate(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
     }
 }

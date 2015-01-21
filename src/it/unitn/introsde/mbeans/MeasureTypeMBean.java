@@ -1,6 +1,5 @@
 package it.unitn.introsde.mbeans;
 
-import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.entity.MeasureType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
