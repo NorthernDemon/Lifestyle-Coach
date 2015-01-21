@@ -43,7 +43,7 @@ public class MeasureTypeService {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<MeasureType>> getPeople() {
-        List<MeasureType> measureTypes = measreTypeDao.getAll("FROM MeasureType");
+        List<MeasureType> measureTypes = measreTypeDao.list();
         if (measureTypes.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

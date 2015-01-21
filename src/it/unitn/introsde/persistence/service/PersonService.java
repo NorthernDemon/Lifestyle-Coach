@@ -24,6 +24,7 @@ public class PersonService {
     private static final Logger logger = LogManager.getLogger();
 
     private PersonDao personDao;
+
     private FaceBookDatasource faceBookDatasource;
 
     @RequestMapping(value = "/person", method = RequestMethod.POST,
@@ -44,7 +45,7 @@ public class PersonService {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Person>> getPeople() {
-        List<Person> people = personDao.getAll("FROM Person");
+        List<Person> people = personDao.list();
         if (people.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -63,7 +64,6 @@ public class PersonService {
             logger.error(e);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         logger.debug("Person =" + person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
@@ -71,7 +71,7 @@ public class PersonService {
     @RequestMapping(value = "/getpersonbyid/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Person> getPersonbyid(@PathVariable("personId") int personId) {
+    public ResponseEntity<Person> getPersonById(@PathVariable("personId") int personId) {
         Person person = personDao.get(Person.class, personId);
         if (person == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

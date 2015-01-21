@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @Repository
@@ -25,6 +26,7 @@ public class MeasureDao extends AbstractDao<Measure> {
         return namedQuery.list();
     }
 
+    @Nullable
     @Transactional(readOnly = true)
     public Measure findLatestMeasureForGoal(Goal goal) {
         Query namedQuery = getSession().getNamedQuery(Measure.FIND_BY_PERSON_AND_MEASURE_TYPE_AND_LATEST_DATE);

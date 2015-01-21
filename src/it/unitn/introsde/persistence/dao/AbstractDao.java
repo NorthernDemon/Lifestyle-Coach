@@ -1,17 +1,16 @@
 package it.unitn.introsde.persistence.dao;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Nullable;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidatorFactory;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -49,6 +48,7 @@ public abstract class AbstractDao<T> {
         return entity;
     }
 
+    @Nullable
     @Transactional
     public T get(Class<T> clazz, int id) {
         return clazz.cast(getSession().get(clazz, id));
@@ -57,13 +57,6 @@ public abstract class AbstractDao<T> {
     @Transactional
     public T load(Class<T> clazz, int id) {
         return clazz.cast(getSession().load(clazz, id));
-    }
-
-    @Transactional
-    public List<T> getAll(String queryString) {
-        Query query = getSession().createQuery(queryString);
-        List<T> list = query.list();
-        return list;
     }
 
     /**
