@@ -32,7 +32,7 @@ public class FeedbackProcess extends AbstractProcess {
     @RequestMapping(value = "/motivation-process/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Motivation> motivatePerson(
+    public ResponseEntity<Motivation> getMotivation(
             @RequestHeader(value = "Accept") String accept,
             @PathVariable("personId") int personId) {
         logger.debug("Incoming [motivation-process] with accept=" + accept + ", personId=" + personId);
@@ -51,7 +51,7 @@ public class FeedbackProcess extends AbstractProcess {
     @RequestMapping(value = "/awareness-process/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Awareness> awarePerson(
+    public ResponseEntity<Awareness> getAwareness(
             @RequestHeader(value = "Accept") String accept,
             @PathVariable("personId") int personId) {
         logger.debug("Incoming [awareness-process] with accept=" + accept + ", personId=" + personId);
@@ -70,7 +70,7 @@ public class FeedbackProcess extends AbstractProcess {
     @RequestMapping(value = "/progress-process/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Progress> progressPerson(
+    public ResponseEntity<Progress> getProgression(
             @RequestHeader(value = "Accept") String accept,
             @PathVariable("personId") int personId) {
         logger.debug("Incoming [progress-process] with accept=" + accept + ", personId=" + personId);
@@ -89,7 +89,7 @@ public class FeedbackProcess extends AbstractProcess {
     @RequestMapping(value = "/workout-process/{personId}", method = RequestMethod.GET,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Workout> workoutPerson(
+    public ResponseEntity<Workout> getWorkout(
             @RequestHeader(value = "Accept") String accept,
             @PathVariable("personId") int personId) {
         logger.debug("Incoming [workout-process] with accept=" + accept + ", personId=" + personId);
