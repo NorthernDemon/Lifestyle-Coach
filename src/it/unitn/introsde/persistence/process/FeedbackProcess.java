@@ -37,7 +37,7 @@ public class FeedbackProcess extends AbstractProcess {
             @PathVariable("personId") int personId) {
         logger.debug("Incoming [motivation-process] with accept=" + accept + ", personId=" + personId);
         String url = ServiceConfiguration.getUrl() + "/motivation/" + personId;
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Motivation.class);
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept), Motivation.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Motivation motivation = (Motivation) exchange.getBody();
             logger.debug("Outgoing [motivation-process] with accept=" + accept + ", motivation=" + motivation);
@@ -56,7 +56,7 @@ public class FeedbackProcess extends AbstractProcess {
             @PathVariable("personId") int personId) {
         logger.debug("Incoming [awareness-process] with accept=" + accept + ", personId=" + personId);
         String url = ServiceConfiguration.getUrl() + "/awareness/" + personId;
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Awareness.class);
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept), Awareness.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Awareness awareness = (Awareness) exchange.getBody();
             logger.debug("Outgoing [awareness-process] with accept=" + accept + ", awareness=" + awareness);
@@ -75,7 +75,7 @@ public class FeedbackProcess extends AbstractProcess {
             @PathVariable("personId") int personId) {
         logger.debug("Incoming [progress-process] with accept=" + accept + ", personId=" + personId);
         String url = ServiceConfiguration.getUrl() + "/progress/" + personId;
-        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept, null), Progress.class);
+        ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.GET, createHeader(accept), Progress.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Progress progress = (Progress) exchange.getBody();
             logger.debug("Outgoing [progress-process] with accept=" + accept + ", progress=" + progress);

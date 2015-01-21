@@ -17,11 +17,11 @@ import java.util.Objects;
 public class Schedule implements Serializable {
 
     @JsonProperty(required = true)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.S")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startDate;
 
     @JsonProperty(required = true)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.S")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endDate;
 
     @JsonProperty(required = true)
@@ -97,8 +97,8 @@ public class Schedule implements Serializable {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(startDate))
-                .add("endDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(endDate))
+                .add("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startDate))
+                .add("endDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(endDate))
                 .add("summary", summary)
                 .add("location", location)
                 .toString();

@@ -22,6 +22,7 @@ import java.util.List;
 public class ScheduleService {
 
     private static final Logger logger = LogManager.getLogger();
+
     private GoogleDatasource googleDatasource;
 
     @RequestMapping(value = "/schedule", method = RequestMethod.POST,
@@ -30,11 +31,11 @@ public class ScheduleService {
     public ResponseEntity<Schedule> createSchedule(
             @RequestBody Schedule schedule,
             BindingResult result,
-            @RequestParam(value = "googleaccesstoken") String googleaccesstoken) throws Exception {
+            @RequestParam(value = "googleaccesstoken") String googleAccessToken) throws Exception {
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-        googleDatasource.createEvent(schedule, googleaccesstoken);
+        googleDatasource.createEvent(schedule, googleAccessToken);
         logger.debug("Created schedule=" + schedule);
         return new ResponseEntity<>(schedule, HttpStatus.OK);
     }

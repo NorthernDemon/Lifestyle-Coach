@@ -23,7 +23,7 @@ import java.util.List;
 public class MeasureTypeService {
     private static final Logger logger = LogManager.getLogger();
 
-    private MeasureTypeDao measreTypeDao;
+    private MeasureTypeDao measureTypeDao;
 
     @RequestMapping(value = "/measuretype", method = RequestMethod.POST,
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
@@ -34,7 +34,7 @@ public class MeasureTypeService {
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-        measreTypeDao.save(measureType);
+        measureTypeDao.save(measureType);
         logger.debug("Created measureType=" + measureType);
         return new ResponseEntity<>(measureType, HttpStatus.OK);
     }
@@ -43,7 +43,7 @@ public class MeasureTypeService {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<MeasureType>> getPeople() {
-        List<MeasureType> measureTypes = measreTypeDao.list(MeasureType.class);
+        List<MeasureType> measureTypes = measureTypeDao.list(MeasureType.class);
         if (measureTypes.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -55,7 +55,7 @@ public class MeasureTypeService {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<MeasureType> getMeasureTypeByID(@PathVariable("measureTypeId") int measureTypeId) {
-        MeasureType measureType = measreTypeDao.get(MeasureType.class, measureTypeId);
+        MeasureType measureType = measureTypeDao.get(MeasureType.class, measureTypeId);
         if (measureType == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -65,7 +65,7 @@ public class MeasureTypeService {
 
 
     @Autowired
-    public void setMeasreTypeDao(MeasureTypeDao measreTypeDao) {
-        this.measreTypeDao = measreTypeDao;
+    public void setMeasureTypeDao(MeasureTypeDao measureTypeDao) {
+        this.measureTypeDao = measureTypeDao;
     }
 }

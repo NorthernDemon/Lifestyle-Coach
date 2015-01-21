@@ -15,6 +15,16 @@ public abstract class AbstractProcess {
      * Create header for with preset body payload and it's content type
      *
      * @param accept media type and content type
+     * @return HttpEntity consumed by rest template
+     */
+    protected static HttpEntity<Object> createHeader(String accept) {
+        return createHeader(accept, null);
+    }
+
+    /**
+     * Create header for with preset body payload and it's content type
+     *
+     * @param accept media type and content type
      * @param body   payload
      * @return HttpEntity consumed by rest template
      */

@@ -63,11 +63,11 @@ public class Person implements Serializable {
 
     @Column(nullable = false, unique = true)
     @JsonProperty(required = true)
-    private String facebookId = "";
+    private String facebookId;
 
     @Column
     @JsonProperty(required = true)
-    private String googleId = "";
+    private String googleId;
 
     public Person() {
     }
