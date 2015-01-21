@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"/>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <style>
+        #top {
+            position: relative;
+            background-color: #036fab;
+            color: white;
+            padding: 5px;
+            margin: 0px 0px 10px 0px;
+        }
+
+        #bottom {
+            position: relative;
+            background-color: #c2dfef;
+            padding: 5px;
+            margin: 10px 0px 0px 0px;
+        }
+
+        #left {
+            float: left;
+            background-color: #ece3a5;
+            padding: 5px;
+            width: 150px;
+        }
+
+        #right {
+            float: right;
+            background-color: #ece3a5;
+            padding: 5px;
+            width: 150px;
+        }
+
+        .center_content {
+            position: relative;
+            background-color: #dddddd;
+            padding: 5px;
+        }
+
+        .left_content {
+            background-color: #dddddd;
+            padding: 5px;
+            margin-left: 170px;
+        }
+
+        .right_content {
+            background-color: #dddddd;
+            padding: 5px;
+            margin: 0px 170px 0px 170px;
+        }
+
+        #top a:link, #top a:visited {
+            color: white;
+            font-weight : bold;
+            text-decoration: none;
+        }
+
+        #top a:link:hover, #top a:visited:hover  {
+            color: black;
+            font-weight : bold;
+            text-decoration : underline;
+        }
+        body {
+            background-color: #ffffff;
+            font-size: 12px;
+            font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+            color: #000000;
+            margin: 10px;
+        }
+
+        h1 {
+            font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+            border-bottom: 1px solid #AFAFAF;
+            font-size:  16px;
+            font-weight: bold;
+            margin: 0px;
+            padding: 0px;
+            color: #D20005;
+        }
+
+        a:link, a:visited {
+            color: #045491;
+            font-weight : bold;
+            text-decoration: none;
+        }
+
+        a:link:hover, a:visited:hover  {
+            color: #045491;
+            font-weight : bold;
+            text-decoration : underline;
+        }
+    </style>
+    <title>Life Coach</title>
+</h:head>
+<h:body>
+    <div id="top" class="top">
+        <ui:insert name="top">
+            <h:form>
+                <h1><h:commandLink value="LIFE COACH" action="/index"/></h1>
+            </h:form>
+        </ui:insert>
+    </div>
+    <div>
+        <div id="left">
+            <ui:insert name="left">
+                <h:form>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/facebook/facebookLogin.xhtml">Login With FaceBook</h:outputLink>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/schedule/loignwithgoogle.xhtml">Login with G+</h:outputLink>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/measure/measuretype.xhtml">Register Measure Type</h:outputLink>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/schedule/schedule.xhtml">Schedule</h:outputLink>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/schedule/viewschedule.xhtml">View Schedule</h:outputLink>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/measure/measure.xhtml">Create Measure</h:outputLink>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/goal/goal.xhtml">Create Goal</h:outputLink>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/goal/viewgoals.xhtml">View Goals</h:outputLink>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/feedback/motivation.xhtml">Get Motivated</h:outputLink>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/feedback/workout.xhtml">Get Workout Advice</h:outputLink>
+                    <p/><h:outputLink value="${facesContext.externalContext.requestContextPath}/faces/feedback/awareness.xhtml">Awareness Info</h:outputLink>
+                </h:form>
+            </ui:insert>
+        </div>
+        <div id="content" class="left_content">
+            <ui:insert name="content">Content</ui:insert>
+        </div>
+    </div>
+</h:body>
+</html>

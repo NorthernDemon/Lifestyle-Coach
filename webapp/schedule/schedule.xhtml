@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<body>
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h1>SCHEDULE</h1>
+        <h:form id="scheduleform">
+            <div>
+                <fieldset>
+                    <div style="color: red;"><h3><h:outputText value="#{scheduleMBean.successMessage}"></h:outputText></h3></div>
+                    <legend>Details</legend>
+                    <table>
+                        <tr>
+                            <td>Start Date</td>
+                            <td><h:inputText id="datepicker" value="#{scheduleMBean.startDate}" required="true"/>yyyy-MM-dd</td>
+                        </tr>
+                        <tr>
+                            <td>End Date</td>
+                            <td><h:inputText id="end" value="#{scheduleMBean.endDate}" required="true"/>yyyy-MM-dd</td>
+                        </tr>
+                        <tr>
+                            <td>Summary</td>
+                            <td><h:inputText value="#{scheduleMBean.summary}" style="width:350px" required="true"/></td>
+
+                        </tr>
+
+                        <tr>
+                            <td>Location</td>
+                            <td><h:inputText value="#{scheduleMBean.location}" style="width:350px" required="true"/></td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </div>
+            <div style="margin-left: 120px;">
+                <h:commandButton value="Create Schedule" action="schedule"
+                                 actionListener="#{scheduleMBean.registerSchedule}"/>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</body>
+</html>

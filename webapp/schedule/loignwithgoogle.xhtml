@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<head>
+    <script src="https://apis.google.com/js/client:platform.js" async="defer" type="text/javascript"></script>
+    <script type="text/javascript">
+        function signinCallback(authResult) {
+            if (authResult['status']['signed_in']) {
+                document.getElementById('signinButton').setAttribute('style', 'display: none');
+                document.getElementById('googleform:googleaccesstoken').value=authResult['access_token'];
+            } else {
+                // Update the app to reflect a signed out user
+                // Possible error values:
+                //   "user_signed_out" - User is signed-out
+                //   "access_denied" - User denied access to your app
+                //   "immediate_failed" - Could not automatically log in the user
+                console.log('Sign-in state: ' + authResult['error']);
+            }
+        }
+    </script>
+    <title></title>
+</head>
+<body>
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h1>SCHEDULE</h1>
+        <h:form id="googleform">
+          <span id="signinButton">
+  <span
+          class="g-signin"
+          data-callback="signinCallback"
+          data-clientid="815360076208-v31l0vasf2so0id50c85kb38msvi1paa.apps.googleusercontent.com"
+          data-cookiepolicy="single_host_origin"
+          data-scope="https://www.googleapis.com/auth/drive">
+  </span>
+
+</span>
+            <div style="margin-right: 200px;">
+                <h:inputHidden id="googleaccesstoken"/>
+                <h:commandButton id="submit" action="loignwithgoogle" value="Initialise Token"
+                                 actionListener="#{scheduleMBean.InitialiseToken}"/>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</body>
+</html>
