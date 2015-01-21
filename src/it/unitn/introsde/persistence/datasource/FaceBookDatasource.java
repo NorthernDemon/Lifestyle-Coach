@@ -6,6 +6,7 @@ import com.restfb.Parameter;
 import com.restfb.Version;
 import com.restfb.types.FacebookType;
 import com.restfb.types.User;
+import it.unitn.introsde.persistence.entity.Goal;
 import it.unitn.introsde.persistence.entity.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,9 +30,11 @@ public class FaceBookDatasource {
         return new Person(user.getFirstName(), user.getLastName(), new SimpleDateFormat("MM/dd/yyyy").parse(user.getBirthday()), accessToken);
     }
 
-    public void postToWall(String accessToken) {
+    public <T>void postToWall(String accessToken,T object) {
+        Goal goal = (Goal)object;
         FacebookClient facebookClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_2);
-        FacebookType publishMessageResponse = facebookClient.publish("me/feed", FacebookType.class, Parameter.with("message", "RestFB test"));
+        FacebookType publishMessageResponse = facebookClient.publish("me/feed", FacebookType.class, Parameter.with("message","Goal to Achieve: " +
+                goal.getMessage()+" from: "+goal.getStart()+" to "+goal.getEnd()+" Created by: "+goal.getPerson().getName() ));
         logger.debug("Published message ID: " + publishMessageResponse.getId());
     }
 }

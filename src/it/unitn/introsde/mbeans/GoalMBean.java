@@ -12,11 +12,10 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by davie on 1/10/2015.
@@ -71,12 +70,15 @@ public class GoalMBean implements Serializable {
         Date startDate = getDate(getEndDate().split("-"));
         Date endDate = getDate(getStartDate().split("-"));
 
-        ResponseEntity<?> personExchange = getGenericResponse("/getpersonbyid-process/" + getPerson(), HttpMethod.GET, Person.class, null);
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+
+        ResponseEntity<?> personExchange = getGenericResponse("/getpersonbyid-process/" + getPerson(), HttpMethod.GET, Person.class,null);
         ResponseEntity<?> creatorExchange = getGenericResponse("/getpersonbyid-process/" + getCreator(), HttpMethod.GET, Person.class, null);
         ResponseEntity<?> measureTypeExchange = getGenericResponse("/getmeasureTypeById-process/" + getMeasureType(), HttpMethod.GET, MeasureType.class, null);
 
         Goal goal = new Goal((Person) creatorExchange.getBody(), (Person) creatorExchange.getBody(), (MeasureType) measureTypeExchange.getBody(), 0, getMessage(), startDate, endDate);
-        ResponseEntity<?> exchange = restTemplate.exchange(url + "/goal-process", httpMethod, createHeader(goal), Goal.class);
+        ResponseEntity<?> exchange = restTemplate.exchange(url + "/goal-process?fbAccessToken="+sessionMap.get("fbaccesstoken"), httpMethod, createHeader(goal), Goal.class);
         logger.debug("Status Code === " + exchange.getStatusCode().is2xxSuccessful());
         logger.debug("message payLoad === " + exchange.getBody().toString());
         if (exchange.getStatusCode().is2xxSuccessful()) {

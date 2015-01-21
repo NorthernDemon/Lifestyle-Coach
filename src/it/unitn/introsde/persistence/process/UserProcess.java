@@ -50,9 +50,9 @@ public class UserProcess extends AbstractProcess {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Goal> createGoal(
             @RequestHeader(value = "Accept") String accept,
-            @RequestBody Goal goal) {
+            @RequestBody Goal goal,@RequestParam(value = "fbAccessToken") String fbaccessToken) {
         logger.debug("Incoming [goal-process] with accept=" + accept + ", goal=" + goal);
-        String url = ServiceConfiguration.getUrl() + "/goal";
+        String url = ServiceConfiguration.getUrl() + "/goal?fbAccessToken="+fbaccessToken;
         ResponseEntity<?> exchange = restTemplate.exchange(url, HttpMethod.POST, createHeader(accept, goal), Goal.class);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             Goal createdGoal = (Goal) exchange.getBody();

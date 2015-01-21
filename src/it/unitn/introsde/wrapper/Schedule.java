@@ -33,6 +33,9 @@ public class Schedule implements Serializable {
     @JsonProperty(required = true)
     private String googleAccessToken;
 
+    @JsonProperty(required = true)
+    private String faceBookAccessToken;
+
     public Schedule() {
     }
 
@@ -82,6 +85,14 @@ public class Schedule implements Serializable {
 
     public void setGoogleAccessToken(String googleAccessToken) {
         this.googleAccessToken = googleAccessToken;
+    }
+
+    public String getFaceBookAccessToken() {
+        return faceBookAccessToken;
+    }
+
+    public void setFaceBookAccessToken(String faceBookAccessToken) {
+        this.faceBookAccessToken = faceBookAccessToken;
     }
 
     @Override

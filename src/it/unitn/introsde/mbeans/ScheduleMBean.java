@@ -51,7 +51,7 @@ public class ScheduleMBean implements Serializable {
         Map<String, String> requestParameters = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String googleaccesstoken = requestParameters.get("googleform:googleaccesstoken");
         sessionMap.put("googleaccesstoken", googleaccesstoken);
-        logger.error("googleaccesstoken>>> " + googleaccesstoken);
+        logger.debug("googleaccesstoken>>> " + googleaccesstoken);
     }
 
     public void registerSchedule() throws Exception {
