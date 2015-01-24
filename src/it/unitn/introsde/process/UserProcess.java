@@ -1,4 +1,4 @@
-package it.unitn.introsde.persistence.process;
+package it.unitn.introsde.process;
 
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.entity.Goal;

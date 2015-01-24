@@ -1,4 +1,4 @@
-package it.unitn.introsde.persistence.datasource;
+package it.unitn.introsde.datasource;
 
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;

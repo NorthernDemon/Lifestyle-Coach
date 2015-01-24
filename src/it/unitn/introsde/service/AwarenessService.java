@@ -1,8 +1,8 @@
-package it.unitn.introsde.persistence.service;
+package it.unitn.introsde.service;
 
 import it.unitn.introsde.ServiceConfiguration;
+import it.unitn.introsde.datasource.AwarenessDatasource;
 import it.unitn.introsde.persistence.dao.PersonDao;
-import it.unitn.introsde.persistence.datasource.AwarenessDatasource;
 import it.unitn.introsde.persistence.entity.Person;
 import it.unitn.introsde.wrapper.Awareness;
 import org.apache.logging.log4j.LogManager;

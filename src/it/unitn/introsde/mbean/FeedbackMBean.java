@@ -1,4 +1,4 @@
-package it.unitn.introsde.mbeans;
+package it.unitn.introsde.mbean;
 
 import it.unitn.introsde.wrapper.Awareness;
 import it.unitn.introsde.wrapper.Motivation;

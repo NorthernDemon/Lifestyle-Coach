@@ -1,6 +1,6 @@
-package it.unitn.introsde.mbeans;
+package it.unitn.introsde.mbean;
 
-import it.unitn.introsde.persistence.process.AbstractProcess;
+import it.unitn.introsde.process.AbstractProcess;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
