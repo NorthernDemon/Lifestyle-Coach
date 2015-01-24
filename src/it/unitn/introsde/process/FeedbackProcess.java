@@ -98,7 +98,7 @@ public class FeedbackProcess extends AbstractProcess {
 
     private WorkoutSOAP getSOAP() throws MalformedURLException {
         URL url = new URL(ServiceConfiguration.getWsdl());
-        QName qname = new QName("http://soap.service.persistence.introsde.unitn.it/", "WorkoutSOAPImplService");
+        QName qname = new QName("http://soap.service.introsde.unitn.it/", "WorkoutSOAPImplService");
         Service service = Service.create(url, qname);
         return service.getPort(WorkoutSOAP.class);
     }
