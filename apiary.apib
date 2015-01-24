@@ -1,0 +1,413 @@
+FORMAT: 1A
+
+# LifestyleCoach
+Ultimate Matteo helper. Specifies endpoints for client users, such as JSF, mobile apps and so on.
+
+## PersonService [/person-process]
+### Create Person [POST]
+
++ Request (application/xml)
+
+        <person>
+            <id>0</id>
+            <name>Chuck</name>
+            <surname>Norris</surname>
+            <birthday>1945-01-01</birthday>
+            <facebookId>200500</facebookId>
+            <googleId>200501</googleId>
+        </person>
+        
++ Response 200 (application/xml)
+
+        <person>
+            <id>101</id>
+            <name>Chuck</name>
+            <surname>Norris</surname>
+            <birthday>1945-01-01</birthday>
+            <facebookId>200500</facebookId>
+            <googleId>200501</googleId>
+        </person>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+
+## GoalService [/goal-process]
+### Create Goal [POST]
+
++ Request (application/xml)
+
+        <goal>
+            <id>0</id>
+            <creator>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </creator>
+            <person>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </person>
+            <measureType>
+                <id>3</id>
+                <type>height</type>
+                <unit>kilometers</unit>
+            </measureType>
+            <value>72.0</value>
+            <message>You can do it!</message>
+            <start>2014-06-10 13:53:25.945</start>
+            <end>2014-06-15 13:53:25.945</end>
+            <finished/>
+        </goal>
+
++ Response 200 (application/xml)
+
+        <goal>
+            <id>101</id>
+            <creator>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </creator>
+            <person>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </person>
+            <measureType>
+                <id>3</id>
+                <type>height</type>
+                <unit>kilometers</unit>
+            </measureType>
+            <value>72.0</value>
+            <message>You can do it!</message>
+            <start>2014-06-10 13:53:25.945</start>
+            <end>2014-06-15 13:53:25.945</end>
+            <finished/>
+        </goal>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+
+## MeasureService [/measure-process]
+### Create Measure [POST]
+
++ Request (application/xml)
+
+        <measure>
+            <id>0</id>
+            <person>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </person>
+            <measureType>
+                <id>3</id>
+                <type>height</type>
+                <unit>kilometers</unit>
+            </measureType>
+            <value>72.1</value>
+            <created>2014-06-12 13:53:26.70</created>
+        </measure>
+
++ Response 200 (application/xml)
+
+        <measure>
+            <id>101</id>
+            <person>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </person>
+            <measureType>
+                <id>3</id>
+                <type>height</type>
+                <unit>kilometers</unit>
+            </measureType>
+            <value>72.1</value>
+            <created>2014-06-12 13:53:26.70</created>
+        </measure>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+
+## ScheduleService [/schedule-process?googleAccessToken={googleAccessToken}]
+### Create Schedule [POST]
+
++ Parameters
+    + googleAccessToken (required, string, `googleAccessToken`) ... Google access token, received after sign in.
+
++ Request (application/xml)
+
+        <schedule>
+            <startDate>2014-06-12 13:53:26.70</startDate>
+            <endDate>2015-06-12 13:53:26.70</endDate>
+            <summary>Go to Doctor</summary>
+            <location>Hospital</location>
+        </measure>
+
++ Response 200 (application/xml)
+
+        <schedule>
+            <startDate>2014-06-12 13:53:26.70</startDate>
+            <endDate>2015-06-12 13:53:26.70</endDate>
+            <summary>Go to Doctor</summary>
+            <location>Hospital</location>
+        </schedule>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+        
++ Response 400 (application/text)
+
+        Bad Request
+
+## MeasureTypeService [/measureType-process]
+### Create MeasureType [POST]
+
++ Request (application/xml)
+
+        <measureType>
+            <id>0</id>
+            <type>weight</type>
+            <unit>kg</unit>
+        </measureType>
+
++ Response 200 (application/xml)
+
+        <measureType>
+            <id>3</id>
+            <type>weight</type>
+            <unit>kg</unit>
+        </measureType>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+        
+## PersonService [/people-process]
+### Get People [GET]
+
++ Response 200 (application/xml)
+
+        <people>
+            <person>
+                <id>100</id>
+                <name>Matteo</name>
+                <surname>Matteovich</surname>
+                <birthday>1965-01-01</birthday>
+                <facebookId>200556</facebookId>
+                <googleId>200557</googleId>
+            </person>
+            <person>
+                <id>101</id>
+                <name>Chuck</name>
+                <surname>Norris</surname>
+                <birthday>1945-01-01</birthday>
+                <facebookId>200500</facebookId>
+                <googleId>200501</googleId>
+            </person>
+        </people>
+
++ Response 404 (application/text)
+
+        Not Found
+
+## PersonService [/fbUser-process/{accessToken}]
+### Get Person From FaceBook [GET]
+
++ Parameters
+    + accessToken (required, string, `accessToken`) ... Facebook access token, received after sign in.
+
++ Response 200 (application/xml)
+
+        <person>
+            <id>101</id>
+            <name>Chuck</name>
+            <surname>Norris</surname>
+            <birthday>1945-01-01</birthday>
+            <facebookId>200500</facebookId>
+            <googleId>200501</googleId>
+        </person>
+
++ Response 404 (application/text)
+
+        Not Found
+
+## ScheduleService [/event-process?accessToken={accessToken}]
+### Get Daily Events [GET]
+
++ Parameters
+    + accessToken (required, string, `accessToken`) ... Facebook access token, received after sign in.
+
++ Response 200 (application/xml)
+
+        <schedules>
+            <schedule>
+                <startDate>2014-06-12 13:53:26.70</startDate>
+                <endDate>2015-06-12 13:53:26.70</endDate>
+                <summary>Go to Doctor</summary>
+                <location>Hospital</location>
+            </schedule>
+            <schedule>
+                <startDate>2015-06-12 13:53:26.70</startDate>
+                <endDate>2015-06-12 13:53:26.70</endDate>
+                <summary>Go to Doctor</summary>
+                <location>Hospital</location>
+            </schedule>
+        </schedules>
+        
++ Response 404 (application/text)
+
+        Not Found
+
+## MeasureTypeService [/measureTypes-process]
+### Get MeasureTypes [GET]
+
++ Response 200 (application/xml)
+    
+        <measureTypes>
+            <measureType>
+                <id>1</id>
+                <type>weight</type>
+                <unit>kg</unit>
+            </measureType>
+            <measureType>
+                <id>2</id>
+                <type>height</type>
+                <unit>m</unit>
+            </measureType>
+        </measureTypes>
+
++ Response 404 (application/text)
+
+        Not Found
+        
+## PersonService [/getPersonById-process/{personId}]
+### Get Person By Id [GET]
+
++ Parameters
+    + personId (required, number, `101`) ... Id of the person we want to get.
+
++ Response 200 (application/xml)
+
+        <person>
+            <id>101</id>
+            <name>Chuck</name>
+            <surname>Norris</surname>
+            <birthday>1945-01-01</birthday>
+            <facebookId>200500</facebookId>
+            <googleId>200501</googleId>
+        </person>
+
++ Response 404 (application/text)
+
+        Not Found
+        
+## MeasureTypeService [/getMeasureTypeById-process/{measureTypeId}]
+### Get MeasureType By Id [GET]
+
++ Parameters
+    + measureTypeId (required, number, `1`) ... Id of the measure type we want to get.
+
++ Response 200 (application/xml)
+    
+        <measureType>
+            <id>1</id>
+            <type>weight</type>
+            <unit>kg</unit>
+        </measureType>
+
++ Response 404 (application/text)
+
+        Not Found
+        
+## MotivationService [/motivation-process/{personId}]
+### Get Motivated [GET]
+
++ Parameters
+    + personId (required, number, `1`) ... Id of the person we want to motivate.
+
++ Response 200 (application/xml)
+
+        <motivation>
+            <type>text</type>
+            <value>Chuck Norris uses ribbed condoms inside out, so he gets the pleasure.</value>
+        </motivation>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+
+## AwarenessService [/awareness-process/{personId}]
+### Get Awareness [GET]
+
++ Parameters
+    + personId (required, number, `1`) ... Id of the person we want to aware.
+
++ Response 200 (application/xml)
+
+        <awareness>
+            <type>severe</type>
+            <value>Chuck, you gonna die.</value>
+        </awareness>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+
+## ProgressService [/progress-process/{personId}]
+### Get Progress [GET]
+
++ Parameters
+    + personId (required, number, `1`) ... Id of the person we want to progress.
+
++ Response 200 (application/xml)
+
+        <progress>
+            <type>You</type>
+            <value>Suck</value>
+        </progress>
+
++ Response 406 (application/text)
+
+        Not Acceptable
+
+## WorkoutService [/workout-process/{personId}]
+### Get Workout [GET]
+
++ Parameters
+    + personId (required, number, `1`) ... Id of the person we want to workout.
+
++ Response 200 (application/xml)
+
+        <workout>
+            <name>Incline Plank with alternate floor touch</name>
+            <description>Perform the plank with legs elevated, feet on a gymball. Once stabilised, slowly move one foot sideways off the ball, then make it touch the floor, then come back to starting position. Alternate with the other foot. This is a core exercise.</description>
+        </workout>
+
++ Response 406 (application/text)
+
+        Not Acceptable

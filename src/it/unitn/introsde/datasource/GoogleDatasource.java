@@ -1,4 +1,4 @@
-package it.unitn.introsde.persistence.datasource;
+package it.unitn.introsde.datasource;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;

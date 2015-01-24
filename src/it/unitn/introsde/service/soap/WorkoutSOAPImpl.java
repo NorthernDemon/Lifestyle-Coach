@@ -1,7 +1,7 @@
-package it.unitn.introsde.persistence.service.soap;
+package it.unitn.introsde.service.soap;
 
+import it.unitn.introsde.datasource.WorkoutDatasource;
 import it.unitn.introsde.persistence.dao.PersonDao;
-import it.unitn.introsde.persistence.datasource.WorkoutDatasource;
 import it.unitn.introsde.persistence.entity.Person;
 import it.unitn.introsde.wrapper.Workout;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +14,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 @Service
-@WebService(endpointInterface = "it.unitn.introsde.persistence.service.soap.WorkoutSOAP")
+@WebService(endpointInterface = "it.unitn.introsde.service.soap.WorkoutSOAP")
 public class WorkoutSOAPImpl implements WorkoutSOAP {
 
     private static final Logger logger = LogManager.getLogger();
