@@ -1,4 +1,4 @@
-package it.unitn.introsde.persistence.service;
+package it.unitn.introsde.service;
 
 import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.persistence.dao.MeasureDao;

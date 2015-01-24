@@ -1,8 +1,8 @@
-package it.unitn.introsde.persistence.service;
+package it.unitn.introsde.service;
 
 import it.unitn.introsde.ServiceConfiguration;
+import it.unitn.introsde.datasource.FaceBookDatasource;
 import it.unitn.introsde.persistence.dao.GoalDao;
-import it.unitn.introsde.persistence.datasource.FaceBookDatasource;
 import it.unitn.introsde.persistence.entity.Goal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

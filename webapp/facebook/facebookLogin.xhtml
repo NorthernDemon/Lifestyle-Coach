@@ -12,7 +12,6 @@
         <h:form id="fbform">
             <div id="fb-root"></div>
             <script type="text/javascript">
-
                 function statusChangeCallback(response) {
                     console.log('statusChangeCallback');
                     console.log(response);
@@ -61,7 +60,7 @@
                     FB.init({
                         appId      : '1394018220898026',
                         xfbml      : true,
-                        version    : 'v2.1'
+                        version    : 'v2.2'
                     });
 
                     FB.getLoginStatus(function(response) {
@@ -80,7 +79,6 @@
                         document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!';
                     });
                 }
-
             </script>
             <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="false" scope="public_profile,email,publish_actions,user_birthday" onlogin="checkLoginState();"></div>
             <div id="status"></div>
@@ -92,4 +90,3 @@
 
 </body>
 </html>
-

@@ -1,4 +1,4 @@
-package it.unitn.introsde.persistence.service.soap;
+package it.unitn.introsde.service.soap;
 
 import it.unitn.introsde.wrapper.Workout;
 

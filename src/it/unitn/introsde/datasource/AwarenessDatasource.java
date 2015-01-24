@@ -1,4 +1,4 @@
-package it.unitn.introsde.persistence.datasource;
+package it.unitn.introsde.datasource;
 
 import it.unitn.introsde.persistence.entity.Person;
 import it.unitn.introsde.wrapper.Awareness;

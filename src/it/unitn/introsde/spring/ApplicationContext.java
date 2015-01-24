@@ -27,7 +27,7 @@ import java.beans.PropertyVetoException;
  * - JAX WS service exporter
  */
 @Configuration
-@ComponentScan("it.unitn.introsde.persistence")
+@ComponentScan("it.unitn.introsde")
 @EnableWebMvc
 @EnableTransactionManagement
 public class ApplicationContext {

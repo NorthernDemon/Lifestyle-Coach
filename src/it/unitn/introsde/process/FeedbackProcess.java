@@ -1,7 +1,7 @@
-package it.unitn.introsde.persistence.process;
+package it.unitn.introsde.process;
 
 import it.unitn.introsde.ServiceConfiguration;
-import it.unitn.introsde.persistence.service.soap.WorkoutSOAP;
+import it.unitn.introsde.service.soap.WorkoutSOAP;
 import it.unitn.introsde.wrapper.Awareness;
 import it.unitn.introsde.wrapper.Motivation;
 import it.unitn.introsde.wrapper.Progress;
@@ -98,7 +98,7 @@ public class FeedbackProcess extends AbstractProcess {
 
     private WorkoutSOAP getSOAP() throws MalformedURLException {
         URL url = new URL(ServiceConfiguration.getWsdl());
-        QName qname = new QName("http://soap.service.persistence.introsde.unitn.it/", "WorkoutSOAPImplService");
+        QName qname = new QName("http://soap.service.introsde.unitn.it/", "WorkoutSOAPImplService");
         Service service = Service.create(url, qname);
         return service.getPort(WorkoutSOAP.class);
     }
