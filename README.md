@@ -4,32 +4,7 @@ LifestyleCoach
 Introduction
 -------
 
-SDE project 2014/2015
-
-LifestyleCoach is designed to help fatty lazy guys, like Matteo Matteovich, to get in shape! Our solution is web service oriented and opened for integration with other datasources.
-
-####N-tier architecture includes
-    - Client layer
-    - Process layer
-    - Service layer
-    - Local datasource
-    - External datasources
-
-####Application is done using
-    - Spring Framework
-    - Hibernate
-    - JSF
-    - JPA
-    - Log4J
-    - Jackson
-    - H2 in-memory database
-    - Embedded Tomcat
-    
-####External datasource
-    - Google Calendar
-    - Facebook
-    - Mashape
-    - and much more! 
+LifestyleCoach is designed to help fatty lazy guys, like [Matteo Matteovich](https://docs.google.com/document/d/1kcRTSzxkvRPT5Lp3A1eqqR51NNqHHHbmHFrjZKqs4Kc/edit?usp=sharing), to get in shape! Our solution is service oriented and opened for integration with other datasources.
 
 ####Features
     - login with Facebook account to import personal data and post to the wall.
@@ -37,19 +12,35 @@ LifestyleCoach is designed to help fatty lazy guys, like Matteo Matteovich, to g
     - create Measure, Goal and MeasureType
     - view Goal, Awareness info, Motivation and Workout tips
 
+####Frameworks
+    - Spring Framework
+    - Hibernate
+    - JPA
+    - Jackson
+    - H2 in-memory database
+    - Log4J
+    - Embedded Tomcat
+    - JSF
+    
+####External datasources
+    - Google Calendar
+    - Facebook
+    - MashApe
+    - and much more!
+
 Installation
 -------
 Requirements: *JDK 7*, *ANT*, *IVY*
 
 Configure service parameters in **service.properties** file.
 
-####To run inside of IDE:
+####Run inside of IDE
     - ant compile
     - run main StandaloneServerLauncher.java
     - (optional test) run main StandaloneClientLauncher.java
     - http://{host}:{port} (example: http://localhost:9915)
     
-####To run inside of Application Server:
+####Run inside of Application Server
     - ant create.war
     - deploy to Application Server
     - http://{host}:{port} (example: http://localhost:9915)
@@ -68,6 +59,7 @@ Architecture Diagram
 
 Documentation
 -------
+Specification: https://docs.google.com/document/d/1kcRTSzxkvRPT5Lp3A1eqqR51NNqHHHbmHFrjZKqs4Kc/edit?usp=sharing
 Apiary: http://docs.lifestylecoach1.apiary.io/
 
 Authors
