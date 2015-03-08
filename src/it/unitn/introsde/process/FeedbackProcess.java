@@ -4,7 +4,6 @@ import it.unitn.introsde.ServiceConfiguration;
 import it.unitn.introsde.service.soap.WorkoutSOAP;
 import it.unitn.introsde.wrapper.Awareness;
 import it.unitn.introsde.wrapper.Motivation;
-import it.unitn.introsde.wrapper.Progress;
 import it.unitn.introsde.wrapper.Workout;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,24 +56,6 @@ public class FeedbackProcess extends AbstractProcess {
             return new ResponseEntity<>(awareness, exchange.getStatusCode());
         } else {
             logger.debug("Outgoing [awareness-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
-            return new ResponseEntity<>(exchange.getStatusCode());
-        }
-    }
-
-    @RequestMapping(value = "/progress-process/{personId}", method = RequestMethod.GET,
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Progress> getProgression(
-            @RequestHeader(value = "Accept") String accept,
-            @PathVariable("personId") int personId) {
-        logger.debug("Incoming [progress-process] with accept=" + accept + ", personId=" + personId);
-        ResponseEntity<?> exchange = request("/progress/" + personId, HttpMethod.GET, Progress.class, accept);
-        if (exchange.getStatusCode().is2xxSuccessful()) {
-            Progress progress = (Progress) exchange.getBody();
-            logger.debug("Outgoing [progress-process] with accept=" + accept + ", progress=" + progress);
-            return new ResponseEntity<>(progress, exchange.getStatusCode());
-        } else {
-            logger.debug("Outgoing [progress-process] with accept=" + accept + ", statusCode=" + exchange.getStatusCode());
             return new ResponseEntity<>(exchange.getStatusCode());
         }
     }

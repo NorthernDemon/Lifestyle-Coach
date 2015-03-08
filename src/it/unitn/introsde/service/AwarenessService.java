@@ -38,7 +38,7 @@ public class AwarenessService {
         if (awareness == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        logger.debug("Person awared with=" + awareness);
+        logger.debug("Person awareness=" + awareness);
         return new ResponseEntity<>(awareness, HttpStatus.OK);
     }
 

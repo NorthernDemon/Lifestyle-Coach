@@ -28,7 +28,6 @@ public class FaceBookMBean extends AbstractMBean implements Serializable {
 
     private Person getFbUser() {
         ResponseEntity<?> exchange = request("/fbUser-process/" + sessionMap.get("fbaccesstoken"), HttpMethod.GET, Person.class, MediaType.APPLICATION_XML_VALUE);
-        logger.debug("message payLoad === " + exchange);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             return (Person) exchange.getBody();
         } else {
@@ -41,11 +40,11 @@ public class FaceBookMBean extends AbstractMBean implements Serializable {
         ResponseEntity<?> exchange = request("/person-process", HttpMethod.POST, Person.class, person, MediaType.APPLICATION_XML_VALUE);
         if (exchange.getStatusCode().is2xxSuccessful()) {
             person = (Person) exchange.getBody();
-            logger.debug("created Person=== " + person);
+            logger.debug("Created person=" + person);
             sessionMap.put("personId", person.getId());
             return person;
         } else {
-            logger.error("failed to create person!");
+            logger.error("failed to create person");
             return null;
         }
     }

@@ -14,6 +14,8 @@ public abstract class ServiceConfiguration {
 
     private static final Logger logger = LogManager.getLogger();
 
+    public static final String CONFIGURATION_FILE = "service.properties";
+
     public final static String SCHEMA = "lifestylecoach";
 
     public final static String NAME = '/' + SCHEMA;
@@ -29,13 +31,13 @@ public abstract class ServiceConfiguration {
     static {
         try {
             Properties properties = new Properties();
-            properties.load(new FileInputStream("service.properties"));
+            properties.load(new FileInputStream(CONFIGURATION_FILE));
             port = Integer.parseInt(properties.getProperty("port"));
             host = properties.getProperty("host");
             url = "http://" + host + ":" + port + NAME;
             wsdl = "http://" + host + ":" + Integer.parseInt(properties.getProperty("wsdl-port")) + NAME + "?wsdl";
         } catch (IOException e) {
-            logger.error(e);
+            logger.error("Failed to load service configuration", e);
         }
     }
 
