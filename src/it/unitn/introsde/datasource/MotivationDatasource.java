@@ -28,7 +28,7 @@ public class MotivationDatasource {
 //            }
             return new Motivation("text", getJoke(person.getName(), person.getSurname()));
         } catch (UnirestException e) {
-            logger.error("Unirest failed in motivation datasource", e);
+            logger.error("Unirest failed", e);
             return null;
         }
     }

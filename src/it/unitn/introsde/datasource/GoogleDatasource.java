@@ -8,7 +8,6 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
-import com.google.api.services.calendar.model.Events;
 import it.unitn.introsde.wrapper.Schedule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,8 +15,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -27,18 +26,18 @@ public class GoogleDatasource {
     private static final Logger logger = LogManager.getLogger();
 
     public Event createEvent(Schedule schedule, String googleAccessToken) throws Exception {
-        logger.debug("access-token>> " + googleAccessToken);
-        logger.debug("schedule object>>> " + schedule.toString());
+        Event createdEvent = getGoogleService(googleAccessToken).events().insert("primary", getEvent(schedule)).execute();
+        logger.info("createdEvent>>> " + createdEvent);
+        return createdEvent;
+    }
 
+    private Event getEvent(Schedule schedule) {
         Event event = new Event();
         event.setSummary(schedule.getSummary());
         event.setLocation(schedule.getLocation());
         event.setStart(getDate(schedule.getStartDate()));
         event.setEnd(getDate(schedule.getEndDate()));
-
-        Event createdEvent = getGoogleService(googleAccessToken).events().insert("primary", event).execute();
-        logger.info("createdEvent>>> " + createdEvent);
-        return createdEvent;
+        return event;
     }
 
     private EventDateTime getDate(Date date) {
@@ -46,10 +45,8 @@ public class GoogleDatasource {
     }
 
     public List<Schedule> getCalendarEvent(String accessToken) throws Exception {
-        Events events = getGoogleService(accessToken).events().list("primary").execute();
-        logger.debug("events>>>> " + events);
-        List<Schedule> schedules = new ArrayList<>(events.size());
-        for (Event event : events.getItems()) {
+        List<Schedule> schedules = new LinkedList<>();
+        for (Event event : getGoogleService(accessToken).events().list("primary").execute().getItems()) {
             schedules.add(new Schedule(new Date(), new Date(), event.getSummary(), event.getLocation()));
         }
         return schedules;
