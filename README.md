@@ -55,7 +55,6 @@ Architecture Diagram
 Documentation
 -------
 Apiary: http://docs.lifestylecoach1.apiary.io/
-Specification: https://docs.google.com/document/d/1kcRTSzxkvRPT5Lp3A1eqqR51NNqHHHbmHFrjZKqs4Kc/edit?usp=sharing
 
 Authors
 -------
