@@ -78,14 +78,4 @@
         <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="lib.path.id" includeAntRuntime="false"/>
         <copy file="${log.file}" todir="${build.dir}"/>
     </target>
-
-    <!-- PART 4: actual meat of the application -->
-    <target name="create.war" depends="compile">
-        <war destfile="${war.file}" webxml="${webxml.file}">
-            <fileset dir="webapp">
-                <include name="**/*.*"/>
-            </fileset>
-            <classes dir="${build.dir}"/>
-        </war>
-    </target>
 </project>

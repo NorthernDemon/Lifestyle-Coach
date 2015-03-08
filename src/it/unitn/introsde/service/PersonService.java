@@ -63,7 +63,7 @@ public class PersonService {
             logger.debug("Person=" + person);
             return new ResponseEntity<>(person, HttpStatus.OK);
         } catch (ParseException e) {
-            logger.error(e);
+            logger.error("Failed to parse the person", e);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

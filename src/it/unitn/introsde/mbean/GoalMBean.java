@@ -45,19 +45,16 @@ public class GoalMBean extends AbstractMBean implements Serializable {
     }
 
     public void registerGoal() {
-        Date startDate = getDate(getEndDate().split("-"));
-        Date endDate = getDate(getStartDate().split("-"));
-
         ResponseEntity<?> creatorExchange = request("/getPersonById-process/" + getCreator(), HttpMethod.GET, Person.class, MediaType.APPLICATION_XML_VALUE);
         ResponseEntity<?> measureTypeExchange = request("/getMeasureTypeById-process/" + getMeasureType(), HttpMethod.GET, MeasureType.class, MediaType.APPLICATION_XML_VALUE);
-
+        Date startDate = getDate(getEndDate().split("-"));
+        Date endDate = getDate(getStartDate().split("-"));
         Goal goal = new Goal((Person) creatorExchange.getBody(), (Person) creatorExchange.getBody(), (MeasureType) measureTypeExchange.getBody(), 0, getMessage(), startDate, endDate);
         ResponseEntity<?> exchange = request("/goal-process?fbAccessToken=" + sessionMap.get("fbaccesstoken"), HttpMethod.POST, Goal.class, goal, MediaType.APPLICATION_XML_VALUE);
-        logger.debug("message payLoad === " + exchange.getBody().toString());
         if (exchange.getStatusCode().is2xxSuccessful()) {
-            setSuccessMessage("Goal Registered Successfully!!");
+            setSuccessMessage("Goal Registered Successfully");
         } else {
-            setSuccessMessage("oops! an error occured!!");
+            setSuccessMessage("oops! an error occurred");
         }
     }
 

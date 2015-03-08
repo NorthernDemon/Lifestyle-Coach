@@ -7,10 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 
 public final class StandaloneServerLauncher {
 
@@ -30,7 +26,7 @@ public final class StandaloneServerLauncher {
                         tomcat.getServer().stop();
                     }
                 } catch (LifecycleException e) {
-                    logger.error(e);
+                    logger.error("Failed to stop Tomcat server", e);
                 }
             }
         });

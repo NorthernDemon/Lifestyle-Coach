@@ -35,14 +35,13 @@ public class ScheduleMBean extends AbstractMBean implements Serializable {
     public void registerSchedule() throws Exception {
         Date startDate = getDate(getStartDate().split("-"));
         Date endDate = getDate(getEndDate().split("-"));
-
         Schedule schedule = new Schedule(startDate, endDate, getSummary(), getLocation());
         ResponseEntity<?> exchange = request("schedule-process/?googleAccessToken=" + sessionMap.get("googleaccesstoken"), HttpMethod.POST, Schedule.class, schedule, MediaType.APPLICATION_XML_VALUE);
         logger.debug("message payLoad === " + exchange);
         if (exchange.getStatusCode().is2xxSuccessful()) {
-            setSuccessMessage("Schedule created Successfully!!");
+            setSuccessMessage("Schedule Registered Successfully");
         } else {
-            setSuccessMessage("oops! an error occured schedule not created");
+            setSuccessMessage("oops! an error occurred");
         }
     }
 

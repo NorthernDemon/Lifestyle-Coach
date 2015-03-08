@@ -27,7 +27,7 @@ public class WorkoutDatasource {
             JSONObject exercise = result.getJSONObject(new Random().nextInt(result.length()));
             return new Workout(exercise.getString("name"), exercise.getString("description"));
         } catch (UnirestException e) {
-            logger.error("Unirest failed in motivation datasource", e);
+            logger.error("Unirest failed", e);
             return null;
         }
     }

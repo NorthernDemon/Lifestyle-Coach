@@ -8,7 +8,6 @@ import it.unitn.introsde.persistence.entity.MeasureType;
 import it.unitn.introsde.persistence.entity.Person;
 import it.unitn.introsde.wrapper.Awareness;
 import it.unitn.introsde.wrapper.Motivation;
-import it.unitn.introsde.wrapper.Progress;
 import it.unitn.introsde.wrapper.Workout;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +18,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-public final class StandaloneClientLauncher {
+public final class ClientLauncher {
 
     private static int id = 200500;
 
@@ -88,12 +87,6 @@ public final class StandaloneClientLauncher {
         logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
         person = (Person) exchange.getBody();
 
-//        httpMethod = HttpMethod.POST;
-//        url = ServiceConfiguration.getUrl() + "/goal-process?fbAccessToken=fbAccessToken";
-//        Goal goal = new Goal(person, person, measureType, 72.0, "You can do it!", getDate(2014, 5, 10), getDate(2014, 5, 15));
-//        exchange = restTemplate.exchange(url, httpMethod, createHeader(goal), Goal.class);
-//        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
-
         httpMethod = HttpMethod.POST;
         url = ServiceConfiguration.getUrl() + "/measure-process";
         Measure measure = new Measure(person, measureType, 72.1, getDate(2014, 5, 12));
@@ -110,11 +103,6 @@ public final class StandaloneClientLauncher {
         httpMethod = HttpMethod.GET;
         url = ServiceConfiguration.getUrl() + "/awareness-process/" + person.getId();
         exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Awareness.class);
-        logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
-
-        httpMethod = HttpMethod.GET;
-        url = ServiceConfiguration.getUrl() + "/progress-process/" + person.getId();
-        exchange = restTemplate.exchange(url, httpMethod, createHeader(person), Progress.class);
         logRequest(0, exchange.getStatusCode().is2xxSuccessful(), exchange);
 
         httpMethod = HttpMethod.GET;

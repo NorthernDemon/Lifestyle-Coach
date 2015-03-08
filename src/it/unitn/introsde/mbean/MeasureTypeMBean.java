@@ -26,11 +26,10 @@ public class MeasureTypeMBean extends AbstractMBean implements Serializable {
     public void createMeasureType() {
         MeasureType measureType = new MeasureType(getType(), getUnit());
         ResponseEntity<?> exchange = request("/measureType-process", HttpMethod.POST, MeasureType.class, measureType, MediaType.APPLICATION_XML_VALUE);
-        logger.debug("message payLoad === " + exchange.getBody().toString());
         if (exchange.getStatusCode().is2xxSuccessful()) {
-            setSuccessMessage("Measure Type Registered Successfully!!");
+            setSuccessMessage("Measure Type Registered Successfully");
         } else {
-            setSuccessMessage("oops! an error occured!!");
+            setSuccessMessage("oops! an error occurred");
         }
     }
 

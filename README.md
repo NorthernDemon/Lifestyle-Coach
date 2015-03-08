@@ -37,12 +37,7 @@ Configure service parameters in **service.properties** file.
 ####Run inside of IDE
     - ant compile
     - run main StandaloneServerLauncher.java
-    - (optional test) run main StandaloneClientLauncher.java
-    - http://{host}:{port} (example: http://localhost:9915)
-    
-####Run inside of Application Server
-    - ant create.war
-    - deploy to Application Server
+    - (optional test) run main ClientLauncher.java
     - http://{host}:{port} (example: http://localhost:9915)
 
 Use Case Diagram
@@ -59,8 +54,8 @@ Architecture Diagram
 
 Documentation
 -------
-Specification: https://docs.google.com/document/d/1kcRTSzxkvRPT5Lp3A1eqqR51NNqHHHbmHFrjZKqs4Kc/edit?usp=sharing
 Apiary: http://docs.lifestylecoach1.apiary.io/
+Specification: https://docs.google.com/document/d/1kcRTSzxkvRPT5Lp3A1eqqR51NNqHHHbmHFrjZKqs4Kc/edit?usp=sharing
 
 Authors
 -------
